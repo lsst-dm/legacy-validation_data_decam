@@ -40,6 +40,7 @@ Example usage
 
 ```
 setup validation_data_decam
+setup obs_decam
 
 NEW_OUTPUT_REPO=DECam_data
 
@@ -47,9 +48,9 @@ export ASTROMETRY_NET_DATA_DIR=${VALIDATION_DATA_DECAM_DIR}/astrometry_net_data
 
 processCcd.py ${VALIDATION_DATA_DECAM_DIR}/data \
     --output ${NEW_OUTPUT_REPO} \
+    --configfile ${VALIDATION_DATA_DECAM_DIR}/decamConfig.py \
     @${VALIDATION_DATA_DECAM_DIR}/Decam.list \
-    -j 4 \
-    --clobber-config 
+    -j 4 
 ```
 
 Notes:
@@ -76,16 +77,18 @@ To fully recreate this Butler `repo` from the `raw` data, set the `mapper` and a
 
 ```
 setup validation_data_decam
+setup obs_decam -t v14_0
 
 mkdir data
 echo lsst.obs.decam.DecamMapper > data/_mapper
-ingestImagesDecam.py data ${VALIDATION_DATA_DECAM_DIR}/instcal/*.fz  --mode copy
+ingestImages.py data ${VALIDATION_DATA_DECAM_DIR}/instcal/*.fz  --mode copy
 
 export ASTROMETRY_NET_DATA_DIR=${VALIDATION_DATA_DECAM_DIR}/astrometry_net_data
-processCcdDecam.py data \
+processCcd.py data --output data \
     @${VALIDATION_DATA_DECAM_DIR}/Decam.list \
+    --configfile ${VALIDATION_DATA_DECAM_DIR}/config/decamConfig.py \
     -j 4 \
-    --logdest processCcd.log
+   >& processCcd.log
 ```
 
 Notes
