@@ -75,16 +75,16 @@ This repository was created using `examples/runDecamTest.sh` from the `validate_
 To fully recreate this Butler `repo` from the `raw` data, set the `mapper` and add the `ingesetImages.py` step:
 
 ```
-setup validation_data_decam -t v14_0
+setup validation_data_decam -t v16_0
 
 mkdir data
 echo lsst.obs.decam.DecamMapper > data/_mapper
-ingestImages.py data ${VALIDATION_DATA_DECAM_DIR}/instcal/*.fz  --mode copy
+ingestImagesDecam.py data ${VALIDATION_DATA_DECAM_DIR}/instcal/*.fz  --mode copy --filetype instcal
 
 export ASTROMETRY_NET_DATA_DIR=${VALIDATION_DATA_DECAM_DIR}/astrometry_net_data
 processCcd.py data --output data \
     @${VALIDATION_DATA_DECAM_DIR}/Decam.list \
-    --configfile ${VALIDATION_DATA_DECAM_DIR}/config/decamConfig.py \
+    --configfile ${VALIDATION_DATA_DECAM_DIR}/decamConfig.py \
     -j 4 \
    >& processCcd.log
 ```
