@@ -40,7 +40,6 @@ Example usage
 
 ```
 setup validation_data_decam
-setup obs_decam
 
 NEW_OUTPUT_REPO=DECam_data
 
@@ -76,8 +75,7 @@ This repository was created using `examples/runDecamTest.sh` from the `validate_
 To fully recreate this Butler `repo` from the `raw` data, set the `mapper` and add the `ingesetImages.py` step:
 
 ```
-setup validation_data_decam
-setup obs_decam -t v14_0
+setup validation_data_decam -t v14_0
 
 mkdir data
 echo lsst.obs.decam.DecamMapper > data/_mapper
