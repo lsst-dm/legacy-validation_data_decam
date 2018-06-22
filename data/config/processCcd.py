@@ -1,42 +1,43 @@
 import lsst.pipe.tasks.processCcd
 assert type(config)==lsst.pipe.tasks.processCcd.ProcessCcdConfig, 'config is of type %s.%s instead of lsst.pipe.tasks.processCcd.ProcessCcdConfig' % (type(config).__module__, type(config).__name__)
-import eups.Product
-import eups.lock
-import eups.stack
-import eups.app
 import eups.distrib.Repositories
+import eups.cmd
+import configparser
+import eups.table
+import eups.distrib.builder
+import lsst.obs.decam.crosstalk
 import eups.distrib.server
-import eups.utils
 import lsst.obs.decam.isr
+import eups.VersionCompare
 import eups.db.ChainFile
+import eups.stack.ProductFamily
+import lsst.pipe.tasks.setConfigFromEups
+import eups.stack
+import eups.db
+import eups.VersionParser
 import eups.distrib.Distrib
 import lsst.obs.decam.decamNullIsr
-import eups.tags
-import eups.cmd
-import eups.table
-import eups.hooks
-import configparser
-import eups.distrib.DistribFactory
-import eups.db
-import eups.distrib.Repository
-import eups.db.VersionFile
-import optparse
-import eups.VersionCompare
-import eups.distrib
-import eups.distrib.builder
-import pipes
-import eups.db.Database
-import eups.stack.ProductStack
-import eups.distrib.eupspkg
-import eups.exceptions
-import eups.Eups
-import eups.Uses
-import eups.VersionParser
-import eups.distrib.tarball
-import eups.distrib.pacman
-import eups.stack.ProductFamily
 import eups
-import lsst.pipe.tasks.setConfigFromEups
+import eups.utils
+import eups.Eups
+import eups.distrib.DistribFactory
+import eups.app
+import eups.distrib.pacman
+import eups.Uses
+import optparse
+import eups.exceptions
+import eups.lock
+import eups.tags
+import eups.Product
+import eups.db.VersionFile
+import eups.stack.ProductStack
+import pipes
+import eups.hooks
+import eups.distrib
+import eups.distrib.tarball
+import eups.db.Database
+import eups.distrib.Repository
+import eups.distrib.eupspkg
 import lsst.obs.decam.decamNullIsr
 config.isr.retarget(target=lsst.obs.decam.decamNullIsr.DecamNullIsrTask, ConfigClass=lsst.obs.decam.decamNullIsr.DecamNullIsrConfig)
 
@@ -56,48 +57,24 @@ config.charImage.doWrite=True
 config.charImage.doWriteExposure=False
 
 # Number of iterations of detect sources, measure sources, estimate PSF. If useSimplePsf is True then 2 should be plenty; otherwise more may be wanted.
-# 	Valid Range = [1,inf)
 config.charImage.psfIterations=2
 
 # type of statistic to use for grid points
-# Allowed values:
-# 	MEANCLIP	clipped mean
-# 	MEAN	unclipped mean
-# 	MEDIAN	median
-# 	None	Field is optional
-# 
 config.charImage.background.statisticsProperty='MEANCLIP'
 
 # behaviour if there are too few points in grid for requested interpolation style
-# Allowed values:
-# 	THROW_EXCEPTION	throw an exception if there are too few points
-# 	REDUCE_INTERP_ORDER	use an interpolation style with a lower order.
-# 	INCREASE_NXNYSAMPLE	Increase the number of samples used to make the interpolation grid.
-# 	None	Field is optional
-# 
 config.charImage.background.undersampleStyle='REDUCE_INTERP_ORDER'
 
 # how large a region of the sky should be used for each background point
-# 	Valid Range = [1,inf)
 config.charImage.background.binSize=128
 
 # Sky region size to be used for each background point in X direction. If 0, the binSize config is used.
-# 	Valid Range = [0,inf)
 config.charImage.background.binSizeX=0
 
 # Sky region size to be used for each background point in Y direction. If 0, the binSize config is used.
-# 	Valid Range = [0,inf)
 config.charImage.background.binSizeY=0
 
 # how to interpolate the background values. This maps to an enum; see afw::math::Background
-# Allowed values:
-# 	CONSTANT	Use a single constant value
-# 	LINEAR	Use linear interpolation
-# 	NATURAL_SPLINE	cubic spline with zero second derivative at endpoints
-# 	AKIMA_SPLINE	higher-level nonlinear spline that is more robust to outliers
-# 	NONE	No background estimation is to be attempted
-# 	None	Field is optional
-# 
 config.charImage.background.algorithm='AKIMA_SPLINE'
 
 # Names of mask planes to ignore while estimating the background
@@ -119,41 +96,30 @@ config.charImage.background.approxOrderY=-1
 config.charImage.background.weighting=True
 
 # detected sources with fewer than the specified number of pixels will be ignored
-# 	Valid Range = [0,inf)
 config.charImage.detection.minPixels=1
 
 # Pixels should be grown as isotropically as possible (slower)
 config.charImage.detection.isotropicGrow=False
 
-# Grow detections by nSigmaToGrow * sigma; if 0 then do not grow
+# Grow all footprints at the same time? This allows disconnected footprints to merge.
+config.charImage.detection.combinedGrow=True
+
+# Grow detections by nSigmaToGrow * [PSF RMS width]; if 0 then do not grow
 config.charImage.detection.nSigmaToGrow=2.4
 
 # Grow detections to set the image mask bits, but return the original (not-grown) footprints
 config.charImage.detection.returnOriginalFootprints=False
 
 # Threshold for footprints
-# 	Valid Range = [0.0,inf)
 config.charImage.detection.thresholdValue=5.0
 
 # Include threshold relative to thresholdValue
-# 	Valid Range = [0.0,inf)
 config.charImage.detection.includeThresholdMultiplier=10.0
 
 # specifies the desired flavor of Threshold
-# Allowed values:
-# 	variance	threshold applied to image variance
-# 	stdev	threshold applied to image std deviation
-# 	value	threshold applied to image value
-# 	pixel_stdev	threshold applied to per-pixel std deviation
-# 
 config.charImage.detection.thresholdType='stdev'
 
 # specifies whether to detect positive, or negative sources, or both
-# Allowed values:
-# 	positive	detect only positive sources
-# 	negative	detect only negative sources
-# 	both	detect both positive and negative sources
-# 
 config.charImage.detection.thresholdPolarity='positive'
 
 # Fiddle factor to add to the background; debugging only
@@ -163,44 +129,21 @@ config.charImage.detection.adjustBackground=0.0
 config.charImage.detection.reEstimateBackground=True
 
 # type of statistic to use for grid points
-# Allowed values:
-# 	MEANCLIP	clipped mean
-# 	MEAN	unclipped mean
-# 	MEDIAN	median
-# 	None	Field is optional
-# 
 config.charImage.detection.background.statisticsProperty='MEANCLIP'
 
 # behaviour if there are too few points in grid for requested interpolation style
-# Allowed values:
-# 	THROW_EXCEPTION	throw an exception if there are too few points
-# 	REDUCE_INTERP_ORDER	use an interpolation style with a lower order.
-# 	INCREASE_NXNYSAMPLE	Increase the number of samples used to make the interpolation grid.
-# 	None	Field is optional
-# 
 config.charImage.detection.background.undersampleStyle='REDUCE_INTERP_ORDER'
 
 # how large a region of the sky should be used for each background point
-# 	Valid Range = [1,inf)
 config.charImage.detection.background.binSize=128
 
 # Sky region size to be used for each background point in X direction. If 0, the binSize config is used.
-# 	Valid Range = [0,inf)
 config.charImage.detection.background.binSizeX=0
 
 # Sky region size to be used for each background point in Y direction. If 0, the binSize config is used.
-# 	Valid Range = [0,inf)
 config.charImage.detection.background.binSizeY=0
 
 # how to interpolate the background values. This maps to an enum; see afw::math::Background
-# Allowed values:
-# 	CONSTANT	Use a single constant value
-# 	LINEAR	Use linear interpolation
-# 	NATURAL_SPLINE	cubic spline with zero second derivative at endpoints
-# 	AKIMA_SPLINE	higher-level nonlinear spline that is more robust to outliers
-# 	NONE	No background estimation is to be attempted
-# 	None	Field is optional
-# 
 config.charImage.detection.background.algorithm='AKIMA_SPLINE'
 
 # Names of mask planes to ignore while estimating the background
@@ -222,44 +165,21 @@ config.charImage.detection.background.approxOrderY=-1
 config.charImage.detection.background.weighting=True
 
 # type of statistic to use for grid points
-# Allowed values:
-# 	MEANCLIP	clipped mean
-# 	MEAN	unclipped mean
-# 	MEDIAN	median
-# 	None	Field is optional
-# 
 config.charImage.detection.tempLocalBackground.statisticsProperty='MEANCLIP'
 
 # behaviour if there are too few points in grid for requested interpolation style
-# Allowed values:
-# 	THROW_EXCEPTION	throw an exception if there are too few points
-# 	REDUCE_INTERP_ORDER	use an interpolation style with a lower order.
-# 	INCREASE_NXNYSAMPLE	Increase the number of samples used to make the interpolation grid.
-# 	None	Field is optional
-# 
 config.charImage.detection.tempLocalBackground.undersampleStyle='REDUCE_INTERP_ORDER'
 
 # how large a region of the sky should be used for each background point
-# 	Valid Range = [1,inf)
 config.charImage.detection.tempLocalBackground.binSize=64
 
 # Sky region size to be used for each background point in X direction. If 0, the binSize config is used.
-# 	Valid Range = [0,inf)
 config.charImage.detection.tempLocalBackground.binSizeX=0
 
 # Sky region size to be used for each background point in Y direction. If 0, the binSize config is used.
-# 	Valid Range = [0,inf)
 config.charImage.detection.tempLocalBackground.binSizeY=0
 
 # how to interpolate the background values. This maps to an enum; see afw::math::Background
-# Allowed values:
-# 	CONSTANT	Use a single constant value
-# 	LINEAR	Use linear interpolation
-# 	NATURAL_SPLINE	cubic spline with zero second derivative at endpoints
-# 	AKIMA_SPLINE	higher-level nonlinear spline that is more robust to outliers
-# 	NONE	No background estimation is to be attempted
-# 	None	Field is optional
-# 
 config.charImage.detection.tempLocalBackground.algorithm='AKIMA_SPLINE'
 
 # Names of mask planes to ignore while estimating the background
@@ -280,44 +200,70 @@ config.charImage.detection.tempLocalBackground.approxOrderY=-1
 # Use inverse variance weighting in calculation (valid only with useApprox=True)
 config.charImage.detection.tempLocalBackground.weighting=True
 
-# Do temporary interpolated background subtraction before footprint detection?
+# Enable temporary local background subtraction? (see tempLocalBackground)
 config.charImage.detection.doTempLocalBackground=False
+
+# type of statistic to use for grid points
+config.charImage.detection.tempWideBackground.statisticsProperty='MEANCLIP'
+
+# behaviour if there are too few points in grid for requested interpolation style
+config.charImage.detection.tempWideBackground.undersampleStyle='REDUCE_INTERP_ORDER'
+
+# how large a region of the sky should be used for each background point
+config.charImage.detection.tempWideBackground.binSize=512
+
+# Sky region size to be used for each background point in X direction. If 0, the binSize config is used.
+config.charImage.detection.tempWideBackground.binSizeX=0
+
+# Sky region size to be used for each background point in Y direction. If 0, the binSize config is used.
+config.charImage.detection.tempWideBackground.binSizeY=0
+
+# how to interpolate the background values. This maps to an enum; see afw::math::Background
+config.charImage.detection.tempWideBackground.algorithm='AKIMA_SPLINE'
+
+# Names of mask planes to ignore while estimating the background
+config.charImage.detection.tempWideBackground.ignoredPixelMask=['BAD', 'EDGE', 'NO_DATA']
+
+# Ignore NaNs when estimating the background
+config.charImage.detection.tempWideBackground.isNanSafe=False
+
+# Use Approximate (Chebyshev) to model background.
+config.charImage.detection.tempWideBackground.useApprox=False
+
+# Approximation order in X for background Chebyshev (valid only with useApprox=True)
+config.charImage.detection.tempWideBackground.approxOrderX=6
+
+# Approximation order in Y for background Chebyshev (valid only with useApprox=True)
+config.charImage.detection.tempWideBackground.approxOrderY=-1
+
+# Use inverse variance weighting in calculation (valid only with useApprox=True)
+config.charImage.detection.tempWideBackground.weighting=True
+
+# Do temporary wide (large-scale) background subtraction before footprint detection?
+config.charImage.detection.doTempWideBackground=False
 
 # The maximum number of peaks in a Footprint before trying to replace its peaks using the temporary local background
 config.charImage.detection.nPeaksMaxSimple=1
+
+# Multiple of PSF RMS size to use for convolution kernel bounding box size; note that this is not a half-size. The size will be rounded up to the nearest odd integer
+config.charImage.detection.nSigmaForKernel=7.0
+
+# Mask planes to ignore when calculating statistics of image (for thresholdType=stdev)
+config.charImage.detection.statsMask=['BAD', 'SAT', 'EDGE', 'NO_DATA']
 
 # Run deblender input exposure
 config.charImage.doDeblend=False
 
 # What to do when a peak to be deblended is close to the edge of the image
-# Allowed values:
-# 	clip	Clip the template at the edge AND the mirror of the edge.
-# 	ramp	Ramp down flux at the image edge by the PSF
-# 	noclip	Ignore the edge when building the symmetric template.
-# 	None	Field is optional
-# 
 config.charImage.deblend.edgeHandling='ramp'
 
 # When the deblender should attribute stray flux to point sources
-# Allowed values:
-# 	necessary	When there is not an extended object in the footprint
-# 	always	Always
-# 	never	Never; stray flux will not be attributed to any deblended child if the deblender thinks all peaks look like point sources
-# 	None	Field is optional
-# 
 config.charImage.deblend.strayFluxToPointSources='necessary'
 
 # Assign stray flux (not claimed by any child in the deblender) to deblend children.
 config.charImage.deblend.assignStrayFlux=True
 
 # How to split flux among peaks
-# Allowed values:
-# 	r-to-peak	~ 1/(1+R^2) to the peak
-# 	r-to-footprint	~ 1/(1+R^2) to the closest pixel in the footprint.  CAUTION: this can be computationally expensive on large footprints!
-# 	nearest-footprint	Assign 100% to the nearest footprint (using L-1 norm aka Manhattan distance)
-# 	trim	Shrink the parent footprint to pixels that are not assigned to children
-# 	None	Field is optional
-# 
 config.charImage.deblend.strayFluxRule='trim'
 
 # When splitting stray flux, clip fractions below this value to zero.
@@ -348,7 +294,6 @@ config.charImage.deblend.minFootprintAxisRatio=0.0
 config.charImage.deblend.notDeblendedMask='NOT_DEBLENDED'
 
 # Footprints smaller in width or height than this value will be ignored; minimum of 2 due to PSF gradient calculation.
-# 	Valid Range = [2,inf)
 config.charImage.deblend.tinyFootprintSize=2
 
 # Guarantee that all peaks produce a child source.
@@ -381,6 +326,9 @@ config.charImage.measurement.slots.centroid='base_SdssCentroid'
 # the name of the algorithm used to set source moments parameters
 config.charImage.measurement.slots.shape='base_SdssShape'
 
+# the name of the algorithm used to set PSF moments parameters
+config.charImage.measurement.slots.psfShape='base_SdssShape_psf'
+
 # the name of the algorithm used to set the source aperture flux slot
 config.charImage.measurement.slots.apFlux='base_CircularApertureFlux_12_0'
 
@@ -400,11 +348,6 @@ config.charImage.measurement.slots.calibFlux='base_CircularApertureFlux_12_0'
 config.charImage.measurement.doReplaceWithNoise=True
 
 # How to choose mean and variance of the Gaussian noise we generate?
-# Allowed values:
-# 	measure	Measure clipped mean and variance from the whole image
-# 	meta	Mean = 0, variance = the "BGMEAN" metadata entry
-# 	variance	Mean = 0, variance = the image's variance
-# 
 config.charImage.measurement.noiseReplacer.noiseSource='measure'
 
 # Add ann offset to the generated noise.
@@ -435,15 +378,6 @@ config.charImage.measurement.plugins['base_GaussianFlux'].doMeasure=True
 
 # FIXME! NEVER DOCUMENTED!
 config.charImage.measurement.plugins['base_GaussianFlux'].background=0.0
-
-# whether to run this plugin in single-object mode
-config.charImage.measurement.plugins['base_GaussianCentroid'].doMeasure=True
-
-# Do check that the centroid is contained in footprint.
-config.charImage.measurement.plugins['base_GaussianCentroid'].doFootprintCheck=True
-
-# If set > 0, Centroid Check also checks distance from footprint peak.
-config.charImage.measurement.plugins['base_GaussianCentroid'].maxDistToPeak=-1.0
 
 # whether to run this plugin in single-object mode
 config.charImage.measurement.plugins['base_NaiveCentroid'].doMeasure=True
@@ -542,6 +476,24 @@ config.charImage.measurement.plugins['base_Blendedness'].doShape=True
 config.charImage.measurement.plugins['base_Blendedness'].nSigmaWeightMax=3.0
 
 # whether to run this plugin in single-object mode
+config.charImage.measurement.plugins['base_LocalBackground'].doMeasure=True
+
+# Inner radius for background annulus as a multiple of the PSF sigma
+config.charImage.measurement.plugins['base_LocalBackground'].annulusInner=7.0
+
+# Outer radius for background annulus as a multiple of the PSF sigma
+config.charImage.measurement.plugins['base_LocalBackground'].annulusOuter=15.0
+
+# Mask planes that indicate pixels that should be excluded from the measurement
+config.charImage.measurement.plugins['base_LocalBackground'].badMaskPlanes=['BAD', 'SAT', 'NO_DATA']
+
+# Number of sigma-clipping iterations for background measurement
+config.charImage.measurement.plugins['base_LocalBackground'].bgIter=3
+
+# Rejection threshold (in standard deviations) for background measurement
+config.charImage.measurement.plugins['base_LocalBackground'].bgRej=3.0
+
+# whether to run this plugin in single-object mode
 config.charImage.measurement.plugins['base_FPPosition'].doMeasure=True
 
 # whether to run this plugin in single-object mode
@@ -568,7 +520,7 @@ config.charImage.measurement.plugins['base_PeakCentroid'].doMeasure=True
 # whether to run this plugin in single-object mode
 config.charImage.measurement.plugins['base_SkyCoord'].doMeasure=True
 
-config.charImage.measurement.plugins.names=['base_GaussianFlux', 'base_PixelFlags', 'base_PsfFlux', 'base_SdssCentroid', 'base_SdssShape', 'base_CircularApertureFlux']
+config.charImage.measurement.plugins.names=['base_PsfFlux', 'base_SdssShape', 'base_PixelFlags', 'base_GaussianFlux', 'base_CircularApertureFlux', 'base_SdssCentroid']
 # whether to run this plugin in single-object mode
 config.charImage.measurement.undeblended['base_PsfFlux'].doMeasure=True
 
@@ -586,15 +538,6 @@ config.charImage.measurement.undeblended['base_GaussianFlux'].doMeasure=True
 
 # FIXME! NEVER DOCUMENTED!
 config.charImage.measurement.undeblended['base_GaussianFlux'].background=0.0
-
-# whether to run this plugin in single-object mode
-config.charImage.measurement.undeblended['base_GaussianCentroid'].doMeasure=True
-
-# Do check that the centroid is contained in footprint.
-config.charImage.measurement.undeblended['base_GaussianCentroid'].doFootprintCheck=True
-
-# If set > 0, Centroid Check also checks distance from footprint peak.
-config.charImage.measurement.undeblended['base_GaussianCentroid'].maxDistToPeak=-1.0
 
 # whether to run this plugin in single-object mode
 config.charImage.measurement.undeblended['base_NaiveCentroid'].doMeasure=True
@@ -693,6 +636,24 @@ config.charImage.measurement.undeblended['base_Blendedness'].doShape=True
 config.charImage.measurement.undeblended['base_Blendedness'].nSigmaWeightMax=3.0
 
 # whether to run this plugin in single-object mode
+config.charImage.measurement.undeblended['base_LocalBackground'].doMeasure=True
+
+# Inner radius for background annulus as a multiple of the PSF sigma
+config.charImage.measurement.undeblended['base_LocalBackground'].annulusInner=7.0
+
+# Outer radius for background annulus as a multiple of the PSF sigma
+config.charImage.measurement.undeblended['base_LocalBackground'].annulusOuter=15.0
+
+# Mask planes that indicate pixels that should be excluded from the measurement
+config.charImage.measurement.undeblended['base_LocalBackground'].badMaskPlanes=['BAD', 'SAT', 'NO_DATA']
+
+# Number of sigma-clipping iterations for background measurement
+config.charImage.measurement.undeblended['base_LocalBackground'].bgIter=3
+
+# Rejection threshold (in standard deviations) for background measurement
+config.charImage.measurement.undeblended['base_LocalBackground'].bgRej=3.0
+
+# whether to run this plugin in single-object mode
 config.charImage.measurement.undeblended['base_FPPosition'].doMeasure=True
 
 # whether to run this plugin in single-object mode
@@ -726,101 +687,171 @@ config.charImage.doApCorr=True
 # Field name prefix for the flux other measurements should be aperture corrected to match
 config.charImage.measureApCorr.refFluxName='slot_CalibFlux'
 
-# size of the kernel to create
-config.charImage.measureApCorr.starSelector['secondMoment'].kernelSize=21
+# Apply flux limit?
+config.charImage.measureApCorr.sourceSelector['science'].doFluxLimit=False
 
-# number of pixels to ignore around the edge of PSF candidate postage stamps
-config.charImage.measureApCorr.starSelector['secondMoment'].borderWidth=0
+# Apply flag limitation?
+config.charImage.measureApCorr.sourceSelector['science'].doFlags=False
 
-# List of flags which cause a source to be rejected as bad
-config.charImage.measureApCorr.starSelector['secondMoment'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter', 'base_PixelFlags_flag_crCenter']
+# Apply unresolved limitation?
+config.charImage.measureApCorr.sourceSelector['science'].doUnresolved=False
 
+# Apply signal-to-noise limit?
+config.charImage.measureApCorr.sourceSelector['science'].doSignalToNoise=False
+
+# Apply isolated limitation?
+config.charImage.measureApCorr.sourceSelector['science'].doIsolated=False
+
+# Select objects with value greater than this
+config.charImage.measureApCorr.sourceSelector['science'].fluxLimit.minimum=None
+
+# Select objects with value less than this
+config.charImage.measureApCorr.sourceSelector['science'].fluxLimit.maximum=None
+
+# Name of the source flux field to use.
+config.charImage.measureApCorr.sourceSelector['science'].fluxLimit.fluxField='slot_CalibFlux_flux'
+
+# List of source flag fields that must be set for a source to be used.
+config.charImage.measureApCorr.sourceSelector['science'].flags.good=[]
+
+# List of source flag fields that must NOT be set for a source to be used.
+config.charImage.measureApCorr.sourceSelector['science'].flags.bad=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_saturated', 'base_PsfFlux_flags']
+
+# Select objects with value greater than this
+config.charImage.measureApCorr.sourceSelector['science'].unresolved.minimum=None
+
+# Select objects with value less than this
+config.charImage.measureApCorr.sourceSelector['science'].unresolved.maximum=None
+
+# Name of column for star/galaxy separation
+config.charImage.measureApCorr.sourceSelector['science'].unresolved.name='base_ClassificationExtendedness_value'
+
+# Select objects with value greater than this
+config.charImage.measureApCorr.sourceSelector['science'].signalToNoise.minimum=None
+
+# Select objects with value less than this
+config.charImage.measureApCorr.sourceSelector['science'].signalToNoise.maximum=None
+
+# Name of the source flux field to use.
+config.charImage.measureApCorr.sourceSelector['science'].signalToNoise.fluxField='base_PsfFlux_flux'
+
+# Name of the source flux error field to use.
+config.charImage.measureApCorr.sourceSelector['science'].signalToNoise.errField='base_PsfFlux_fluxSigma'
+
+# Name of column for parent
+config.charImage.measureApCorr.sourceSelector['science'].isolated.parentName='parent'
+
+# Name of column for nChild
+config.charImage.measureApCorr.sourceSelector['science'].isolated.nChildName='deblend_nChild'
+
+# Apply magnitude limit?
+config.charImage.measureApCorr.sourceSelector['references'].doMagLimit=False
+
+# Apply flag limitation?
+config.charImage.measureApCorr.sourceSelector['references'].doFlags=False
+
+# Apply signal-to-noise limit?
+config.charImage.measureApCorr.sourceSelector['references'].doSignalToNoise=False
+
+# Apply magnitude error limit?
+config.charImage.measureApCorr.sourceSelector['references'].doMagError=False
+
+# Select objects with value greater than this
+config.charImage.measureApCorr.sourceSelector['references'].magLimit.minimum=None
+
+# Select objects with value less than this
+config.charImage.measureApCorr.sourceSelector['references'].magLimit.maximum=None
+
+# Name of the source flux field to use.
+config.charImage.measureApCorr.sourceSelector['references'].magLimit.fluxField='flux'
+
+# List of source flag fields that must be set for a source to be used.
+config.charImage.measureApCorr.sourceSelector['references'].flags.good=[]
+
+# List of source flag fields that must NOT be set for a source to be used.
+config.charImage.measureApCorr.sourceSelector['references'].flags.bad=[]
+
+# Select objects with value greater than this
+config.charImage.measureApCorr.sourceSelector['references'].signalToNoise.minimum=None
+
+# Select objects with value less than this
+config.charImage.measureApCorr.sourceSelector['references'].signalToNoise.maximum=None
+
+# Name of the source flux field to use.
+config.charImage.measureApCorr.sourceSelector['references'].signalToNoise.fluxField='flux'
+
+# Name of the source flux error field to use.
+config.charImage.measureApCorr.sourceSelector['references'].signalToNoise.errField='flux_err'
+
+# Select objects with value greater than this
+config.charImage.measureApCorr.sourceSelector['references'].magError.minimum=None
+
+# Select objects with value less than this
+config.charImage.measureApCorr.sourceSelector['references'].magError.maximum=None
+
+# Name of the source flux error field to use.
+config.charImage.measureApCorr.sourceSelector['references'].magError.magErrField='mag_err'
+
+config.charImage.measureApCorr.sourceSelector['references'].colorLimits={}
 # specify the minimum psfFlux for good Psf Candidates
-config.charImage.measureApCorr.starSelector['secondMoment'].fluxLim=12500.0
+config.charImage.measureApCorr.sourceSelector['objectSize'].fluxMin=12500.0
 
 # specify the maximum psfFlux for good Psf Candidates (ignored if == 0)
-config.charImage.measureApCorr.starSelector['secondMoment'].fluxMax=0.0
-
-# candidate PSF's shapes must lie within this many sigma of the average shape
-config.charImage.measureApCorr.starSelector['secondMoment'].clumpNSigma=2.0
-
-# Number of bins in moment histogram
-config.charImage.measureApCorr.starSelector['secondMoment'].histSize=64
-
-# Maximum moment to consider
-config.charImage.measureApCorr.starSelector['secondMoment'].histMomentMax=100.0
-
-# Multiplier of mean for maximum moments histogram range
-config.charImage.measureApCorr.starSelector['secondMoment'].histMomentMaxMultiplier=5.0
-
-# Clipping threshold for moments histogram range
-config.charImage.measureApCorr.starSelector['secondMoment'].histMomentClip=5.0
-
-# Multiplier of mean for minimum moments histogram range
-config.charImage.measureApCorr.starSelector['secondMoment'].histMomentMinMultiplier=2.0
-
-# size of the kernel to create
-config.charImage.measureApCorr.starSelector['objectSize'].kernelSize=21
-
-# number of pixels to ignore around the edge of PSF candidate postage stamps
-config.charImage.measureApCorr.starSelector['objectSize'].borderWidth=0
-
-# List of flags which cause a source to be rejected as bad
-config.charImage.measureApCorr.starSelector['objectSize'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter', 'base_PixelFlags_flag_crCenter', 'base_PixelFlags_flag_bad', 'base_PixelFlags_flag_interpolated']
-
-# specify the minimum psfFlux for good Psf Candidates
-config.charImage.measureApCorr.starSelector['objectSize'].fluxMin=12500.0
-
-# specify the maximum psfFlux for good Psf Candidates (ignored if == 0)
-config.charImage.measureApCorr.starSelector['objectSize'].fluxMax=0.0
+config.charImage.measureApCorr.sourceSelector['objectSize'].fluxMax=0.0
 
 # minimum width to include in histogram
-config.charImage.measureApCorr.starSelector['objectSize'].widthMin=0.0
+config.charImage.measureApCorr.sourceSelector['objectSize'].widthMin=0.0
 
 # maximum width to include in histogram
-config.charImage.measureApCorr.starSelector['objectSize'].widthMax=10.0
+config.charImage.measureApCorr.sourceSelector['objectSize'].widthMax=10.0
 
 # Name of field in Source to use for flux measurement
-config.charImage.measureApCorr.starSelector['objectSize'].sourceFluxField='base_GaussianFlux_flux'
+config.charImage.measureApCorr.sourceSelector['objectSize'].sourceFluxField='base_GaussianFlux_flux'
 
 # Standard deviation of width allowed to be interpreted as good stars
-config.charImage.measureApCorr.starSelector['objectSize'].widthStdAllowed=0.15
+config.charImage.measureApCorr.sourceSelector['objectSize'].widthStdAllowed=0.15
 
 # Keep objects within this many sigma of cluster 0's median
-config.charImage.measureApCorr.starSelector['objectSize'].nSigmaClip=2.0
-
-# size of the kernel to create
-config.charImage.measureApCorr.starSelector['flagged'].kernelSize=21
-
-# number of pixels to ignore around the edge of PSF candidate postage stamps
-config.charImage.measureApCorr.starSelector['flagged'].borderWidth=0
+config.charImage.measureApCorr.sourceSelector['objectSize'].nSigmaClip=2.0
 
 # List of flags which cause a source to be rejected as bad
-config.charImage.measureApCorr.starSelector['flagged'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter', 'base_PixelFlags_flag_crCenter', 'base_PixelFlags_flag_bad', 'base_PixelFlags_flag_interpolated']
+config.charImage.measureApCorr.sourceSelector['objectSize'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter', 'base_PixelFlags_flag_crCenter', 'base_PixelFlags_flag_bad', 'base_PixelFlags_flag_interpolated']
 
-# Name of a flag field that is True for stars that should be used.
-config.charImage.measureApCorr.starSelector['flagged'].field='calib_psfUsed'
-
-# size of the kernel to create
-config.charImage.measureApCorr.starSelector['catalog'].kernelSize=21
-
-# number of pixels to ignore around the edge of PSF candidate postage stamps
-config.charImage.measureApCorr.starSelector['catalog'].borderWidth=0
+# Name of a flag field that is True for Sources that should be used.
+config.charImage.measureApCorr.sourceSelector['flagged'].field='calib_psfUsed'
 
 # List of flags which cause a source to be rejected as bad
-config.charImage.measureApCorr.starSelector['catalog'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter']
+config.charImage.measureApCorr.sourceSelector['astrometry'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter', 'base_PixelFlags_flag_crCenter', 'base_PixelFlags_flag_bad']
+
+# Type of source flux; typically one of Ap or Psf
+config.charImage.measureApCorr.sourceSelector['astrometry'].sourceFluxType='Ap'
+
+# Minimum allowed signal-to-noise ratio for sources used for matching (in the flux specified by sourceFluxType); <= 0 for no limit
+config.charImage.measureApCorr.sourceSelector['astrometry'].minSnr=10.0
+
+# Type of source flux; typically one of Ap or Psf
+config.charImage.measureApCorr.sourceSelector['matcher'].sourceFluxType='Ap'
+
+# Minimum allowed signal-to-noise ratio for sources used for matching (in the flux specified by sourceFluxType); <= 0 for no limit
+config.charImage.measureApCorr.sourceSelector['matcher'].minSnr=40.0
+
+# Type of source flux; typically one of Ap or Psf
+config.charImage.measureApCorr.sourceSelector['matcherPessimistic'].sourceFluxType='Ap'
+
+# Minimum allowed signal-to-noise ratio for sources used for matching (in the flux specified by sourceFluxType); <= 0 for no limit
+config.charImage.measureApCorr.sourceSelector['matcherPessimistic'].minSnr=40.0
 
 # specify the minimum psfFlux for good Psf Candidates
-# 	Valid Range = [0.0,inf)
-config.charImage.measureApCorr.starSelector['catalog'].fluxLim=0.0
+config.charImage.measureApCorr.sourceSelector['catalog'].fluxLim=0.0
 
 # specify the maximum psfFlux for good Psf Candidates (ignored if == 0)
-# 	Valid Range = [0.0,inf)
-config.charImage.measureApCorr.starSelector['catalog'].fluxMax=0.0
+config.charImage.measureApCorr.sourceSelector['catalog'].fluxMax=0.0
 
-config.charImage.measureApCorr.starSelector.name='flagged'
+# List of flags which cause a source to be rejected as bad
+config.charImage.measureApCorr.sourceSelector['catalog'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter']
+
+config.charImage.measureApCorr.sourceSelector.name='flagged'
 # Minimum number of degrees of freedom (# of valid data points - # of parameters); if this is exceeded, the order of the fit is decreased (in both dimensions), and if we can't decrease it enough, we'll raise ValueError.
-# 	Valid Range = [1,inf)
 config.charImage.measureApCorr.minDegreesOfFreedom=1
 
 # maximum Chebyshev function order in x
@@ -867,45 +898,42 @@ config.charImage.useSimplePsf=True
 config.charImage.installSimplePsf.fwhm=3.5322300675464238
 
 # Width and height of PSF model, in pixels. Must be odd.
-# 	Valid Range = [1,inf)
 config.charImage.installSimplePsf.width=11
 
+import lsst.meas.algorithms.loadIndexedReferenceObjects
+config.charImage.refObjLoader.retarget(target=lsst.meas.algorithms.loadIndexedReferenceObjects.LoadIndexedReferenceObjectsTask, ConfigClass=lsst.meas.algorithms.loadIndexedReferenceObjects.LoadIndexedReferenceObjectsConfig)
+
 # Padding to add to 4 all edges of the bounding box (pixels)
-# 	Valid Range = [0,inf)
-config.charImage.refObjLoader.pixelMargin=50
+config.charImage.refObjLoader.pixelMargin=300
 
 # Default reference catalog filter to use if filter not specified in exposure; if blank then filter must be specified in exposure
 config.charImage.refObjLoader.defaultFilter=''
 
 # Mapping of camera filter name: reference catalog filter name; each reference filter must exist
-config.charImage.refObjLoader.filterMap={}
+config.charImage.refObjLoader.filterMap={'u': 'g', 'Y': 'y'}
+
+# Name of the ingested reference dataset
+config.charImage.refObjLoader.ref_dataset_name='ps1_pv3_3pi_20170110'
 
 # Maximum separation between reference objects and sources beyond which they will not be considered a match (arcsec)
-# 	Valid Range = [0,inf)
 config.charImage.ref_match.matcher.maxMatchDistArcSec=3.0
 
 # Number of bright stars to use
-# 	Valid Range = [2,inf)
 config.charImage.ref_match.matcher.numBrightStars=50
 
 # Minimum number of matched pairs; see also minFracMatchedPairs
-# 	Valid Range = [2,inf)
 config.charImage.ref_match.matcher.minMatchedPairs=30
 
 # Minimum number of matched pairs as a fraction of the smaller of the number of reference stars or the number of good sources; the actual minimum is the smaller of this value or minMatchedPairs
-# 	Valid Range = [0,1)
 config.charImage.ref_match.matcher.minFracMatchedPairs=0.3
 
-# Maximum allowed shift of WCS, due to matching (pixel)
-# 	Valid Range = [-inf,4000)
+# Maximum allowed shift of WCS, due to matching (pixel). When changing this value, the LoadReferenceObjectsConfig.pixelMargin should also be updated.
 config.charImage.ref_match.matcher.maxOffsetPix=300
 
 # Rotation angle allowed between sources and position reference objects (degrees)
-# 	Valid Range = [-inf,6.0)
 config.charImage.ref_match.matcher.maxRotationDeg=1.0
 
 # Allowed non-perpendicularity of x and y (degree)
-# 	Valid Range = [-inf,45.0)
 config.charImage.ref_match.matcher.allowedNonperpDeg=3.0
 
 # number of points to define a shape for matching
@@ -914,8 +942,141 @@ config.charImage.ref_match.matcher.numPointsForShape=6
 # maximum determinant of linear transformation matrix for a usable solution
 config.charImage.ref_match.matcher.maxDeterminant=0.02
 
+# Apply flux limit?
+config.charImage.ref_match.matcher.sourceSelector['science'].doFluxLimit=False
+
+# Apply flag limitation?
+config.charImage.ref_match.matcher.sourceSelector['science'].doFlags=False
+
+# Apply unresolved limitation?
+config.charImage.ref_match.matcher.sourceSelector['science'].doUnresolved=False
+
+# Apply signal-to-noise limit?
+config.charImage.ref_match.matcher.sourceSelector['science'].doSignalToNoise=False
+
+# Apply isolated limitation?
+config.charImage.ref_match.matcher.sourceSelector['science'].doIsolated=False
+
+# Select objects with value greater than this
+config.charImage.ref_match.matcher.sourceSelector['science'].fluxLimit.minimum=None
+
+# Select objects with value less than this
+config.charImage.ref_match.matcher.sourceSelector['science'].fluxLimit.maximum=None
+
+# Name of the source flux field to use.
+config.charImage.ref_match.matcher.sourceSelector['science'].fluxLimit.fluxField='slot_CalibFlux_flux'
+
+# List of source flag fields that must be set for a source to be used.
+config.charImage.ref_match.matcher.sourceSelector['science'].flags.good=[]
+
+# List of source flag fields that must NOT be set for a source to be used.
+config.charImage.ref_match.matcher.sourceSelector['science'].flags.bad=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_saturated', 'base_PsfFlux_flags']
+
+# Select objects with value greater than this
+config.charImage.ref_match.matcher.sourceSelector['science'].unresolved.minimum=None
+
+# Select objects with value less than this
+config.charImage.ref_match.matcher.sourceSelector['science'].unresolved.maximum=None
+
+# Name of column for star/galaxy separation
+config.charImage.ref_match.matcher.sourceSelector['science'].unresolved.name='base_ClassificationExtendedness_value'
+
+# Select objects with value greater than this
+config.charImage.ref_match.matcher.sourceSelector['science'].signalToNoise.minimum=None
+
+# Select objects with value less than this
+config.charImage.ref_match.matcher.sourceSelector['science'].signalToNoise.maximum=None
+
+# Name of the source flux field to use.
+config.charImage.ref_match.matcher.sourceSelector['science'].signalToNoise.fluxField='base_PsfFlux_flux'
+
+# Name of the source flux error field to use.
+config.charImage.ref_match.matcher.sourceSelector['science'].signalToNoise.errField='base_PsfFlux_fluxSigma'
+
+# Name of column for parent
+config.charImage.ref_match.matcher.sourceSelector['science'].isolated.parentName='parent'
+
+# Name of column for nChild
+config.charImage.ref_match.matcher.sourceSelector['science'].isolated.nChildName='deblend_nChild'
+
+# Apply magnitude limit?
+config.charImage.ref_match.matcher.sourceSelector['references'].doMagLimit=False
+
+# Apply flag limitation?
+config.charImage.ref_match.matcher.sourceSelector['references'].doFlags=False
+
+# Apply signal-to-noise limit?
+config.charImage.ref_match.matcher.sourceSelector['references'].doSignalToNoise=False
+
+# Apply magnitude error limit?
+config.charImage.ref_match.matcher.sourceSelector['references'].doMagError=False
+
+# Select objects with value greater than this
+config.charImage.ref_match.matcher.sourceSelector['references'].magLimit.minimum=None
+
+# Select objects with value less than this
+config.charImage.ref_match.matcher.sourceSelector['references'].magLimit.maximum=None
+
+# Name of the source flux field to use.
+config.charImage.ref_match.matcher.sourceSelector['references'].magLimit.fluxField='flux'
+
+# List of source flag fields that must be set for a source to be used.
+config.charImage.ref_match.matcher.sourceSelector['references'].flags.good=[]
+
+# List of source flag fields that must NOT be set for a source to be used.
+config.charImage.ref_match.matcher.sourceSelector['references'].flags.bad=[]
+
+# Select objects with value greater than this
+config.charImage.ref_match.matcher.sourceSelector['references'].signalToNoise.minimum=None
+
+# Select objects with value less than this
+config.charImage.ref_match.matcher.sourceSelector['references'].signalToNoise.maximum=None
+
+# Name of the source flux field to use.
+config.charImage.ref_match.matcher.sourceSelector['references'].signalToNoise.fluxField='flux'
+
+# Name of the source flux error field to use.
+config.charImage.ref_match.matcher.sourceSelector['references'].signalToNoise.errField='flux_err'
+
+# Select objects with value greater than this
+config.charImage.ref_match.matcher.sourceSelector['references'].magError.minimum=None
+
+# Select objects with value less than this
+config.charImage.ref_match.matcher.sourceSelector['references'].magError.maximum=None
+
+# Name of the source flux error field to use.
+config.charImage.ref_match.matcher.sourceSelector['references'].magError.magErrField='mag_err'
+
+config.charImage.ref_match.matcher.sourceSelector['references'].colorLimits={}
+# specify the minimum psfFlux for good Psf Candidates
+config.charImage.ref_match.matcher.sourceSelector['objectSize'].fluxMin=12500.0
+
+# specify the maximum psfFlux for good Psf Candidates (ignored if == 0)
+config.charImage.ref_match.matcher.sourceSelector['objectSize'].fluxMax=0.0
+
+# minimum width to include in histogram
+config.charImage.ref_match.matcher.sourceSelector['objectSize'].widthMin=0.0
+
+# maximum width to include in histogram
+config.charImage.ref_match.matcher.sourceSelector['objectSize'].widthMax=10.0
+
+# Name of field in Source to use for flux measurement
+config.charImage.ref_match.matcher.sourceSelector['objectSize'].sourceFluxField='base_GaussianFlux_flux'
+
+# Standard deviation of width allowed to be interpreted as good stars
+config.charImage.ref_match.matcher.sourceSelector['objectSize'].widthStdAllowed=0.15
+
+# Keep objects within this many sigma of cluster 0's median
+config.charImage.ref_match.matcher.sourceSelector['objectSize'].nSigmaClip=2.0
+
 # List of flags which cause a source to be rejected as bad
-config.charImage.ref_match.matcher.sourceSelector['astrometry'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter', 'base_PixelFlags_flag_crCenter', 'base_PixelFlags_flag_bad', 'base_PixelFlags_flag_interpolated']
+config.charImage.ref_match.matcher.sourceSelector['objectSize'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter', 'base_PixelFlags_flag_crCenter', 'base_PixelFlags_flag_bad', 'base_PixelFlags_flag_interpolated']
+
+# Name of a flag field that is True for Sources that should be used.
+config.charImage.ref_match.matcher.sourceSelector['flagged'].field='calib_psfUsed'
+
+# List of flags which cause a source to be rejected as bad
+config.charImage.ref_match.matcher.sourceSelector['astrometry'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter', 'base_PixelFlags_flag_crCenter', 'base_PixelFlags_flag_bad']
 
 # Type of source flux; typically one of Ap or Psf
 config.charImage.ref_match.matcher.sourceSelector['astrometry'].sourceFluxType='Ap'
@@ -923,17 +1084,11 @@ config.charImage.ref_match.matcher.sourceSelector['astrometry'].sourceFluxType='
 # Minimum allowed signal-to-noise ratio for sources used for matching (in the flux specified by sourceFluxType); <= 0 for no limit
 config.charImage.ref_match.matcher.sourceSelector['astrometry'].minSnr=10.0
 
-# List of flags which cause a source to be rejected as bad
-config.charImage.ref_match.matcher.sourceSelector['matcher'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter', 'base_PixelFlags_flag_crCenter', 'base_PixelFlags_flag_bad', 'base_PixelFlags_flag_interpolated']
-
 # Type of source flux; typically one of Ap or Psf
 config.charImage.ref_match.matcher.sourceSelector['matcher'].sourceFluxType='Ap'
 
 # Minimum allowed signal-to-noise ratio for sources used for matching (in the flux specified by sourceFluxType); <= 0 for no limit
 config.charImage.ref_match.matcher.sourceSelector['matcher'].minSnr=40.0
-
-# List of flags which cause a source to be rejected as bad
-config.charImage.ref_match.matcher.sourceSelector['matcherPessimistic'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter', 'base_PixelFlags_flag_crCenter', 'base_PixelFlags_flag_bad', 'base_PixelFlags_flag_interpolated']
 
 # Type of source flux; typically one of Ap or Psf
 config.charImage.ref_match.matcher.sourceSelector['matcherPessimistic'].sourceFluxType='Ap'
@@ -941,53 +1096,231 @@ config.charImage.ref_match.matcher.sourceSelector['matcherPessimistic'].sourceFl
 # Minimum allowed signal-to-noise ratio for sources used for matching (in the flux specified by sourceFluxType); <= 0 for no limit
 config.charImage.ref_match.matcher.sourceSelector['matcherPessimistic'].minSnr=40.0
 
-config.charImage.ref_match.matcher.sourceSelector.name='matcher'
-# the maximum match distance is set to  mean_match_distance + matchDistanceSigma*std_dev_match_distance; ignored if not fitting a WCS
-# 	Valid Range = [0,inf)
-config.charImage.ref_match.matchDistanceSigma=2.0
-
-# size of the kernel to create
-config.charImage.measurePsf.starSelector['secondMoment'].kernelSize=21
-
-# number of pixels to ignore around the edge of PSF candidate postage stamps
-config.charImage.measurePsf.starSelector['secondMoment'].borderWidth=0
-
-# List of flags which cause a source to be rejected as bad
-config.charImage.measurePsf.starSelector['secondMoment'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter', 'base_PixelFlags_flag_crCenter']
-
 # specify the minimum psfFlux for good Psf Candidates
-config.charImage.measurePsf.starSelector['secondMoment'].fluxLim=12500.0
+config.charImage.ref_match.matcher.sourceSelector['catalog'].fluxLim=0.0
 
 # specify the maximum psfFlux for good Psf Candidates (ignored if == 0)
-config.charImage.measurePsf.starSelector['secondMoment'].fluxMax=0.0
-
-# candidate PSF's shapes must lie within this many sigma of the average shape
-config.charImage.measurePsf.starSelector['secondMoment'].clumpNSigma=2.0
-
-# Number of bins in moment histogram
-config.charImage.measurePsf.starSelector['secondMoment'].histSize=64
-
-# Maximum moment to consider
-config.charImage.measurePsf.starSelector['secondMoment'].histMomentMax=100.0
-
-# Multiplier of mean for maximum moments histogram range
-config.charImage.measurePsf.starSelector['secondMoment'].histMomentMaxMultiplier=5.0
-
-# Clipping threshold for moments histogram range
-config.charImage.measurePsf.starSelector['secondMoment'].histMomentClip=5.0
-
-# Multiplier of mean for minimum moments histogram range
-config.charImage.measurePsf.starSelector['secondMoment'].histMomentMinMultiplier=2.0
-
-# size of the kernel to create
-config.charImage.measurePsf.starSelector['objectSize'].kernelSize=21
-
-# number of pixels to ignore around the edge of PSF candidate postage stamps
-config.charImage.measurePsf.starSelector['objectSize'].borderWidth=0
+config.charImage.ref_match.matcher.sourceSelector['catalog'].fluxMax=0.0
 
 # List of flags which cause a source to be rejected as bad
-config.charImage.measurePsf.starSelector['objectSize'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter', 'base_PixelFlags_flag_crCenter', 'base_PixelFlags_flag_bad', 'base_PixelFlags_flag_interpolated']
+config.charImage.ref_match.matcher.sourceSelector['catalog'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter']
 
+config.charImage.ref_match.matcher.sourceSelector.name='matcher'
+# the maximum match distance is set to  mean_match_distance + matchDistanceSigma*std_dev_match_distance; ignored if not fitting a WCS
+config.charImage.ref_match.matchDistanceSigma=2.0
+
+# Apply flux limit?
+config.charImage.ref_match.sourceSelection.doFluxLimit=False
+
+# Apply flag limitation?
+config.charImage.ref_match.sourceSelection.doFlags=False
+
+# Apply unresolved limitation?
+config.charImage.ref_match.sourceSelection.doUnresolved=False
+
+# Apply signal-to-noise limit?
+config.charImage.ref_match.sourceSelection.doSignalToNoise=False
+
+# Apply isolated limitation?
+config.charImage.ref_match.sourceSelection.doIsolated=False
+
+# Select objects with value greater than this
+config.charImage.ref_match.sourceSelection.fluxLimit.minimum=None
+
+# Select objects with value less than this
+config.charImage.ref_match.sourceSelection.fluxLimit.maximum=None
+
+# Name of the source flux field to use.
+config.charImage.ref_match.sourceSelection.fluxLimit.fluxField='slot_CalibFlux_flux'
+
+# List of source flag fields that must be set for a source to be used.
+config.charImage.ref_match.sourceSelection.flags.good=[]
+
+# List of source flag fields that must NOT be set for a source to be used.
+config.charImage.ref_match.sourceSelection.flags.bad=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_saturated', 'base_PsfFlux_flags']
+
+# Select objects with value greater than this
+config.charImage.ref_match.sourceSelection.unresolved.minimum=None
+
+# Select objects with value less than this
+config.charImage.ref_match.sourceSelection.unresolved.maximum=None
+
+# Name of column for star/galaxy separation
+config.charImage.ref_match.sourceSelection.unresolved.name='base_ClassificationExtendedness_value'
+
+# Select objects with value greater than this
+config.charImage.ref_match.sourceSelection.signalToNoise.minimum=None
+
+# Select objects with value less than this
+config.charImage.ref_match.sourceSelection.signalToNoise.maximum=None
+
+# Name of the source flux field to use.
+config.charImage.ref_match.sourceSelection.signalToNoise.fluxField='base_PsfFlux_flux'
+
+# Name of the source flux error field to use.
+config.charImage.ref_match.sourceSelection.signalToNoise.errField='base_PsfFlux_fluxSigma'
+
+# Name of column for parent
+config.charImage.ref_match.sourceSelection.isolated.parentName='parent'
+
+# Name of column for nChild
+config.charImage.ref_match.sourceSelection.isolated.nChildName='deblend_nChild'
+
+# Apply magnitude limit?
+config.charImage.ref_match.referenceSelection.doMagLimit=False
+
+# Apply flag limitation?
+config.charImage.ref_match.referenceSelection.doFlags=False
+
+# Apply signal-to-noise limit?
+config.charImage.ref_match.referenceSelection.doSignalToNoise=False
+
+# Apply magnitude error limit?
+config.charImage.ref_match.referenceSelection.doMagError=False
+
+# Select objects with value greater than this
+config.charImage.ref_match.referenceSelection.magLimit.minimum=None
+
+# Select objects with value less than this
+config.charImage.ref_match.referenceSelection.magLimit.maximum=None
+
+# Name of the source flux field to use.
+config.charImage.ref_match.referenceSelection.magLimit.fluxField='flux'
+
+# List of source flag fields that must be set for a source to be used.
+config.charImage.ref_match.referenceSelection.flags.good=[]
+
+# List of source flag fields that must NOT be set for a source to be used.
+config.charImage.ref_match.referenceSelection.flags.bad=[]
+
+# Select objects with value greater than this
+config.charImage.ref_match.referenceSelection.signalToNoise.minimum=None
+
+# Select objects with value less than this
+config.charImage.ref_match.referenceSelection.signalToNoise.maximum=None
+
+# Name of the source flux field to use.
+config.charImage.ref_match.referenceSelection.signalToNoise.fluxField='flux'
+
+# Name of the source flux error field to use.
+config.charImage.ref_match.referenceSelection.signalToNoise.errField='flux_err'
+
+# Select objects with value greater than this
+config.charImage.ref_match.referenceSelection.magError.minimum=None
+
+# Select objects with value less than this
+config.charImage.ref_match.referenceSelection.magError.maximum=None
+
+# Name of the source flux error field to use.
+config.charImage.ref_match.referenceSelection.magError.magErrField='mag_err'
+
+config.charImage.ref_match.referenceSelection.colorLimits={}
+# Apply flux limit?
+config.charImage.measurePsf.starSelector['science'].doFluxLimit=False
+
+# Apply flag limitation?
+config.charImage.measurePsf.starSelector['science'].doFlags=False
+
+# Apply unresolved limitation?
+config.charImage.measurePsf.starSelector['science'].doUnresolved=False
+
+# Apply signal-to-noise limit?
+config.charImage.measurePsf.starSelector['science'].doSignalToNoise=False
+
+# Apply isolated limitation?
+config.charImage.measurePsf.starSelector['science'].doIsolated=False
+
+# Select objects with value greater than this
+config.charImage.measurePsf.starSelector['science'].fluxLimit.minimum=None
+
+# Select objects with value less than this
+config.charImage.measurePsf.starSelector['science'].fluxLimit.maximum=None
+
+# Name of the source flux field to use.
+config.charImage.measurePsf.starSelector['science'].fluxLimit.fluxField='slot_CalibFlux_flux'
+
+# List of source flag fields that must be set for a source to be used.
+config.charImage.measurePsf.starSelector['science'].flags.good=[]
+
+# List of source flag fields that must NOT be set for a source to be used.
+config.charImage.measurePsf.starSelector['science'].flags.bad=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_saturated', 'base_PsfFlux_flags']
+
+# Select objects with value greater than this
+config.charImage.measurePsf.starSelector['science'].unresolved.minimum=None
+
+# Select objects with value less than this
+config.charImage.measurePsf.starSelector['science'].unresolved.maximum=None
+
+# Name of column for star/galaxy separation
+config.charImage.measurePsf.starSelector['science'].unresolved.name='base_ClassificationExtendedness_value'
+
+# Select objects with value greater than this
+config.charImage.measurePsf.starSelector['science'].signalToNoise.minimum=None
+
+# Select objects with value less than this
+config.charImage.measurePsf.starSelector['science'].signalToNoise.maximum=None
+
+# Name of the source flux field to use.
+config.charImage.measurePsf.starSelector['science'].signalToNoise.fluxField='base_PsfFlux_flux'
+
+# Name of the source flux error field to use.
+config.charImage.measurePsf.starSelector['science'].signalToNoise.errField='base_PsfFlux_fluxSigma'
+
+# Name of column for parent
+config.charImage.measurePsf.starSelector['science'].isolated.parentName='parent'
+
+# Name of column for nChild
+config.charImage.measurePsf.starSelector['science'].isolated.nChildName='deblend_nChild'
+
+# Apply magnitude limit?
+config.charImage.measurePsf.starSelector['references'].doMagLimit=False
+
+# Apply flag limitation?
+config.charImage.measurePsf.starSelector['references'].doFlags=False
+
+# Apply signal-to-noise limit?
+config.charImage.measurePsf.starSelector['references'].doSignalToNoise=False
+
+# Apply magnitude error limit?
+config.charImage.measurePsf.starSelector['references'].doMagError=False
+
+# Select objects with value greater than this
+config.charImage.measurePsf.starSelector['references'].magLimit.minimum=None
+
+# Select objects with value less than this
+config.charImage.measurePsf.starSelector['references'].magLimit.maximum=None
+
+# Name of the source flux field to use.
+config.charImage.measurePsf.starSelector['references'].magLimit.fluxField='flux'
+
+# List of source flag fields that must be set for a source to be used.
+config.charImage.measurePsf.starSelector['references'].flags.good=[]
+
+# List of source flag fields that must NOT be set for a source to be used.
+config.charImage.measurePsf.starSelector['references'].flags.bad=[]
+
+# Select objects with value greater than this
+config.charImage.measurePsf.starSelector['references'].signalToNoise.minimum=None
+
+# Select objects with value less than this
+config.charImage.measurePsf.starSelector['references'].signalToNoise.maximum=None
+
+# Name of the source flux field to use.
+config.charImage.measurePsf.starSelector['references'].signalToNoise.fluxField='flux'
+
+# Name of the source flux error field to use.
+config.charImage.measurePsf.starSelector['references'].signalToNoise.errField='flux_err'
+
+# Select objects with value greater than this
+config.charImage.measurePsf.starSelector['references'].magError.minimum=None
+
+# Select objects with value less than this
+config.charImage.measurePsf.starSelector['references'].magError.maximum=None
+
+# Name of the source flux error field to use.
+config.charImage.measurePsf.starSelector['references'].magError.magErrField='mag_err'
+
+config.charImage.measurePsf.starSelector['references'].colorLimits={}
 # specify the minimum psfFlux for good Psf Candidates
 config.charImage.measurePsf.starSelector['objectSize'].fluxMin=12500.0
 
@@ -1009,36 +1342,49 @@ config.charImage.measurePsf.starSelector['objectSize'].widthStdAllowed=0.15
 # Keep objects within this many sigma of cluster 0's median
 config.charImage.measurePsf.starSelector['objectSize'].nSigmaClip=2.0
 
-# size of the kernel to create
-config.charImage.measurePsf.starSelector['flagged'].kernelSize=21
-
-# number of pixels to ignore around the edge of PSF candidate postage stamps
-config.charImage.measurePsf.starSelector['flagged'].borderWidth=0
-
 # List of flags which cause a source to be rejected as bad
-config.charImage.measurePsf.starSelector['flagged'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter', 'base_PixelFlags_flag_crCenter', 'base_PixelFlags_flag_bad', 'base_PixelFlags_flag_interpolated']
+config.charImage.measurePsf.starSelector['objectSize'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter', 'base_PixelFlags_flag_crCenter', 'base_PixelFlags_flag_bad', 'base_PixelFlags_flag_interpolated']
 
-# Name of a flag field that is True for stars that should be used.
+# Name of a flag field that is True for Sources that should be used.
 config.charImage.measurePsf.starSelector['flagged'].field='calib_psfUsed'
 
-# size of the kernel to create
-config.charImage.measurePsf.starSelector['catalog'].kernelSize=21
+# List of flags which cause a source to be rejected as bad
+config.charImage.measurePsf.starSelector['astrometry'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter', 'base_PixelFlags_flag_crCenter', 'base_PixelFlags_flag_bad']
 
-# number of pixels to ignore around the edge of PSF candidate postage stamps
-config.charImage.measurePsf.starSelector['catalog'].borderWidth=0
+# Type of source flux; typically one of Ap or Psf
+config.charImage.measurePsf.starSelector['astrometry'].sourceFluxType='Ap'
+
+# Minimum allowed signal-to-noise ratio for sources used for matching (in the flux specified by sourceFluxType); <= 0 for no limit
+config.charImage.measurePsf.starSelector['astrometry'].minSnr=10.0
+
+# Type of source flux; typically one of Ap or Psf
+config.charImage.measurePsf.starSelector['matcher'].sourceFluxType='Ap'
+
+# Minimum allowed signal-to-noise ratio for sources used for matching (in the flux specified by sourceFluxType); <= 0 for no limit
+config.charImage.measurePsf.starSelector['matcher'].minSnr=40.0
+
+# Type of source flux; typically one of Ap or Psf
+config.charImage.measurePsf.starSelector['matcherPessimistic'].sourceFluxType='Ap'
+
+# Minimum allowed signal-to-noise ratio for sources used for matching (in the flux specified by sourceFluxType); <= 0 for no limit
+config.charImage.measurePsf.starSelector['matcherPessimistic'].minSnr=40.0
+
+# specify the minimum psfFlux for good Psf Candidates
+config.charImage.measurePsf.starSelector['catalog'].fluxLim=0.0
+
+# specify the maximum psfFlux for good Psf Candidates (ignored if == 0)
+config.charImage.measurePsf.starSelector['catalog'].fluxMax=0.0
 
 # List of flags which cause a source to be rejected as bad
 config.charImage.measurePsf.starSelector['catalog'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter']
 
-# specify the minimum psfFlux for good Psf Candidates
-# 	Valid Range = [0.0,inf)
-config.charImage.measurePsf.starSelector['catalog'].fluxLim=0.0
-
-# specify the maximum psfFlux for good Psf Candidates (ignored if == 0)
-# 	Valid Range = [0.0,inf)
-config.charImage.measurePsf.starSelector['catalog'].fluxMax=0.0
-
 config.charImage.measurePsf.starSelector.name='objectSize'
+# size of the kernel to create
+config.charImage.measurePsf.makePsfCandidates.kernelSize=21
+
+# number of pixels to ignore around the edge of PSF candidate postage stamps
+config.charImage.measurePsf.makePsfCandidates.borderWidth=0
+
 # radius of the kernel to create, relative to the square root of the stellar quadrupole moments
 config.charImage.measurePsf.psfDeterminer['pca'].kernelSize=10.0
 
@@ -1100,11 +1446,11 @@ config.charImage.measurePsf.psfDeterminer['pca'].doRejectBlends=False
 config.charImage.measurePsf.psfDeterminer['pca'].doMaskBlends=True
 
 config.charImage.measurePsf.psfDeterminer.name='pca'
-# Fraction of PSF candidates to reserve from fitting; none if <= 0
-config.charImage.measurePsf.reserveFraction=-1.0
+# Fraction of candidates to reserve from fitting; none if <= 0
+config.charImage.measurePsf.reserve.fraction=0.0
 
-# This number will be multiplied by the exposure ID to set the random seed for reserving candidates
-config.charImage.measurePsf.reserveSeed=1
+# This number will be added to the exposure ID to set the random seed for reserving candidates
+config.charImage.measurePsf.reserve.seed=1
 
 # Interpolate over defects? (ignored unless you provide a list of defects)
 config.charImage.repair.doInterpolate=True
@@ -1134,44 +1480,21 @@ config.charImage.repair.cosmicray.niteration=3
 config.charImage.repair.cosmicray.keepCRs=False
 
 # type of statistic to use for grid points
-# Allowed values:
-# 	MEANCLIP	clipped mean
-# 	MEAN	unclipped mean
-# 	MEDIAN	median
-# 	None	Field is optional
-# 
 config.charImage.repair.cosmicray.background.statisticsProperty='MEDIAN'
 
 # behaviour if there are too few points in grid for requested interpolation style
-# Allowed values:
-# 	THROW_EXCEPTION	throw an exception if there are too few points
-# 	REDUCE_INTERP_ORDER	use an interpolation style with a lower order.
-# 	INCREASE_NXNYSAMPLE	Increase the number of samples used to make the interpolation grid.
-# 	None	Field is optional
-# 
 config.charImage.repair.cosmicray.background.undersampleStyle='REDUCE_INTERP_ORDER'
 
 # how large a region of the sky should be used for each background point
-# 	Valid Range = [1,inf)
 config.charImage.repair.cosmicray.background.binSize=100000
 
 # Sky region size to be used for each background point in X direction. If 0, the binSize config is used.
-# 	Valid Range = [0,inf)
 config.charImage.repair.cosmicray.background.binSizeX=0
 
 # Sky region size to be used for each background point in Y direction. If 0, the binSize config is used.
-# 	Valid Range = [0,inf)
 config.charImage.repair.cosmicray.background.binSizeY=0
 
 # how to interpolate the background values. This maps to an enum; see afw::math::Background
-# Allowed values:
-# 	CONSTANT	Use a single constant value
-# 	LINEAR	Use linear interpolation
-# 	NATURAL_SPLINE	cubic spline with zero second derivative at endpoints
-# 	AKIMA_SPLINE	higher-level nonlinear spline that is more robust to outliers
-# 	NONE	No background estimation is to be attempted
-# 	None	Field is optional
-# 
 config.charImage.repair.cosmicray.background.algorithm='AKIMA_SPLINE'
 
 # Names of mask planes to ignore while estimating the background
@@ -1220,13 +1543,6 @@ config.charImage.repair.interp.modelPsf.wingAmplitude=0.1
 config.charImage.repair.interp.useFallbackValueAtEdge=True
 
 # Type of statistic to calculate edge fallbackValue for interpolation
-# Allowed values:
-# 	MEAN	mean
-# 	MEDIAN	median
-# 	MEANCLIP	clipped mean
-# 	USER	user value set in fallbackUserValue config
-# 	None	Field is optional
-# 
 config.charImage.repair.interp.fallbackValueType='MEANCLIP'
 
 # If fallbackValueType is 'USER' then use this as the fallbackValue; ignored otherwise
@@ -1257,8 +1573,7 @@ config.calibrate.doWriteMatchesDenormalized=False
 config.calibrate.doAstrometry=True
 
 # Padding to add to 4 all edges of the bounding box (pixels)
-# 	Valid Range = [0,inf)
-config.calibrate.astromRefObjLoader.pixelMargin=50
+config.calibrate.astromRefObjLoader.pixelMargin=300
 
 # Default reference catalog filter to use if filter not specified in exposure; if blank then filter must be specified in exposure
 config.calibrate.astromRefObjLoader.defaultFilter=''
@@ -1267,8 +1582,7 @@ config.calibrate.astromRefObjLoader.defaultFilter=''
 config.calibrate.astromRefObjLoader.filterMap={}
 
 # Padding to add to 4 all edges of the bounding box (pixels)
-# 	Valid Range = [0,inf)
-config.calibrate.photoRefObjLoader.pixelMargin=50
+config.calibrate.photoRefObjLoader.pixelMargin=300
 
 # Default reference catalog filter to use if filter not specified in exposure; if blank then filter must be specified in exposure
 config.calibrate.photoRefObjLoader.defaultFilter=''
@@ -1277,31 +1591,24 @@ config.calibrate.photoRefObjLoader.defaultFilter=''
 config.calibrate.photoRefObjLoader.filterMap={}
 
 # Maximum separation between reference objects and sources beyond which they will not be considered a match (arcsec)
-# 	Valid Range = [0,inf)
 config.calibrate.astrometry.matcher.maxMatchDistArcSec=3.0
 
 # Number of bright stars to use
-# 	Valid Range = [2,inf)
 config.calibrate.astrometry.matcher.numBrightStars=50
 
 # Minimum number of matched pairs; see also minFracMatchedPairs
-# 	Valid Range = [2,inf)
 config.calibrate.astrometry.matcher.minMatchedPairs=30
 
 # Minimum number of matched pairs as a fraction of the smaller of the number of reference stars or the number of good sources; the actual minimum is the smaller of this value or minMatchedPairs
-# 	Valid Range = [0,1)
 config.calibrate.astrometry.matcher.minFracMatchedPairs=0.3
 
-# Maximum allowed shift of WCS, due to matching (pixel)
-# 	Valid Range = [-inf,4000)
+# Maximum allowed shift of WCS, due to matching (pixel). When changing this value, the LoadReferenceObjectsConfig.pixelMargin should also be updated.
 config.calibrate.astrometry.matcher.maxOffsetPix=300
 
 # Rotation angle allowed between sources and position reference objects (degrees)
-# 	Valid Range = [-inf,6.0)
 config.calibrate.astrometry.matcher.maxRotationDeg=1.0
 
 # Allowed non-perpendicularity of x and y (degree)
-# 	Valid Range = [-inf,45.0)
 config.calibrate.astrometry.matcher.allowedNonperpDeg=3.0
 
 # number of points to define a shape for matching
@@ -1310,8 +1617,141 @@ config.calibrate.astrometry.matcher.numPointsForShape=6
 # maximum determinant of linear transformation matrix for a usable solution
 config.calibrate.astrometry.matcher.maxDeterminant=0.02
 
+# Apply flux limit?
+config.calibrate.astrometry.matcher.sourceSelector['science'].doFluxLimit=False
+
+# Apply flag limitation?
+config.calibrate.astrometry.matcher.sourceSelector['science'].doFlags=False
+
+# Apply unresolved limitation?
+config.calibrate.astrometry.matcher.sourceSelector['science'].doUnresolved=False
+
+# Apply signal-to-noise limit?
+config.calibrate.astrometry.matcher.sourceSelector['science'].doSignalToNoise=False
+
+# Apply isolated limitation?
+config.calibrate.astrometry.matcher.sourceSelector['science'].doIsolated=False
+
+# Select objects with value greater than this
+config.calibrate.astrometry.matcher.sourceSelector['science'].fluxLimit.minimum=None
+
+# Select objects with value less than this
+config.calibrate.astrometry.matcher.sourceSelector['science'].fluxLimit.maximum=None
+
+# Name of the source flux field to use.
+config.calibrate.astrometry.matcher.sourceSelector['science'].fluxLimit.fluxField='slot_CalibFlux_flux'
+
+# List of source flag fields that must be set for a source to be used.
+config.calibrate.astrometry.matcher.sourceSelector['science'].flags.good=[]
+
+# List of source flag fields that must NOT be set for a source to be used.
+config.calibrate.astrometry.matcher.sourceSelector['science'].flags.bad=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_saturated', 'base_PsfFlux_flags']
+
+# Select objects with value greater than this
+config.calibrate.astrometry.matcher.sourceSelector['science'].unresolved.minimum=None
+
+# Select objects with value less than this
+config.calibrate.astrometry.matcher.sourceSelector['science'].unresolved.maximum=None
+
+# Name of column for star/galaxy separation
+config.calibrate.astrometry.matcher.sourceSelector['science'].unresolved.name='base_ClassificationExtendedness_value'
+
+# Select objects with value greater than this
+config.calibrate.astrometry.matcher.sourceSelector['science'].signalToNoise.minimum=None
+
+# Select objects with value less than this
+config.calibrate.astrometry.matcher.sourceSelector['science'].signalToNoise.maximum=None
+
+# Name of the source flux field to use.
+config.calibrate.astrometry.matcher.sourceSelector['science'].signalToNoise.fluxField='base_PsfFlux_flux'
+
+# Name of the source flux error field to use.
+config.calibrate.astrometry.matcher.sourceSelector['science'].signalToNoise.errField='base_PsfFlux_fluxSigma'
+
+# Name of column for parent
+config.calibrate.astrometry.matcher.sourceSelector['science'].isolated.parentName='parent'
+
+# Name of column for nChild
+config.calibrate.astrometry.matcher.sourceSelector['science'].isolated.nChildName='deblend_nChild'
+
+# Apply magnitude limit?
+config.calibrate.astrometry.matcher.sourceSelector['references'].doMagLimit=False
+
+# Apply flag limitation?
+config.calibrate.astrometry.matcher.sourceSelector['references'].doFlags=False
+
+# Apply signal-to-noise limit?
+config.calibrate.astrometry.matcher.sourceSelector['references'].doSignalToNoise=False
+
+# Apply magnitude error limit?
+config.calibrate.astrometry.matcher.sourceSelector['references'].doMagError=False
+
+# Select objects with value greater than this
+config.calibrate.astrometry.matcher.sourceSelector['references'].magLimit.minimum=None
+
+# Select objects with value less than this
+config.calibrate.astrometry.matcher.sourceSelector['references'].magLimit.maximum=None
+
+# Name of the source flux field to use.
+config.calibrate.astrometry.matcher.sourceSelector['references'].magLimit.fluxField='flux'
+
+# List of source flag fields that must be set for a source to be used.
+config.calibrate.astrometry.matcher.sourceSelector['references'].flags.good=[]
+
+# List of source flag fields that must NOT be set for a source to be used.
+config.calibrate.astrometry.matcher.sourceSelector['references'].flags.bad=[]
+
+# Select objects with value greater than this
+config.calibrate.astrometry.matcher.sourceSelector['references'].signalToNoise.minimum=None
+
+# Select objects with value less than this
+config.calibrate.astrometry.matcher.sourceSelector['references'].signalToNoise.maximum=None
+
+# Name of the source flux field to use.
+config.calibrate.astrometry.matcher.sourceSelector['references'].signalToNoise.fluxField='flux'
+
+# Name of the source flux error field to use.
+config.calibrate.astrometry.matcher.sourceSelector['references'].signalToNoise.errField='flux_err'
+
+# Select objects with value greater than this
+config.calibrate.astrometry.matcher.sourceSelector['references'].magError.minimum=None
+
+# Select objects with value less than this
+config.calibrate.astrometry.matcher.sourceSelector['references'].magError.maximum=None
+
+# Name of the source flux error field to use.
+config.calibrate.astrometry.matcher.sourceSelector['references'].magError.magErrField='mag_err'
+
+config.calibrate.astrometry.matcher.sourceSelector['references'].colorLimits={}
+# specify the minimum psfFlux for good Psf Candidates
+config.calibrate.astrometry.matcher.sourceSelector['objectSize'].fluxMin=12500.0
+
+# specify the maximum psfFlux for good Psf Candidates (ignored if == 0)
+config.calibrate.astrometry.matcher.sourceSelector['objectSize'].fluxMax=0.0
+
+# minimum width to include in histogram
+config.calibrate.astrometry.matcher.sourceSelector['objectSize'].widthMin=0.0
+
+# maximum width to include in histogram
+config.calibrate.astrometry.matcher.sourceSelector['objectSize'].widthMax=10.0
+
+# Name of field in Source to use for flux measurement
+config.calibrate.astrometry.matcher.sourceSelector['objectSize'].sourceFluxField='base_GaussianFlux_flux'
+
+# Standard deviation of width allowed to be interpreted as good stars
+config.calibrate.astrometry.matcher.sourceSelector['objectSize'].widthStdAllowed=0.15
+
+# Keep objects within this many sigma of cluster 0's median
+config.calibrate.astrometry.matcher.sourceSelector['objectSize'].nSigmaClip=2.0
+
 # List of flags which cause a source to be rejected as bad
-config.calibrate.astrometry.matcher.sourceSelector['astrometry'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter', 'base_PixelFlags_flag_crCenter', 'base_PixelFlags_flag_bad', 'base_PixelFlags_flag_interpolated']
+config.calibrate.astrometry.matcher.sourceSelector['objectSize'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter', 'base_PixelFlags_flag_crCenter', 'base_PixelFlags_flag_bad', 'base_PixelFlags_flag_interpolated']
+
+# Name of a flag field that is True for Sources that should be used.
+config.calibrate.astrometry.matcher.sourceSelector['flagged'].field='calib_psfUsed'
+
+# List of flags which cause a source to be rejected as bad
+config.calibrate.astrometry.matcher.sourceSelector['astrometry'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter', 'base_PixelFlags_flag_crCenter', 'base_PixelFlags_flag_bad']
 
 # Type of source flux; typically one of Ap or Psf
 config.calibrate.astrometry.matcher.sourceSelector['astrometry'].sourceFluxType='Ap'
@@ -1319,17 +1759,11 @@ config.calibrate.astrometry.matcher.sourceSelector['astrometry'].sourceFluxType=
 # Minimum allowed signal-to-noise ratio for sources used for matching (in the flux specified by sourceFluxType); <= 0 for no limit
 config.calibrate.astrometry.matcher.sourceSelector['astrometry'].minSnr=10.0
 
-# List of flags which cause a source to be rejected as bad
-config.calibrate.astrometry.matcher.sourceSelector['matcher'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter', 'base_PixelFlags_flag_crCenter', 'base_PixelFlags_flag_bad', 'base_PixelFlags_flag_interpolated']
-
 # Type of source flux; typically one of Ap or Psf
 config.calibrate.astrometry.matcher.sourceSelector['matcher'].sourceFluxType='Ap'
 
 # Minimum allowed signal-to-noise ratio for sources used for matching (in the flux specified by sourceFluxType); <= 0 for no limit
 config.calibrate.astrometry.matcher.sourceSelector['matcher'].minSnr=40.0
-
-# List of flags which cause a source to be rejected as bad
-config.calibrate.astrometry.matcher.sourceSelector['matcherPessimistic'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter', 'base_PixelFlags_flag_crCenter', 'base_PixelFlags_flag_bad', 'base_PixelFlags_flag_interpolated']
 
 # Type of source flux; typically one of Ap or Psf
 config.calibrate.astrometry.matcher.sourceSelector['matcherPessimistic'].sourceFluxType='Ap'
@@ -1337,40 +1771,147 @@ config.calibrate.astrometry.matcher.sourceSelector['matcherPessimistic'].sourceF
 # Minimum allowed signal-to-noise ratio for sources used for matching (in the flux specified by sourceFluxType); <= 0 for no limit
 config.calibrate.astrometry.matcher.sourceSelector['matcherPessimistic'].minSnr=40.0
 
+# specify the minimum psfFlux for good Psf Candidates
+config.calibrate.astrometry.matcher.sourceSelector['catalog'].fluxLim=0.0
+
+# specify the maximum psfFlux for good Psf Candidates (ignored if == 0)
+config.calibrate.astrometry.matcher.sourceSelector['catalog'].fluxMax=0.0
+
+# List of flags which cause a source to be rejected as bad
+config.calibrate.astrometry.matcher.sourceSelector['catalog'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter']
+
 config.calibrate.astrometry.matcher.sourceSelector.name='matcher'
 # the maximum match distance is set to  mean_match_distance + matchDistanceSigma*std_dev_match_distance; ignored if not fitting a WCS
-# 	Valid Range = [0,inf)
 config.calibrate.astrometry.matchDistanceSigma=2.0
 
+# Apply flux limit?
+config.calibrate.astrometry.sourceSelection.doFluxLimit=False
+
+# Apply flag limitation?
+config.calibrate.astrometry.sourceSelection.doFlags=False
+
+# Apply unresolved limitation?
+config.calibrate.astrometry.sourceSelection.doUnresolved=False
+
+# Apply signal-to-noise limit?
+config.calibrate.astrometry.sourceSelection.doSignalToNoise=False
+
+# Apply isolated limitation?
+config.calibrate.astrometry.sourceSelection.doIsolated=False
+
+# Select objects with value greater than this
+config.calibrate.astrometry.sourceSelection.fluxLimit.minimum=None
+
+# Select objects with value less than this
+config.calibrate.astrometry.sourceSelection.fluxLimit.maximum=None
+
+# Name of the source flux field to use.
+config.calibrate.astrometry.sourceSelection.fluxLimit.fluxField='slot_CalibFlux_flux'
+
+# List of source flag fields that must be set for a source to be used.
+config.calibrate.astrometry.sourceSelection.flags.good=[]
+
+# List of source flag fields that must NOT be set for a source to be used.
+config.calibrate.astrometry.sourceSelection.flags.bad=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_saturated', 'base_PsfFlux_flags']
+
+# Select objects with value greater than this
+config.calibrate.astrometry.sourceSelection.unresolved.minimum=None
+
+# Select objects with value less than this
+config.calibrate.astrometry.sourceSelection.unresolved.maximum=None
+
+# Name of column for star/galaxy separation
+config.calibrate.astrometry.sourceSelection.unresolved.name='base_ClassificationExtendedness_value'
+
+# Select objects with value greater than this
+config.calibrate.astrometry.sourceSelection.signalToNoise.minimum=None
+
+# Select objects with value less than this
+config.calibrate.astrometry.sourceSelection.signalToNoise.maximum=None
+
+# Name of the source flux field to use.
+config.calibrate.astrometry.sourceSelection.signalToNoise.fluxField='base_PsfFlux_flux'
+
+# Name of the source flux error field to use.
+config.calibrate.astrometry.sourceSelection.signalToNoise.errField='base_PsfFlux_fluxSigma'
+
+# Name of column for parent
+config.calibrate.astrometry.sourceSelection.isolated.parentName='parent'
+
+# Name of column for nChild
+config.calibrate.astrometry.sourceSelection.isolated.nChildName='deblend_nChild'
+
+# Apply magnitude limit?
+config.calibrate.astrometry.referenceSelection.doMagLimit=False
+
+# Apply flag limitation?
+config.calibrate.astrometry.referenceSelection.doFlags=False
+
+# Apply signal-to-noise limit?
+config.calibrate.astrometry.referenceSelection.doSignalToNoise=False
+
+# Apply magnitude error limit?
+config.calibrate.astrometry.referenceSelection.doMagError=False
+
+# Select objects with value greater than this
+config.calibrate.astrometry.referenceSelection.magLimit.minimum=None
+
+# Select objects with value less than this
+config.calibrate.astrometry.referenceSelection.magLimit.maximum=None
+
+# Name of the source flux field to use.
+config.calibrate.astrometry.referenceSelection.magLimit.fluxField='flux'
+
+# List of source flag fields that must be set for a source to be used.
+config.calibrate.astrometry.referenceSelection.flags.good=[]
+
+# List of source flag fields that must NOT be set for a source to be used.
+config.calibrate.astrometry.referenceSelection.flags.bad=[]
+
+# Select objects with value greater than this
+config.calibrate.astrometry.referenceSelection.signalToNoise.minimum=None
+
+# Select objects with value less than this
+config.calibrate.astrometry.referenceSelection.signalToNoise.maximum=None
+
+# Name of the source flux field to use.
+config.calibrate.astrometry.referenceSelection.signalToNoise.fluxField='flux'
+
+# Name of the source flux error field to use.
+config.calibrate.astrometry.referenceSelection.signalToNoise.errField='flux_err'
+
+# Select objects with value greater than this
+config.calibrate.astrometry.referenceSelection.magError.minimum=None
+
+# Select objects with value less than this
+config.calibrate.astrometry.referenceSelection.magError.maximum=None
+
+# Name of the source flux error field to use.
+config.calibrate.astrometry.referenceSelection.magError.magErrField='mag_err'
+
+config.calibrate.astrometry.referenceSelection.colorLimits={}
 # order of SIP polynomial
-# 	Valid Range = [0,inf)
 config.calibrate.astrometry.wcsFitter.order=4
 
 # number of iterations of fitter (which fits X and Y separately, and so benefits from a few iterations
-# 	Valid Range = [1,inf)
 config.calibrate.astrometry.wcsFitter.numIter=3
 
 # number of rejection iterations
-# 	Valid Range = [0,inf)
 config.calibrate.astrometry.wcsFitter.numRejIter=1
 
 # Number of standard deviations for clipping level
-# 	Valid Range = [0.0,inf)
 config.calibrate.astrometry.wcsFitter.rejSigma=3.0
 
 # maximum median scatter of a WCS fit beyond which the fit fails (arcsec); be generous, as this is only intended to catch catastrophic failures
-# 	Valid Range = [0,inf)
 config.calibrate.astrometry.wcsFitter.maxScatterArcsec=10.0
 
 # If True then load reference objects and match sources but do not fit a WCS;  this simply controls whether 'run' calls 'solve' or 'loadAndMatch'
 config.calibrate.astrometry.forceKnownWcs=False
 
 # maximum number of iterations of match sources and fit WCSignored if not fitting a WCS
-# 	Valid Range = [1,inf)
 config.calibrate.astrometry.maxIter=3
 
 # the match distance below which further iteration is pointless (arcsec); ignored if not fitting a WCS
-# 	Valid Range = [0,inf)
 config.calibrate.astrometry.minMatchDistanceArcSec=0.001
 
 # Raise an exception if astrometry fails? Ignored if doAstrometry false.
@@ -1382,80 +1923,120 @@ config.calibrate.doPhotoCal=True
 # Raise an exception if photoCal fails? Ignored if doPhotoCal false.
 config.calibrate.requirePhotoCal=True
 
-# Maximum separation between reference objects and sources beyond which they will not be considered a match (arcsec)
-# 	Valid Range = [0,inf)
-config.calibrate.photoCal.matcher.maxMatchDistArcSec=3.0
+# Matching radius, arcsec
+config.calibrate.photoCal.match.matchRadius=0.25
 
-# Number of bright stars to use
-# 	Valid Range = [2,inf)
-config.calibrate.photoCal.matcher.numBrightStars=50
+# Apply flux limit?
+config.calibrate.photoCal.match.sourceSelection.doFluxLimit=False
 
-# Minimum number of matched pairs; see also minFracMatchedPairs
-# 	Valid Range = [2,inf)
-config.calibrate.photoCal.matcher.minMatchedPairs=30
+# Apply flag limitation?
+config.calibrate.photoCal.match.sourceSelection.doFlags=True
 
-# Minimum number of matched pairs as a fraction of the smaller of the number of reference stars or the number of good sources; the actual minimum is the smaller of this value or minMatchedPairs
-# 	Valid Range = [0,1)
-config.calibrate.photoCal.matcher.minFracMatchedPairs=0.3
+# Apply unresolved limitation?
+config.calibrate.photoCal.match.sourceSelection.doUnresolved=True
 
-# Maximum allowed shift of WCS, due to matching (pixel)
-# 	Valid Range = [-inf,4000)
-config.calibrate.photoCal.matcher.maxOffsetPix=300
+# Apply signal-to-noise limit?
+config.calibrate.photoCal.match.sourceSelection.doSignalToNoise=False
 
-# Rotation angle allowed between sources and position reference objects (degrees)
-# 	Valid Range = [-inf,6.0)
-config.calibrate.photoCal.matcher.maxRotationDeg=1.0
+# Apply isolated limitation?
+config.calibrate.photoCal.match.sourceSelection.doIsolated=False
 
-# Allowed non-perpendicularity of x and y (degree)
-# 	Valid Range = [-inf,45.0)
-config.calibrate.photoCal.matcher.allowedNonperpDeg=3.0
+# Select objects with value greater than this
+config.calibrate.photoCal.match.sourceSelection.fluxLimit.minimum=None
 
-# number of points to define a shape for matching
-config.calibrate.photoCal.matcher.numPointsForShape=6
+# Select objects with value less than this
+config.calibrate.photoCal.match.sourceSelection.fluxLimit.maximum=None
 
-# maximum determinant of linear transformation matrix for a usable solution
-config.calibrate.photoCal.matcher.maxDeterminant=0.02
+# Name of the source flux field to use.
+config.calibrate.photoCal.match.sourceSelection.fluxLimit.fluxField='slot_CalibFlux_flux'
 
-# List of flags which cause a source to be rejected as bad
-config.calibrate.photoCal.matcher.sourceSelector['astrometry'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter', 'base_PixelFlags_flag_crCenter', 'base_PixelFlags_flag_bad', 'base_PixelFlags_flag_interpolated']
+# List of source flag fields that must be set for a source to be used.
+config.calibrate.photoCal.match.sourceSelection.flags.good=[]
 
-# Type of source flux; typically one of Ap or Psf
-config.calibrate.photoCal.matcher.sourceSelector['astrometry'].sourceFluxType='Ap'
+# List of source flag fields that must NOT be set for a source to be used.
+config.calibrate.photoCal.match.sourceSelection.flags.bad=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolated', 'base_PixelFlags_flag_saturated']
 
-# Minimum allowed signal-to-noise ratio for sources used for matching (in the flux specified by sourceFluxType); <= 0 for no limit
-config.calibrate.photoCal.matcher.sourceSelector['astrometry'].minSnr=10.0
+# Select objects with value greater than this
+config.calibrate.photoCal.match.sourceSelection.unresolved.minimum=None
 
-# List of flags which cause a source to be rejected as bad
-config.calibrate.photoCal.matcher.sourceSelector['matcher'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter', 'base_PixelFlags_flag_crCenter', 'base_PixelFlags_flag_bad', 'base_PixelFlags_flag_interpolated']
+# Select objects with value less than this
+config.calibrate.photoCal.match.sourceSelection.unresolved.maximum=None
 
-# Type of source flux; typically one of Ap or Psf
-config.calibrate.photoCal.matcher.sourceSelector['matcher'].sourceFluxType='Ap'
+# Name of column for star/galaxy separation
+config.calibrate.photoCal.match.sourceSelection.unresolved.name='base_ClassificationExtendedness_value'
 
-# Minimum allowed signal-to-noise ratio for sources used for matching (in the flux specified by sourceFluxType); <= 0 for no limit
-config.calibrate.photoCal.matcher.sourceSelector['matcher'].minSnr=40.0
+# Select objects with value greater than this
+config.calibrate.photoCal.match.sourceSelection.signalToNoise.minimum=None
 
-# List of flags which cause a source to be rejected as bad
-config.calibrate.photoCal.matcher.sourceSelector['matcherPessimistic'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter', 'base_PixelFlags_flag_crCenter', 'base_PixelFlags_flag_bad', 'base_PixelFlags_flag_interpolated']
+# Select objects with value less than this
+config.calibrate.photoCal.match.sourceSelection.signalToNoise.maximum=None
 
-# Type of source flux; typically one of Ap or Psf
-config.calibrate.photoCal.matcher.sourceSelector['matcherPessimistic'].sourceFluxType='Ap'
+# Name of the source flux field to use.
+config.calibrate.photoCal.match.sourceSelection.signalToNoise.fluxField='base_PsfFlux_flux'
 
-# Minimum allowed signal-to-noise ratio for sources used for matching (in the flux specified by sourceFluxType); <= 0 for no limit
-config.calibrate.photoCal.matcher.sourceSelector['matcherPessimistic'].minSnr=40.0
+# Name of the source flux error field to use.
+config.calibrate.photoCal.match.sourceSelection.signalToNoise.errField='base_PsfFlux_fluxSigma'
 
-config.calibrate.photoCal.matcher.sourceSelector.name='matcher'
-# the maximum match distance is set to  mean_match_distance + matchDistanceSigma*std_dev_match_distance; ignored if not fitting a WCS
-# 	Valid Range = [0,inf)
-config.calibrate.photoCal.matchDistanceSigma=2.0
+# Name of column for parent
+config.calibrate.photoCal.match.sourceSelection.isolated.parentName='parent'
 
-# Don't use objects fainter than this magnitude
-config.calibrate.photoCal.magLimit=22.0
+# Name of column for nChild
+config.calibrate.photoCal.match.sourceSelection.isolated.nChildName='deblend_nChild'
 
+# Apply magnitude limit?
+config.calibrate.photoCal.match.referenceSelection.doMagLimit=False
+
+# Apply flag limitation?
+config.calibrate.photoCal.match.referenceSelection.doFlags=False
+
+# Apply signal-to-noise limit?
+config.calibrate.photoCal.match.referenceSelection.doSignalToNoise=False
+
+# Apply magnitude error limit?
+config.calibrate.photoCal.match.referenceSelection.doMagError=False
+
+# Select objects with value greater than this
+config.calibrate.photoCal.match.referenceSelection.magLimit.minimum=None
+
+# Select objects with value less than this
+config.calibrate.photoCal.match.referenceSelection.magLimit.maximum=None
+
+# Name of the source flux field to use.
+config.calibrate.photoCal.match.referenceSelection.magLimit.fluxField='flux'
+
+# List of source flag fields that must be set for a source to be used.
+config.calibrate.photoCal.match.referenceSelection.flags.good=[]
+
+# List of source flag fields that must NOT be set for a source to be used.
+config.calibrate.photoCal.match.referenceSelection.flags.bad=[]
+
+# Select objects with value greater than this
+config.calibrate.photoCal.match.referenceSelection.signalToNoise.minimum=None
+
+# Select objects with value less than this
+config.calibrate.photoCal.match.referenceSelection.signalToNoise.maximum=None
+
+# Name of the source flux field to use.
+config.calibrate.photoCal.match.referenceSelection.signalToNoise.fluxField='flux'
+
+# Name of the source flux error field to use.
+config.calibrate.photoCal.match.referenceSelection.signalToNoise.errField='flux_err'
+
+# Select objects with value greater than this
+config.calibrate.photoCal.match.referenceSelection.magError.minimum=None
+
+# Select objects with value less than this
+config.calibrate.photoCal.match.referenceSelection.magError.maximum=None
+
+# Name of the source flux error field to use.
+config.calibrate.photoCal.match.referenceSelection.magError.magErrField='mag_err'
+
+config.calibrate.photoCal.match.referenceSelection.colorLimits={}
 # Fraction of candidates to reserve from fitting; none if <= 0
-config.calibrate.photoCal.reserveFraction=-1.0
+config.calibrate.photoCal.reserve.fraction=0.0
 
-# This number will be multiplied by the exposure ID to set the random seed for reserving candidates
-config.calibrate.photoCal.reserveSeed=1
+# This number will be added to the exposure ID to set the random seed for reserving candidates
+config.calibrate.photoCal.reserve.seed=1
 
 # Name of the source flux field to use.  The associated flag field
 # ('<name>_flags') will be implicitly included in badFlags.
@@ -1468,12 +2049,6 @@ config.calibrate.photoCal.fluxField='slot_CalibFlux_flux'
 #       specified reference catalog and filter.
 # False: do not apply.
 config.calibrate.photoCal.applyColorTerms=None
-
-# List of source flag fields that must be set for a source to be used.
-config.calibrate.photoCal.goodFlags=[]
-
-# List of source flag fields that will cause a source to be rejected when they are set.
-config.calibrate.photoCal.badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolated', 'base_PixelFlags_flag_saturated']
 
 # maximum sigma to use when clipping
 config.calibrate.photoCal.sigmaMax=0.25
@@ -1489,18 +2064,13 @@ config.calibrate.photoCal.nIter=20
 
 config.calibrate.photoCal.colorterms.data={}
 # Name of photometric reference catalog; used to select a color term dict in colorterms. see also applyColorTerms
-config.calibrate.photoCal.photoCatName='10.0+111'
+config.calibrate.photoCal.photoCatName='8.0.0.0+34'
 
 # Additional magnitude uncertainty to be added in quadrature with measurement errors.
-# 	Valid Range = [0.0,inf)
 config.calibrate.photoCal.magErrFloor=0.0
 
-# Use the extendedness parameter to select objects to use in photometric calibration?
-# This applies only to the sources detected on the exposure, not the reference catalog
-config.calibrate.photoCal.doSelectUnresolved=True
-
 # Fields to copy from the icSource catalog to the output catalog for matching sources Any missing fields will trigger a RuntimeError exception. Ignored if icSourceCat is not provided.
-config.calibrate.icSourceFieldsToCopy=['calib_psfCandidate', 'calib_psfUsed', 'calib_psfReserved']
+config.calibrate.icSourceFieldsToCopy=['calib_psfCandidate', 'calib_psfUsed', 'calib_psf_reserved']
 
 # Match radius for matching icSourceCat objects to sourceCat objects (pixels)
 config.calibrate.matchRadiusPix=3.0
@@ -1509,41 +2079,30 @@ config.calibrate.matchRadiusPix=3.0
 config.calibrate.checkUnitsParseStrict='raise'
 
 # detected sources with fewer than the specified number of pixels will be ignored
-# 	Valid Range = [0,inf)
 config.calibrate.detection.minPixels=1
 
 # Pixels should be grown as isotropically as possible (slower)
 config.calibrate.detection.isotropicGrow=False
 
-# Grow detections by nSigmaToGrow * sigma; if 0 then do not grow
+# Grow all footprints at the same time? This allows disconnected footprints to merge.
+config.calibrate.detection.combinedGrow=True
+
+# Grow detections by nSigmaToGrow * [PSF RMS width]; if 0 then do not grow
 config.calibrate.detection.nSigmaToGrow=2.4
 
 # Grow detections to set the image mask bits, but return the original (not-grown) footprints
 config.calibrate.detection.returnOriginalFootprints=False
 
 # Threshold for footprints
-# 	Valid Range = [0.0,inf)
 config.calibrate.detection.thresholdValue=5.0
 
 # Include threshold relative to thresholdValue
-# 	Valid Range = [0.0,inf)
 config.calibrate.detection.includeThresholdMultiplier=1.0
 
 # specifies the desired flavor of Threshold
-# Allowed values:
-# 	variance	threshold applied to image variance
-# 	stdev	threshold applied to image std deviation
-# 	value	threshold applied to image value
-# 	pixel_stdev	threshold applied to per-pixel std deviation
-# 
 config.calibrate.detection.thresholdType='stdev'
 
 # specifies whether to detect positive, or negative sources, or both
-# Allowed values:
-# 	positive	detect only positive sources
-# 	negative	detect only negative sources
-# 	both	detect both positive and negative sources
-# 
 config.calibrate.detection.thresholdPolarity='positive'
 
 # Fiddle factor to add to the background; debugging only
@@ -1553,44 +2112,21 @@ config.calibrate.detection.adjustBackground=0.0
 config.calibrate.detection.reEstimateBackground=True
 
 # type of statistic to use for grid points
-# Allowed values:
-# 	MEANCLIP	clipped mean
-# 	MEAN	unclipped mean
-# 	MEDIAN	median
-# 	None	Field is optional
-# 
 config.calibrate.detection.background.statisticsProperty='MEANCLIP'
 
 # behaviour if there are too few points in grid for requested interpolation style
-# Allowed values:
-# 	THROW_EXCEPTION	throw an exception if there are too few points
-# 	REDUCE_INTERP_ORDER	use an interpolation style with a lower order.
-# 	INCREASE_NXNYSAMPLE	Increase the number of samples used to make the interpolation grid.
-# 	None	Field is optional
-# 
 config.calibrate.detection.background.undersampleStyle='REDUCE_INTERP_ORDER'
 
 # how large a region of the sky should be used for each background point
-# 	Valid Range = [1,inf)
 config.calibrate.detection.background.binSize=128
 
 # Sky region size to be used for each background point in X direction. If 0, the binSize config is used.
-# 	Valid Range = [0,inf)
 config.calibrate.detection.background.binSizeX=0
 
 # Sky region size to be used for each background point in Y direction. If 0, the binSize config is used.
-# 	Valid Range = [0,inf)
 config.calibrate.detection.background.binSizeY=0
 
 # how to interpolate the background values. This maps to an enum; see afw::math::Background
-# Allowed values:
-# 	CONSTANT	Use a single constant value
-# 	LINEAR	Use linear interpolation
-# 	NATURAL_SPLINE	cubic spline with zero second derivative at endpoints
-# 	AKIMA_SPLINE	higher-level nonlinear spline that is more robust to outliers
-# 	NONE	No background estimation is to be attempted
-# 	None	Field is optional
-# 
 config.calibrate.detection.background.algorithm='AKIMA_SPLINE'
 
 # Names of mask planes to ignore while estimating the background
@@ -1612,44 +2148,21 @@ config.calibrate.detection.background.approxOrderY=-1
 config.calibrate.detection.background.weighting=True
 
 # type of statistic to use for grid points
-# Allowed values:
-# 	MEANCLIP	clipped mean
-# 	MEAN	unclipped mean
-# 	MEDIAN	median
-# 	None	Field is optional
-# 
 config.calibrate.detection.tempLocalBackground.statisticsProperty='MEANCLIP'
 
 # behaviour if there are too few points in grid for requested interpolation style
-# Allowed values:
-# 	THROW_EXCEPTION	throw an exception if there are too few points
-# 	REDUCE_INTERP_ORDER	use an interpolation style with a lower order.
-# 	INCREASE_NXNYSAMPLE	Increase the number of samples used to make the interpolation grid.
-# 	None	Field is optional
-# 
 config.calibrate.detection.tempLocalBackground.undersampleStyle='REDUCE_INTERP_ORDER'
 
 # how large a region of the sky should be used for each background point
-# 	Valid Range = [1,inf)
 config.calibrate.detection.tempLocalBackground.binSize=64
 
 # Sky region size to be used for each background point in X direction. If 0, the binSize config is used.
-# 	Valid Range = [0,inf)
 config.calibrate.detection.tempLocalBackground.binSizeX=0
 
 # Sky region size to be used for each background point in Y direction. If 0, the binSize config is used.
-# 	Valid Range = [0,inf)
 config.calibrate.detection.tempLocalBackground.binSizeY=0
 
 # how to interpolate the background values. This maps to an enum; see afw::math::Background
-# Allowed values:
-# 	CONSTANT	Use a single constant value
-# 	LINEAR	Use linear interpolation
-# 	NATURAL_SPLINE	cubic spline with zero second derivative at endpoints
-# 	AKIMA_SPLINE	higher-level nonlinear spline that is more robust to outliers
-# 	NONE	No background estimation is to be attempted
-# 	None	Field is optional
-# 
 config.calibrate.detection.tempLocalBackground.algorithm='AKIMA_SPLINE'
 
 # Names of mask planes to ignore while estimating the background
@@ -1670,44 +2183,70 @@ config.calibrate.detection.tempLocalBackground.approxOrderY=-1
 # Use inverse variance weighting in calculation (valid only with useApprox=True)
 config.calibrate.detection.tempLocalBackground.weighting=True
 
-# Do temporary interpolated background subtraction before footprint detection?
+# Enable temporary local background subtraction? (see tempLocalBackground)
 config.calibrate.detection.doTempLocalBackground=False
+
+# type of statistic to use for grid points
+config.calibrate.detection.tempWideBackground.statisticsProperty='MEANCLIP'
+
+# behaviour if there are too few points in grid for requested interpolation style
+config.calibrate.detection.tempWideBackground.undersampleStyle='REDUCE_INTERP_ORDER'
+
+# how large a region of the sky should be used for each background point
+config.calibrate.detection.tempWideBackground.binSize=512
+
+# Sky region size to be used for each background point in X direction. If 0, the binSize config is used.
+config.calibrate.detection.tempWideBackground.binSizeX=0
+
+# Sky region size to be used for each background point in Y direction. If 0, the binSize config is used.
+config.calibrate.detection.tempWideBackground.binSizeY=0
+
+# how to interpolate the background values. This maps to an enum; see afw::math::Background
+config.calibrate.detection.tempWideBackground.algorithm='AKIMA_SPLINE'
+
+# Names of mask planes to ignore while estimating the background
+config.calibrate.detection.tempWideBackground.ignoredPixelMask=['BAD', 'EDGE', 'NO_DATA']
+
+# Ignore NaNs when estimating the background
+config.calibrate.detection.tempWideBackground.isNanSafe=False
+
+# Use Approximate (Chebyshev) to model background.
+config.calibrate.detection.tempWideBackground.useApprox=False
+
+# Approximation order in X for background Chebyshev (valid only with useApprox=True)
+config.calibrate.detection.tempWideBackground.approxOrderX=6
+
+# Approximation order in Y for background Chebyshev (valid only with useApprox=True)
+config.calibrate.detection.tempWideBackground.approxOrderY=-1
+
+# Use inverse variance weighting in calculation (valid only with useApprox=True)
+config.calibrate.detection.tempWideBackground.weighting=True
+
+# Do temporary wide (large-scale) background subtraction before footprint detection?
+config.calibrate.detection.doTempWideBackground=False
 
 # The maximum number of peaks in a Footprint before trying to replace its peaks using the temporary local background
 config.calibrate.detection.nPeaksMaxSimple=1
+
+# Multiple of PSF RMS size to use for convolution kernel bounding box size; note that this is not a half-size. The size will be rounded up to the nearest odd integer
+config.calibrate.detection.nSigmaForKernel=7.0
+
+# Mask planes to ignore when calculating statistics of image (for thresholdType=stdev)
+config.calibrate.detection.statsMask=['BAD', 'SAT', 'EDGE', 'NO_DATA']
 
 # Run deblender input exposure
 config.calibrate.doDeblend=True
 
 # What to do when a peak to be deblended is close to the edge of the image
-# Allowed values:
-# 	clip	Clip the template at the edge AND the mirror of the edge.
-# 	ramp	Ramp down flux at the image edge by the PSF
-# 	noclip	Ignore the edge when building the symmetric template.
-# 	None	Field is optional
-# 
 config.calibrate.deblend.edgeHandling='ramp'
 
 # When the deblender should attribute stray flux to point sources
-# Allowed values:
-# 	necessary	When there is not an extended object in the footprint
-# 	always	Always
-# 	never	Never; stray flux will not be attributed to any deblended child if the deblender thinks all peaks look like point sources
-# 	None	Field is optional
-# 
 config.calibrate.deblend.strayFluxToPointSources='necessary'
 
 # Assign stray flux (not claimed by any child in the deblender) to deblend children.
 config.calibrate.deblend.assignStrayFlux=True
 
 # How to split flux among peaks
-# Allowed values:
-# 	r-to-peak	~ 1/(1+R^2) to the peak
-# 	r-to-footprint	~ 1/(1+R^2) to the closest pixel in the footprint.  CAUTION: this can be computationally expensive on large footprints!
-# 	nearest-footprint	Assign 100% to the nearest footprint (using L-1 norm aka Manhattan distance)
-# 	trim	Shrink the parent footprint to pixels that are not assigned to children
-# 	None	Field is optional
-# 
 config.calibrate.deblend.strayFluxRule='trim'
 
 # When splitting stray flux, clip fractions below this value to zero.
@@ -1738,7 +2277,6 @@ config.calibrate.deblend.minFootprintAxisRatio=0.0
 config.calibrate.deblend.notDeblendedMask='NOT_DEBLENDED'
 
 # Footprints smaller in width or height than this value will be ignored; minimum of 2 due to PSF gradient calculation.
-# 	Valid Range = [2,inf)
 config.calibrate.deblend.tinyFootprintSize=2
 
 # Guarantee that all peaks produce a child source.
@@ -1771,6 +2309,9 @@ config.calibrate.measurement.slots.centroid='base_SdssCentroid'
 # the name of the algorithm used to set source moments parameters
 config.calibrate.measurement.slots.shape='base_SdssShape'
 
+# the name of the algorithm used to set PSF moments parameters
+config.calibrate.measurement.slots.psfShape='base_SdssShape_psf'
+
 # the name of the algorithm used to set the source aperture flux slot
 config.calibrate.measurement.slots.apFlux='base_CircularApertureFlux_12_0'
 
@@ -1790,11 +2331,6 @@ config.calibrate.measurement.slots.calibFlux='base_CircularApertureFlux_12_0'
 config.calibrate.measurement.doReplaceWithNoise=True
 
 # How to choose mean and variance of the Gaussian noise we generate?
-# Allowed values:
-# 	measure	Measure clipped mean and variance from the whole image
-# 	meta	Mean = 0, variance = the "BGMEAN" metadata entry
-# 	variance	Mean = 0, variance = the image's variance
-# 
 config.calibrate.measurement.noiseReplacer.noiseSource='measure'
 
 # Add ann offset to the generated noise.
@@ -1825,15 +2361,6 @@ config.calibrate.measurement.plugins['base_GaussianFlux'].doMeasure=True
 
 # FIXME! NEVER DOCUMENTED!
 config.calibrate.measurement.plugins['base_GaussianFlux'].background=0.0
-
-# whether to run this plugin in single-object mode
-config.calibrate.measurement.plugins['base_GaussianCentroid'].doMeasure=True
-
-# Do check that the centroid is contained in footprint.
-config.calibrate.measurement.plugins['base_GaussianCentroid'].doFootprintCheck=True
-
-# If set > 0, Centroid Check also checks distance from footprint peak.
-config.calibrate.measurement.plugins['base_GaussianCentroid'].maxDistToPeak=-1.0
 
 # whether to run this plugin in single-object mode
 config.calibrate.measurement.plugins['base_NaiveCentroid'].doMeasure=True
@@ -1932,6 +2459,24 @@ config.calibrate.measurement.plugins['base_Blendedness'].doShape=True
 config.calibrate.measurement.plugins['base_Blendedness'].nSigmaWeightMax=3.0
 
 # whether to run this plugin in single-object mode
+config.calibrate.measurement.plugins['base_LocalBackground'].doMeasure=True
+
+# Inner radius for background annulus as a multiple of the PSF sigma
+config.calibrate.measurement.plugins['base_LocalBackground'].annulusInner=7.0
+
+# Outer radius for background annulus as a multiple of the PSF sigma
+config.calibrate.measurement.plugins['base_LocalBackground'].annulusOuter=15.0
+
+# Mask planes that indicate pixels that should be excluded from the measurement
+config.calibrate.measurement.plugins['base_LocalBackground'].badMaskPlanes=['BAD', 'SAT', 'NO_DATA']
+
+# Number of sigma-clipping iterations for background measurement
+config.calibrate.measurement.plugins['base_LocalBackground'].bgIter=3
+
+# Rejection threshold (in standard deviations) for background measurement
+config.calibrate.measurement.plugins['base_LocalBackground'].bgRej=3.0
+
+# whether to run this plugin in single-object mode
 config.calibrate.measurement.plugins['base_FPPosition'].doMeasure=True
 
 # whether to run this plugin in single-object mode
@@ -1958,7 +2503,7 @@ config.calibrate.measurement.plugins['base_PeakCentroid'].doMeasure=True
 # whether to run this plugin in single-object mode
 config.calibrate.measurement.plugins['base_SkyCoord'].doMeasure=True
 
-config.calibrate.measurement.plugins.names=['base_GaussianFlux', 'base_PixelFlags', 'base_PsfFlux', 'base_GaussianCentroid', 'base_Blendedness', 'base_NaiveCentroid', 'base_Variance', 'base_SkyCoord', 'base_SdssCentroid', 'base_SdssShape', 'base_CircularApertureFlux']
+config.calibrate.measurement.plugins.names=['base_PsfFlux', 'base_SdssShape', 'base_PixelFlags', 'base_GaussianFlux', 'base_NaiveCentroid', 'base_Blendedness', 'base_SkyCoord', 'base_CircularApertureFlux', 'base_SdssCentroid', 'base_LocalBackground', 'base_Variance']
 # whether to run this plugin in single-object mode
 config.calibrate.measurement.undeblended['base_PsfFlux'].doMeasure=True
 
@@ -1976,15 +2521,6 @@ config.calibrate.measurement.undeblended['base_GaussianFlux'].doMeasure=True
 
 # FIXME! NEVER DOCUMENTED!
 config.calibrate.measurement.undeblended['base_GaussianFlux'].background=0.0
-
-# whether to run this plugin in single-object mode
-config.calibrate.measurement.undeblended['base_GaussianCentroid'].doMeasure=True
-
-# Do check that the centroid is contained in footprint.
-config.calibrate.measurement.undeblended['base_GaussianCentroid'].doFootprintCheck=True
-
-# If set > 0, Centroid Check also checks distance from footprint peak.
-config.calibrate.measurement.undeblended['base_GaussianCentroid'].maxDistToPeak=-1.0
 
 # whether to run this plugin in single-object mode
 config.calibrate.measurement.undeblended['base_NaiveCentroid'].doMeasure=True
@@ -2081,6 +2617,24 @@ config.calibrate.measurement.undeblended['base_Blendedness'].doShape=True
 
 # Radius factor that sets the maximum extent of the weight function (and hence the flux measurements)
 config.calibrate.measurement.undeblended['base_Blendedness'].nSigmaWeightMax=3.0
+
+# whether to run this plugin in single-object mode
+config.calibrate.measurement.undeblended['base_LocalBackground'].doMeasure=True
+
+# Inner radius for background annulus as a multiple of the PSF sigma
+config.calibrate.measurement.undeblended['base_LocalBackground'].annulusInner=7.0
+
+# Outer radius for background annulus as a multiple of the PSF sigma
+config.calibrate.measurement.undeblended['base_LocalBackground'].annulusOuter=15.0
+
+# Mask planes that indicate pixels that should be excluded from the measurement
+config.calibrate.measurement.undeblended['base_LocalBackground'].badMaskPlanes=['BAD', 'SAT', 'NO_DATA']
+
+# Number of sigma-clipping iterations for background measurement
+config.calibrate.measurement.undeblended['base_LocalBackground'].bgIter=3
+
+# Rejection threshold (in standard deviations) for background measurement
+config.calibrate.measurement.undeblended['base_LocalBackground'].bgRej=3.0
 
 # whether to run this plugin in single-object mode
 config.calibrate.measurement.undeblended['base_FPPosition'].doMeasure=True
