@@ -25,6 +25,8 @@ path                  | description
 `data`                | Butler repo of ingested raw data and processCcd results
 `astrometry_net_data` | SDSS DR9 catalog files in astrometry.net format
                       |   as photometrically recalibrated by Doug Finkbeiner's group.
+`ref_cats`            | HTM indexed catalog files from both SDSS and Pan-Starrs for
+                      |   astrometric and photometric calibration.
 `processCcd.log`      | Output from the processCcd run on the `data` repo.
 `eups_setup_used.txt` | EUPS setup configuration for ingestImages and processCcd run
 `Decam.list`          | List of dataIds in this repo.  For use in running Tasks.
