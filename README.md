@@ -45,8 +45,6 @@ setup validation_data_decam
 
 NEW_OUTPUT_REPO=DECam_data
 
-export ASTROMETRY_NET_DATA_DIR=${VALIDATION_DATA_DECAM_DIR}/astrometry_net_data
-
 processCcd.py ${VALIDATION_DATA_DECAM_DIR}/data \
     --output ${NEW_OUTPUT_REPO} \
     --configfile ${VALIDATION_DATA_DECAM_DIR}/decamConfig.py \
@@ -82,8 +80,9 @@ setup validation_data_decam -t v16_0
 mkdir data
 echo lsst.obs.decam.DecamMapper > data/_mapper
 ingestImagesDecam.py data ${VALIDATION_DATA_DECAM_DIR}/instcal/*.fz  --mode copy --filetype instcal
+# Link in the reference catalogs
+ln -s ${VALIDATION_DATA_DECAM_DIR}/ref_cats data/ref_cats
 
-export ASTROMETRY_NET_DATA_DIR=${VALIDATION_DATA_DECAM_DIR}/astrometry_net_data
 processCcd.py data --output data \
     @${VALIDATION_DATA_DECAM_DIR}/Decam.list \
     --configfile ${VALIDATION_DATA_DECAM_DIR}/decamConfig.py \
