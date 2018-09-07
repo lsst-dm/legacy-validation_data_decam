@@ -83,6 +83,7 @@ ingestImagesDecam.py data ${VALIDATION_DATA_DECAM_DIR}/instcal/*.fz  --mode copy
 # Link in the reference catalogs
 ln -s ${VALIDATION_DATA_DECAM_DIR}/ref_cats data/ref_cats
 
+export OMP_NUM_THREADS=1  # Suppress OMP parallelism.  We parallelize by CCD.
 processCcd.py data --output data \
     @${VALIDATION_DATA_DECAM_DIR}/Decam.list \
     --configfile ${VALIDATION_DATA_DECAM_DIR}/decamConfig.py \
