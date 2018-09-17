@@ -70,26 +70,7 @@ validateDrp.py DECam_data
 
 Recreating the repository
 -------------------------
-This repository was created using `examples/runDecamTest.sh` from the `validate_drp` package.
-
-To fully recreate this Butler `repo` from the `raw` data, set the `mapper` and add the `ingesetImages.py` step:
-
-```
-setup validation_data_decam -t v16_0
-
-mkdir data
-echo lsst.obs.decam.DecamMapper > data/_mapper
-ingestImagesDecam.py data ${VALIDATION_DATA_DECAM_DIR}/instcal/*.fz  --mode copy --filetype instcal
-# Link in the reference catalogs
-ln -s ${VALIDATION_DATA_DECAM_DIR}/ref_cats data/ref_cats
-
-export OMP_NUM_THREADS=1  # Suppress OMP parallelism.  We parallelize by CCD.
-processCcd.py data --output data \
-    @${VALIDATION_DATA_DECAM_DIR}/Decam.list \
-    --configfile ${VALIDATION_DATA_DECAM_DIR}/decamConfig.py \
-    -j 4 \
-   >& processCcd.log
-```
+To fully recreate this Butler `repo` from the `raw` data, run the `reprocess.sh` script in this directory.
 
 Notes
  1. We use `--copy` to create a full copy of the raw images in the repo.
