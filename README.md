@@ -45,8 +45,6 @@ setup validation_data_decam
 
 NEW_OUTPUT_REPO=DECam_data
 
-export ASTROMETRY_NET_DATA_DIR=${VALIDATION_DATA_DECAM_DIR}/astrometry_net_data
-
 processCcd.py ${VALIDATION_DATA_DECAM_DIR}/data \
     --output ${NEW_OUTPUT_REPO} \
     --configfile ${VALIDATION_DATA_DECAM_DIR}/decamConfig.py \
@@ -72,24 +70,7 @@ validateDrp.py DECam_data
 
 Recreating the repository
 -------------------------
-This repository was created using `examples/runDecamTest.sh` from the `validate_drp` package.
-
-To fully recreate this Butler `repo` from the `raw` data, set the `mapper` and add the `ingesetImages.py` step:
-
-```
-setup validation_data_decam -t v16_0
-
-mkdir data
-echo lsst.obs.decam.DecamMapper > data/_mapper
-ingestImagesDecam.py data ${VALIDATION_DATA_DECAM_DIR}/instcal/*.fz  --mode copy --filetype instcal
-
-export ASTROMETRY_NET_DATA_DIR=${VALIDATION_DATA_DECAM_DIR}/astrometry_net_data
-processCcd.py data --output data \
-    @${VALIDATION_DATA_DECAM_DIR}/Decam.list \
-    --configfile ${VALIDATION_DATA_DECAM_DIR}/decamConfig.py \
-    -j 4 \
-   >& processCcd.log
-```
+To fully recreate this Butler `repo` from the `raw` data, run the `reprocess.sh` script in this directory.
 
 Notes
  1. We use `--copy` to create a full copy of the raw images in the repo.

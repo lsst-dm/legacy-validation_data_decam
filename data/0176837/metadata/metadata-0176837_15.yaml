@@ -1,0 +1,1430 @@
+!<lsst.daf.base.PropertySet>
+- - processCcd:calibrate:photoCal:reserve
+  - PropertySet
+  - !<lsst.daf.base.PropertyList> []
+- - processCcd:calibrate:photoCal:match:referenceSelection
+  - PropertySet
+  - !<lsst.daf.base.PropertyList> []
+- - processCcd:calibrate:photoCal:match
+  - PropertySet
+  - !<lsst.daf.base.PropertyList> []
+- - processCcd:calibrate:photoRefObjLoader
+  - PropertySet
+  - !<lsst.daf.base.PropertyList>
+    - [loadSkyCircleStartUtc, String, '2018-09-17T18:51:56.491259', '']
+    - [loadSkyCircleStartCpuTime, Double, 298.54, '']
+    - [loadSkyCircleStartUserTime, Double, 285.542565, '']
+    - [loadSkyCircleStartSystemTime, Double, 13.002024, '']
+    - [loadSkyCircleStartMaxResidentSetSize, LongLong, 5318200, '']
+    - [loadSkyCircleStartMinorPageFaults, LongLong, 9938964, '']
+    - [loadSkyCircleStartMajorPageFaults, LongLong, 0, '']
+    - [loadSkyCircleStartBlockInputs, LongLong, 0, '']
+    - [loadSkyCircleStartBlockOutputs, LongLong, 0, '']
+    - [loadSkyCircleStartVoluntaryContextSwitches, LongLong, 410, '']
+    - [loadSkyCircleStartInvoluntaryContextSwitches, LongLong, 510, '']
+    - [loadSkyCircleEndUtc, String, '2018-09-17T18:51:57.077921', '']
+    - [loadSkyCircleEndCpuTime, Double, 299.12, '']
+    - [loadSkyCircleEndUserTime, Double, 286.121863, '']
+    - [loadSkyCircleEndSystemTime, Double, 13.009038, '']
+    - [loadSkyCircleEndMaxResidentSetSize, LongLong, 5318200, '']
+    - [loadSkyCircleEndMinorPageFaults, LongLong, 9944188, '']
+    - [loadSkyCircleEndMajorPageFaults, LongLong, 0, '']
+    - [loadSkyCircleEndBlockInputs, LongLong, 0, '']
+    - [loadSkyCircleEndBlockOutputs, LongLong, 0, '']
+    - [loadSkyCircleEndVoluntaryContextSwitches, LongLong, 422, '']
+    - [loadSkyCircleEndInvoluntaryContextSwitches, LongLong, 510, '']
+- - processCcd:calibrate:astromRefObjLoader
+  - PropertySet
+  - !<lsst.daf.base.PropertyList>
+    - [loadPixelBoxStartUtc, String, '2018-09-17T18:51:24.812489', '']
+    - [loadPixelBoxStartCpuTime, Double, 266.85, '']
+    - [loadPixelBoxStartUserTime, Double, 257.819407, '']
+    - [loadPixelBoxStartSystemTime, Double, 9.049314, '']
+    - [loadPixelBoxStartMaxResidentSetSize, LongLong, 3422236, '']
+    - [loadPixelBoxStartMinorPageFaults, LongLong, 7075946, '']
+    - [loadPixelBoxStartMajorPageFaults, LongLong, 0, '']
+    - [loadPixelBoxStartBlockInputs, LongLong, 0, '']
+    - [loadPixelBoxStartBlockOutputs, LongLong, 0, '']
+    - [loadPixelBoxStartVoluntaryContextSwitches, LongLong, 398, '']
+    - [loadPixelBoxStartInvoluntaryContextSwitches, LongLong, 457, '']
+    - [loadSkyCircleStartUtc, String, '2018-09-17T18:51:24.813148', '']
+    - [loadSkyCircleStartCpuTime, Double, 266.86, '']
+    - [loadSkyCircleStartUserTime, Double, 257.820066, '']
+    - [loadSkyCircleStartSystemTime, Double, 9.049314, '']
+    - [loadSkyCircleStartMaxResidentSetSize, LongLong, 3422236, '']
+    - [loadSkyCircleStartMinorPageFaults, LongLong, 7076054, '']
+    - [loadSkyCircleStartMajorPageFaults, LongLong, 0, '']
+    - [loadSkyCircleStartBlockInputs, LongLong, 0, '']
+    - [loadSkyCircleStartBlockOutputs, LongLong, 0, '']
+    - [loadSkyCircleStartVoluntaryContextSwitches, LongLong, 398, '']
+    - [loadSkyCircleStartInvoluntaryContextSwitches, LongLong, 457, '']
+    - [loadSkyCircleEndUtc, String, '2018-09-17T18:51:25.437947', '']
+    - [loadSkyCircleEndCpuTime, Double, 267.49, '']
+    - [loadSkyCircleEndUserTime, Double, 258.43247, '']
+    - [loadSkyCircleEndSystemTime, Double, 9.06128, '']
+    - [loadSkyCircleEndMaxResidentSetSize, LongLong, 3422236, '']
+    - [loadSkyCircleEndMinorPageFaults, LongLong, 7082289, '']
+    - [loadSkyCircleEndMajorPageFaults, LongLong, 0, '']
+    - [loadSkyCircleEndBlockInputs, LongLong, 0, '']
+    - [loadSkyCircleEndBlockOutputs, LongLong, 0, '']
+    - [loadSkyCircleEndVoluntaryContextSwitches, LongLong, 410, '']
+    - [loadSkyCircleEndInvoluntaryContextSwitches, LongLong, 459, '']
+    - [loadPixelBoxEndUtc, String, '2018-09-17T18:51:25.665127', '']
+    - [loadPixelBoxEndCpuTime, Double, 267.71, '']
+    - [loadPixelBoxEndUserTime, Double, 258.65663, '']
+    - [loadPixelBoxEndSystemTime, Double, 9.064286, '']
+    - [loadPixelBoxEndMaxResidentSetSize, LongLong, 3422236, '']
+    - [loadPixelBoxEndMinorPageFaults, LongLong, 7083385, '']
+    - [loadPixelBoxEndMajorPageFaults, LongLong, 0, '']
+    - [loadPixelBoxEndBlockInputs, LongLong, 0, '']
+    - [loadPixelBoxEndBlockOutputs, LongLong, 0, '']
+    - [loadPixelBoxEndVoluntaryContextSwitches, LongLong, 410, '']
+    - [loadPixelBoxEndInvoluntaryContextSwitches, LongLong, 459, '']
+- - processCcd:calibrate:catalogCalculation
+  - PropertySet
+  - !<lsst.daf.base.PropertyList>
+    - [runStartUtc, String, '2018-09-17T18:51:24.483220', '']
+    - [runStartCpuTime, Double, 266.53, '']
+    - [runStartUserTime, Double, 257.495181, '']
+    - [runStartSystemTime, Double, 9.044303, '']
+    - [runStartMaxResidentSetSize, LongLong, 3422236, '']
+    - [runStartMinorPageFaults, LongLong, 7072186, '']
+    - [runStartMajorPageFaults, LongLong, 0, '']
+    - [runStartBlockInputs, LongLong, 0, '']
+    - [runStartBlockOutputs, LongLong, 0, '']
+    - [runStartVoluntaryContextSwitches, LongLong, 398, '']
+    - [runStartInvoluntaryContextSwitches, LongLong, 457, '']
+    - [runEndUtc, String, '2018-09-17T18:51:24.768553', '']
+    - [runEndCpuTime, Double, 266.81, '']
+    - [runEndUserTime, Double, 257.775483, '']
+    - [runEndSystemTime, Double, 9.049314, '']
+    - [runEndMaxResidentSetSize, LongLong, 3422236, '']
+    - [runEndMinorPageFaults, LongLong, 7073786, '']
+    - [runEndMajorPageFaults, LongLong, 0, '']
+    - [runEndBlockInputs, LongLong, 0, '']
+    - [runEndBlockOutputs, LongLong, 0, '']
+    - [runEndVoluntaryContextSwitches, LongLong, 398, '']
+    - [runEndInvoluntaryContextSwitches, LongLong, 457, '']
+- - processCcd:calibrate:measurement
+  - PropertySet
+  - !<lsst.daf.base.PropertyList>
+    - [runStartUtc, String, '2018-09-17T18:50:51.843315', '']
+    - [runStartCpuTime, Double, 233.9, '']
+    - [runStartUserTime, Double, 225.724636, '']
+    - [runStartSystemTime, Double, 8.181406, '']
+    - [runStartMaxResidentSetSize, LongLong, 3296272, '']
+    - [runStartMinorPageFaults, LongLong, 6284091, '']
+    - [runStartMajorPageFaults, LongLong, 0, '']
+    - [runStartBlockInputs, LongLong, 0, '']
+    - [runStartBlockOutputs, LongLong, 0, '']
+    - [runStartVoluntaryContextSwitches, LongLong, 398, '']
+    - [runStartInvoluntaryContextSwitches, LongLong, 383, '']
+    - [runEndUtc, String, '2018-09-17T18:51:23.591925', '']
+    - [runEndCpuTime, Double, 265.63, '']
+    - [runEndUserTime, Double, 256.618989, '']
+    - [runEndSystemTime, Double, 9.029295, '']
+    - [runEndMaxResidentSetSize, LongLong, 3422236, '']
+    - [runEndMinorPageFaults, LongLong, 7062824, '']
+    - [runEndMajorPageFaults, LongLong, 0, '']
+    - [runEndBlockInputs, LongLong, 0, '']
+    - [runEndBlockOutputs, LongLong, 0, '']
+    - [runEndVoluntaryContextSwitches, LongLong, 398, '']
+    - [runEndInvoluntaryContextSwitches, LongLong, 454, '']
+- - processCcd:calibrate:astrometry:matcher:sourceSelector
+  - PropertySet
+  - !<lsst.daf.base.PropertyList> []
+- - processCcd:calibrate:deblend
+  - PropertySet
+  - !<lsst.daf.base.PropertyList>
+    - [runStartUtc, String, '2018-09-17T18:49:19.018672', '']
+    - [runStartCpuTime, Double, 141.08, '']
+    - [runStartUserTime, Double, 134.872613, '']
+    - [runStartSystemTime, Double, 6.216599, '']
+    - [runStartMaxResidentSetSize, LongLong, 2929652, '']
+    - [runStartMinorPageFaults, LongLong, 4608830, '']
+    - [runStartMajorPageFaults, LongLong, 0, '']
+    - [runStartBlockInputs, LongLong, 0, '']
+    - [runStartBlockOutputs, LongLong, 0, '']
+    - [runStartVoluntaryContextSwitches, LongLong, 398, '']
+    - [runStartInvoluntaryContextSwitches, LongLong, 236, '']
+    - [deblendStartUtc, String, '2018-09-17T18:49:19.018876', '']
+    - [deblendStartCpuTime, Double, 141.08, '']
+    - [deblendStartUserTime, Double, 134.872816, '']
+    - [deblendStartSystemTime, Double, 6.216599, '']
+    - [deblendStartMaxResidentSetSize, LongLong, 2929652, '']
+    - [deblendStartMinorPageFaults, LongLong, 4608845, '']
+    - [deblendStartMajorPageFaults, LongLong, 0, '']
+    - [deblendStartBlockInputs, LongLong, 0, '']
+    - [deblendStartBlockOutputs, LongLong, 0, '']
+    - [deblendStartVoluntaryContextSwitches, LongLong, 398, '']
+    - [deblendStartInvoluntaryContextSwitches, LongLong, 236, '']
+    - [deblendEndUtc, String, '2018-09-17T18:50:51.842845', '']
+    - [deblendEndCpuTime, Double, 233.9, '']
+    - [deblendEndUserTime, Double, 225.724194, '']
+    - [deblendEndSystemTime, Double, 8.18139, '']
+    - [deblendEndMaxResidentSetSize, LongLong, 3296272, '']
+    - [deblendEndMinorPageFaults, LongLong, 6283998, '']
+    - [deblendEndMajorPageFaults, LongLong, 0, '']
+    - [deblendEndBlockInputs, LongLong, 0, '']
+    - [deblendEndBlockOutputs, LongLong, 0, '']
+    - [deblendEndVoluntaryContextSwitches, LongLong, 398, '']
+    - [deblendEndInvoluntaryContextSwitches, LongLong, 383, '']
+    - [runEndUtc, String, '2018-09-17T18:50:51.843152', '']
+    - [runEndCpuTime, Double, 233.9, '']
+    - [runEndUserTime, Double, 225.724479, '']
+    - [runEndSystemTime, Double, 8.181401, '']
+    - [runEndMaxResidentSetSize, LongLong, 3296272, '']
+    - [runEndMinorPageFaults, LongLong, 6284063, '']
+    - [runEndMajorPageFaults, LongLong, 0, '']
+    - [runEndBlockInputs, LongLong, 0, '']
+    - [runEndBlockOutputs, LongLong, 0, '']
+    - [runEndVoluntaryContextSwitches, LongLong, 398, '']
+    - [runEndInvoluntaryContextSwitches, LongLong, 383, '']
+- - processCcd:calibrate:astrometry:wcsFitter
+  - PropertySet
+  - !<lsst.daf.base.PropertyList>
+    - - fitWcsStartUtc
+      - String
+      - ['2018-09-17T18:51:35.704733', '2018-09-17T18:51:45.967348', '2018-09-17T18:51:56.233049']
+      - ''
+    - - fitWcsStartCpuTime
+      - Double
+      - [277.75, 288.01, 298.27]
+      - ''
+    - - fitWcsStartUserTime
+      - Double
+      - [267.467306, 276.421712, 285.287359]
+      - ''
+    - - fitWcsStartSystemTime
+      - Double
+      - [10.292418, 11.599811, 12.999027]
+      - ''
+    - - fitWcsStartMaxResidentSetSize
+      - LongLong
+      - [5318192, 5318200, 5318200]
+      - ''
+    - - fitWcsStartMinorPageFaults
+      - LongLong
+      - [7987599, 8909790, 9934275]
+      - ''
+    - - fitWcsStartMajorPageFaults
+      - LongLong
+      - [0, 0, 0]
+      - ''
+    - - fitWcsStartBlockInputs
+      - LongLong
+      - [0, 0, 0]
+      - ''
+    - - fitWcsStartBlockOutputs
+      - LongLong
+      - [0, 0, 0]
+      - ''
+    - - fitWcsStartVoluntaryContextSwitches
+      - LongLong
+      - [410, 410, 410]
+      - ''
+    - - fitWcsStartInvoluntaryContextSwitches
+      - LongLong
+      - [475, 491, 510]
+      - ''
+    - - fitWcsEndUtc
+      - String
+      - ['2018-09-17T18:51:35.900126', '2018-09-17T18:51:46.152251', '2018-09-17T18:51:56.416221']
+      - ''
+    - - fitWcsEndCpuTime
+      - Double
+      - [277.94, 288.2, 298.46]
+      - ''
+    - - fitWcsEndUserTime
+      - Double
+      - [267.659927, 276.604334, 285.468533]
+      - ''
+    - - fitWcsEndSystemTime
+      - Double
+      - [10.295189, 11.602091, 13.001022]
+      - ''
+    - - fitWcsEndMaxResidentSetSize
+      - LongLong
+      - [5318192, 5318200, 5318200]
+      - ''
+    - - fitWcsEndMinorPageFaults
+      - LongLong
+      - [7991737, 8913943, 9938151]
+      - ''
+    - - fitWcsEndMajorPageFaults
+      - LongLong
+      - [0, 0, 0]
+      - ''
+    - - fitWcsEndBlockInputs
+      - LongLong
+      - [0, 0, 0]
+      - ''
+    - - fitWcsEndBlockOutputs
+      - LongLong
+      - [0, 0, 0]
+      - ''
+    - - fitWcsEndVoluntaryContextSwitches
+      - LongLong
+      - [410, 410, 410]
+      - ''
+    - - fitWcsEndInvoluntaryContextSwitches
+      - LongLong
+      - [475, 491, 510]
+      - ''
+- - processCcd:charImage:repair:interp
+  - PropertySet
+  - !<lsst.daf.base.PropertyList> []
+- - processCcd:charImage:measurePsf:reserve
+  - PropertySet
+  - !<lsst.daf.base.PropertyList> []
+- - processCcd:calibrate:detection
+  - PropertySet
+  - !<lsst.daf.base.PropertyList>
+    - [runStartUtc, String, '2018-09-17T18:49:17.388902', '']
+    - [runStartCpuTime, Double, 139.45, '']
+    - [runStartUserTime, Double, 133.266961, '']
+    - [runStartSystemTime, Double, 6.1926, '']
+    - [runStartMaxResidentSetSize, LongLong, 2929652, '']
+    - [runStartMinorPageFaults, LongLong, 4571388, '']
+    - [runStartMajorPageFaults, LongLong, 0, '']
+    - [runStartBlockInputs, LongLong, 0, '']
+    - [runStartBlockOutputs, LongLong, 0, '']
+    - [runStartVoluntaryContextSwitches, LongLong, 398, '']
+    - [runStartInvoluntaryContextSwitches, LongLong, 233, '']
+    - [detectFootprintsStartUtc, String, '2018-09-17T18:49:17.389077', '']
+    - [detectFootprintsStartCpuTime, Double, 139.45, '']
+    - [detectFootprintsStartUserTime, Double, 133.267134, '']
+    - [detectFootprintsStartSystemTime, Double, 6.1926, '']
+    - [detectFootprintsStartMaxResidentSetSize, LongLong, 2929652, '']
+    - [detectFootprintsStartMinorPageFaults, LongLong, 4571397, '']
+    - [detectFootprintsStartMajorPageFaults, LongLong, 0, '']
+    - [detectFootprintsStartBlockInputs, LongLong, 0, '']
+    - [detectFootprintsStartBlockOutputs, LongLong, 0, '']
+    - [detectFootprintsStartVoluntaryContextSwitches, LongLong, 398, '']
+    - [detectFootprintsStartInvoluntaryContextSwitches, LongLong, 233, '']
+    - [doSmooth, Bool, true, '']
+    - [sigma, Double, 1.8297840190366055, '']
+    - [smoothingKernelWidth, Int, 13, '']
+    - [nGrow, Int, 4, '']
+    - [detectFootprintsEndUtc, String, '2018-09-17T18:49:19.012236', '']
+    - [detectFootprintsEndCpuTime, Double, 141.07, '']
+    - [detectFootprintsEndUserTime, Double, 134.867195, '']
+    - [detectFootprintsEndSystemTime, Double, 6.215594, '']
+    - [detectFootprintsEndMaxResidentSetSize, LongLong, 2929652, '']
+    - [detectFootprintsEndMinorPageFaults, LongLong, 4607789, '']
+    - [detectFootprintsEndMajorPageFaults, LongLong, 0, '']
+    - [detectFootprintsEndBlockInputs, LongLong, 0, '']
+    - [detectFootprintsEndBlockOutputs, LongLong, 0, '']
+    - [detectFootprintsEndVoluntaryContextSwitches, LongLong, 398, '']
+    - [detectFootprintsEndInvoluntaryContextSwitches, LongLong, 236, '']
+    - [runEndUtc, String, '2018-09-17T18:49:19.018356', '']
+    - [runEndCpuTime, Double, 141.08, '']
+    - [runEndUserTime, Double, 134.8723, '']
+    - [runEndSystemTime, Double, 6.216599, '']
+    - [runEndMaxResidentSetSize, LongLong, 2929652, '']
+    - [runEndMinorPageFaults, LongLong, 4608807, '']
+    - [runEndMajorPageFaults, LongLong, 0, '']
+    - [runEndBlockInputs, LongLong, 0, '']
+    - [runEndBlockOutputs, LongLong, 0, '']
+    - [runEndVoluntaryContextSwitches, LongLong, 398, '']
+    - [runEndInvoluntaryContextSwitches, LongLong, 236, '']
+- - processCcd:calibrate:astrometry:sourceSelection
+  - PropertySet
+  - !<lsst.daf.base.PropertyList> []
+- - processCcd:calibrate:astrometry:matcher
+  - PropertySet
+  - !<lsst.daf.base.PropertyList>
+    - - matchObjectsToSourcesStartUtc
+      - String
+      - ['2018-09-17T18:51:25.666274', '2018-09-17T18:51:35.901077', '2018-09-17T18:51:46.153279']
+      - ''
+    - - matchObjectsToSourcesStartCpuTime
+      - Double
+      - [267.71, 277.95, 288.2]
+      - ''
+    - - matchObjectsToSourcesStartUserTime
+      - Double
+      - [258.657758, 267.660854, 276.605338]
+      - ''
+    - - matchObjectsToSourcesStartSystemTime
+      - Double
+      - [9.06429, 10.295202, 11.602105]
+      - ''
+    - - matchObjectsToSourcesStartMaxResidentSetSize
+      - LongLong
+      - [3422236, 5318192, 5318200]
+      - ''
+    - - matchObjectsToSourcesStartMinorPageFaults
+      - LongLong
+      - [7083665, 7991934, 8914184]
+      - ''
+    - - matchObjectsToSourcesStartMajorPageFaults
+      - LongLong
+      - [0, 0, 0]
+      - ''
+    - - matchObjectsToSourcesStartBlockInputs
+      - LongLong
+      - [0, 0, 0]
+      - ''
+    - - matchObjectsToSourcesStartBlockOutputs
+      - LongLong
+      - [0, 0, 0]
+      - ''
+    - - matchObjectsToSourcesStartVoluntaryContextSwitches
+      - LongLong
+      - [410, 410, 410]
+      - ''
+    - - matchObjectsToSourcesStartInvoluntaryContextSwitches
+      - LongLong
+      - [459, 475, 491]
+      - ''
+    - - _doMatchStartUtc
+      - String
+      - ['2018-09-17T18:51:25.668769', '2018-09-17T18:51:35.902589', '2018-09-17T18:51:46.154675']
+      - ''
+    - - _doMatchStartCpuTime
+      - Double
+      - [267.71, 277.95, 288.2]
+      - ''
+    - - _doMatchStartUserTime
+      - Double
+      - [258.658269, 267.662363, 276.606735]
+      - ''
+    - - _doMatchStartSystemTime
+      - Double
+      - [9.066273, 10.295206, 11.602105]
+      - ''
+    - - _doMatchStartMaxResidentSetSize
+      - LongLong
+      - [3422236, 5318192, 5318200]
+      - ''
+    - - _doMatchStartMinorPageFaults
+      - LongLong
+      - [7085079, 7992218, 8914474]
+      - ''
+    - - _doMatchStartMajorPageFaults
+      - LongLong
+      - [0, 0, 0]
+      - ''
+    - - _doMatchStartBlockInputs
+      - LongLong
+      - [0, 0, 0]
+      - ''
+    - - _doMatchStartBlockOutputs
+      - LongLong
+      - [0, 0, 0]
+      - ''
+    - - _doMatchStartVoluntaryContextSwitches
+      - LongLong
+      - [410, 410, 410]
+      - ''
+    - - _doMatchStartInvoluntaryContextSwitches
+      - LongLong
+      - [459, 475, 491]
+      - ''
+    - - _doMatchEndUtc
+      - String
+      - ['2018-09-17T18:51:35.703969', '2018-09-17T18:51:45.966663', '2018-09-17T18:51:56.232338']
+      - ''
+    - - _doMatchEndCpuTime
+      - Double
+      - [277.75, 288.01, 298.27]
+      - ''
+    - - _doMatchEndUserTime
+      - Double
+      - [267.466791, 276.421712, 285.28666]
+      - ''
+    - - _doMatchEndSystemTime
+      - Double
+      - [10.292183, 11.599141, 12.999027]
+      - ''
+    - - _doMatchEndMaxResidentSetSize
+      - LongLong
+      - [5318192, 5318200, 5318200]
+      - ''
+    - - _doMatchEndMinorPageFaults
+      - LongLong
+      - [7987400, 8909589, 9934073]
+      - ''
+    - - _doMatchEndMajorPageFaults
+      - LongLong
+      - [0, 0, 0]
+      - ''
+    - - _doMatchEndBlockInputs
+      - LongLong
+      - [0, 0, 0]
+      - ''
+    - - _doMatchEndBlockOutputs
+      - LongLong
+      - [0, 0, 0]
+      - ''
+    - - _doMatchEndVoluntaryContextSwitches
+      - LongLong
+      - [410, 410, 410]
+      - ''
+    - - _doMatchEndInvoluntaryContextSwitches
+      - LongLong
+      - [475, 491, 510]
+      - ''
+    - - matchObjectsToSourcesEndUtc
+      - String
+      - ['2018-09-17T18:51:35.704516', '2018-09-17T18:51:45.967172', '2018-09-17T18:51:56.232871']
+      - ''
+    - - matchObjectsToSourcesEndCpuTime
+      - Double
+      - [277.75, 288.01, 298.27]
+      - ''
+    - - matchObjectsToSourcesEndUserTime
+      - Double
+      - [267.467306, 276.421712, 285.287182]
+      - ''
+    - - matchObjectsToSourcesEndSystemTime
+      - Double
+      - [10.292203, 11.599635, 12.999027]
+      - ''
+    - - matchObjectsToSourcesEndMaxResidentSetSize
+      - LongLong
+      - [5318192, 5318200, 5318200]
+      - ''
+    - - matchObjectsToSourcesEndMinorPageFaults
+      - LongLong
+      - [7987568, 8909760, 9934244]
+      - ''
+    - - matchObjectsToSourcesEndMajorPageFaults
+      - LongLong
+      - [0, 0, 0]
+      - ''
+    - - matchObjectsToSourcesEndBlockInputs
+      - LongLong
+      - [0, 0, 0]
+      - ''
+    - - matchObjectsToSourcesEndBlockOutputs
+      - LongLong
+      - [0, 0, 0]
+      - ''
+    - - matchObjectsToSourcesEndVoluntaryContextSwitches
+      - LongLong
+      - [410, 410, 410]
+      - ''
+    - - matchObjectsToSourcesEndInvoluntaryContextSwitches
+      - LongLong
+      - [475, 491, 510]
+      - ''
+- - processCcd:charImage:repair
+  - PropertySet
+  - !<lsst.daf.base.PropertyList>
+    - - runStartUtc
+      - String
+      - ['2018-09-17T18:49:06.653419', '2018-09-17T18:49:11.459048', '2018-09-17T18:49:15.810133']
+      - ''
+    - - runStartCpuTime
+      - Double
+      - [128.72, 133.53, 137.87]
+      - ''
+    - - runStartUserTime
+      - Double
+      - [122.716352, 127.420589, 131.706422]
+      - ''
+    - - runStartSystemTime
+      - Double
+      - [6.012625, 6.113618, 6.178597]
+      - ''
+    - - runStartMaxResidentSetSize
+      - LongLong
+      - [2929652, 2929652, 2929652]
+      - ''
+    - - runStartMinorPageFaults
+      - LongLong
+      - [4329030, 4457724, 4542942]
+      - ''
+    - - runStartMajorPageFaults
+      - LongLong
+      - [0, 0, 0]
+      - ''
+    - - runStartBlockInputs
+      - LongLong
+      - [0, 0, 0]
+      - ''
+    - - runStartBlockOutputs
+      - LongLong
+      - [0, 0, 0]
+      - ''
+    - - runStartVoluntaryContextSwitches
+      - LongLong
+      - [389, 389, 389]
+      - ''
+    - - runStartInvoluntaryContextSwitches
+      - LongLong
+      - [213, 225, 227]
+      - ''
+    - - runEndUtc
+      - String
+      - ['2018-09-17T18:49:06.948908', '2018-09-17T18:49:11.723979', '2018-09-17T18:49:16.112966']
+      - ''
+    - - runEndCpuTime
+      - Double
+      - [129.01, 133.79, 138.18]
+      - ''
+    - - runEndUserTime
+      - Double
+      - [122.997842, 127.670537, 132.002237]
+      - ''
+    - - runEndSystemTime
+      - Double
+      - [6.0266, 6.128593, 6.185589]
+      - ''
+    - - runEndMaxResidentSetSize
+      - LongLong
+      - [2929652, 2929652, 2929652]
+      - ''
+    - - runEndMinorPageFaults
+      - LongLong
+      - [4340226, 4476324, 4565254]
+      - ''
+    - - runEndMajorPageFaults
+      - LongLong
+      - [0, 0, 0]
+      - ''
+    - - runEndBlockInputs
+      - LongLong
+      - [0, 0, 0]
+      - ''
+    - - runEndBlockOutputs
+      - LongLong
+      - [0, 0, 0]
+      - ''
+    - - runEndVoluntaryContextSwitches
+      - LongLong
+      - [389, 389, 389]
+      - ''
+    - - runEndInvoluntaryContextSwitches
+      - LongLong
+      - [214, 225, 228]
+      - ''
+- - processCcd:calibrate:detection:background
+  - PropertySet
+  - !<lsst.daf.base.PropertyList> []
+- - processCcd:calibrate:photoCal
+  - PropertySet
+  - !<lsst.daf.base.PropertyList>
+    - [runStartUtc, String, '2018-09-17T18:51:56.418623', '']
+    - [runStartCpuTime, Double, 298.47, '']
+    - [runStartUserTime, Double, 285.470909, '']
+    - [runStartSystemTime, Double, 13.001039, '']
+    - [runStartMaxResidentSetSize, LongLong, 5318200, '']
+    - [runStartMinorPageFaults, LongLong, 9938344, '']
+    - [runStartMajorPageFaults, LongLong, 0, '']
+    - [runStartBlockInputs, LongLong, 0, '']
+    - [runStartBlockOutputs, LongLong, 0, '']
+    - [runStartVoluntaryContextSwitches, LongLong, 410, '']
+    - [runStartInvoluntaryContextSwitches, LongLong, 510, '']
+    - [extractMagArraysStartUtc, String, '2018-09-17T18:51:57.083587', '']
+    - [extractMagArraysStartCpuTime, Double, 299.12, '']
+    - [extractMagArraysStartUserTime, Double, 286.127487, '']
+    - [extractMagArraysStartSystemTime, Double, 13.009067, '']
+    - [extractMagArraysStartMaxResidentSetSize, LongLong, 5318200, '']
+    - [extractMagArraysStartMinorPageFaults, LongLong, 9944646, '']
+    - [extractMagArraysStartMajorPageFaults, LongLong, 0, '']
+    - [extractMagArraysStartBlockInputs, LongLong, 0, '']
+    - [extractMagArraysStartBlockOutputs, LongLong, 0, '']
+    - [extractMagArraysStartVoluntaryContextSwitches, LongLong, 422, '']
+    - [extractMagArraysStartInvoluntaryContextSwitches, LongLong, 510, '']
+    - [extractMagArraysEndUtc, String, '2018-09-17T18:51:57.089326', '']
+    - [extractMagArraysEndCpuTime, Double, 299.13, '']
+    - [extractMagArraysEndUserTime, Double, 286.133227, '']
+    - [extractMagArraysEndSystemTime, Double, 13.009067, '']
+    - [extractMagArraysEndMaxResidentSetSize, LongLong, 5318200, '']
+    - [extractMagArraysEndMinorPageFaults, LongLong, 9944719, '']
+    - [extractMagArraysEndMajorPageFaults, LongLong, 0, '']
+    - [extractMagArraysEndBlockInputs, LongLong, 0, '']
+    - [extractMagArraysEndBlockOutputs, LongLong, 0, '']
+    - [extractMagArraysEndVoluntaryContextSwitches, LongLong, 422, '']
+    - [extractMagArraysEndInvoluntaryContextSwitches, LongLong, 510, '']
+    - [runEndUtc, String, '2018-09-17T18:51:57.102830', '']
+    - [runEndCpuTime, Double, 299.15, '']
+    - [runEndUserTime, Double, 286.143764, '']
+    - [runEndSystemTime, Double, 13.012034, '']
+    - [runEndMaxResidentSetSize, LongLong, 5318200, '']
+    - [runEndMinorPageFaults, LongLong, 9945119, '']
+    - [runEndMajorPageFaults, LongLong, 0, '']
+    - [runEndBlockInputs, LongLong, 0, '']
+    - [runEndBlockOutputs, LongLong, 0, '']
+    - [runEndVoluntaryContextSwitches, LongLong, 422, '']
+    - [runEndInvoluntaryContextSwitches, LongLong, 510, '']
+- - processCcd:charImage:measurePsf
+  - PropertySet
+  - !<lsst.daf.base.PropertyList>
+    - - runStartUtc
+      - String
+      - ['2018-09-17T18:49:09.504488', '2018-09-17T18:49:14.253195']
+      - ''
+    - - runStartCpuTime
+      - Double
+      - [131.57, 136.32]
+      - ''
+    - - runStartUserTime
+      - Double
+      - [125.488186, 130.163569]
+      - ''
+    - - runStartSystemTime
+      - Double
+      - [6.09162, 6.1646]
+      - ''
+    - - runStartMaxResidentSetSize
+      - LongLong
+      - [2929652, 2929652]
+      - ''
+    - - runStartMinorPageFaults
+      - LongLong
+      - [4431693, 4522742]
+      - ''
+    - - runStartMajorPageFaults
+      - LongLong
+      - [0, 0]
+      - ''
+    - - runStartBlockInputs
+      - LongLong
+      - [0, 0]
+      - ''
+    - - runStartBlockOutputs
+      - LongLong
+      - [0, 0]
+      - ''
+    - - runStartVoluntaryContextSwitches
+      - LongLong
+      - [389, 389]
+      - ''
+    - - runStartInvoluntaryContextSwitches
+      - LongLong
+      - [220, 226]
+      - ''
+    - [spatialFitChi2, Double, 161.12134320185672, '']
+    - [numGoodStars, Int, 74, '']
+    - [numAvailStars, Int, 93, '']
+    - [avgX, Double, 1058.3744307747738, '']
+    - [avgY, Double, 1935.4357825589752, '']
+    - - runEndUtc
+      - String
+      - ['2018-09-17T18:49:11.194335', '2018-09-17T18:49:15.513589']
+      - ''
+    - - runEndCpuTime
+      - Double
+      - [133.25, 137.57]
+      - ''
+    - - runEndUserTime
+      - Double
+      - [127.169922, 131.418875]
+      - ''
+    - - runEndSystemTime
+      - Double
+      - [6.099612, 6.169618]
+      - ''
+    - - runEndMaxResidentSetSize
+      - LongLong
+      - [2929652, 2929652]
+      - ''
+    - - runEndMinorPageFaults
+      - LongLong
+      - [4441077, 4526859]
+      - ''
+    - - runEndMajorPageFaults
+      - LongLong
+      - [0, 0]
+      - ''
+    - - runEndBlockInputs
+      - LongLong
+      - [0, 0]
+      - ''
+    - - runEndBlockOutputs
+      - LongLong
+      - [0, 0]
+      - ''
+    - - runEndVoluntaryContextSwitches
+      - LongLong
+      - [389, 389]
+      - ''
+    - - runEndInvoluntaryContextSwitches
+      - LongLong
+      - [223, 227]
+      - ''
+- - processCcd:charImage:measurePsf:psfDeterminer
+  - PropertySet
+  - !<lsst.daf.base.PropertyList> []
+- - processCcd:calibrate:applyApCorr
+  - PropertySet
+  - !<lsst.daf.base.PropertyList> []
+- - processCcd
+  - PropertySet
+  - !<lsst.daf.base.PropertyList>
+    - [runDataRefStartUtc, String, '2018-09-17T18:49:05.321357', '']
+    - [runDataRefStartCpuTime, Double, 127.39, '']
+    - [runDataRefStartUserTime, Double, 121.436388, '']
+    - [runDataRefStartSystemTime, Double, 5.9606259999999995, '']
+    - [runDataRefStartMaxResidentSetSize, LongLong, 2929652, '']
+    - [runDataRefStartMinorPageFaults, LongLong, 4251847, '']
+    - [runDataRefStartMajorPageFaults, LongLong, 0, '']
+    - [runDataRefStartBlockInputs, LongLong, 0, '']
+    - [runDataRefStartBlockOutputs, LongLong, 0, '']
+    - [runDataRefStartVoluntaryContextSwitches, LongLong, 389, '']
+    - [runDataRefStartInvoluntaryContextSwitches, LongLong, 211, '']
+    - [runDataRefEndUtc, String, '2018-09-17T18:51:59.475780', '']
+    - [runDataRefEndCpuTime, Double, 301.47, '']
+    - [runDataRefEndUserTime, Double, 288.240129, '']
+    - [runDataRefEndSystemTime, Double, 13.236071, '']
+    - [runDataRefEndMaxResidentSetSize, LongLong, 5318200, '']
+    - [runDataRefEndMinorPageFaults, LongLong, 10038137, '']
+    - [runDataRefEndMajorPageFaults, LongLong, 0, '']
+    - [runDataRefEndBlockInputs, LongLong, 0, '']
+    - [runDataRefEndBlockOutputs, LongLong, 0, '']
+    - [runDataRefEndVoluntaryContextSwitches, LongLong, 479, '']
+    - [runDataRefEndInvoluntaryContextSwitches, LongLong, 518, '']
+- - processCcd:isr
+  - PropertySet
+  - !<lsst.daf.base.PropertyList>
+    - [runDataRefStartUtc, String, '2018-09-17T18:49:05.321617', '']
+    - [runDataRefStartCpuTime, Double, 127.39, '']
+    - [runDataRefStartUserTime, Double, 121.436631, '']
+    - [runDataRefStartSystemTime, Double, 5.960638, '']
+    - [runDataRefStartMaxResidentSetSize, LongLong, 2929652, '']
+    - [runDataRefStartMinorPageFaults, LongLong, 4251859, '']
+    - [runDataRefStartMajorPageFaults, LongLong, 0, '']
+    - [runDataRefStartBlockInputs, LongLong, 0, '']
+    - [runDataRefStartBlockOutputs, LongLong, 0, '']
+    - [runDataRefStartVoluntaryContextSwitches, LongLong, 389, '']
+    - [runDataRefStartInvoluntaryContextSwitches, LongLong, 211, '']
+    - [runDataRefEndUtc, String, '2018-09-17T18:49:06.182305', '']
+    - [runDataRefEndCpuTime, Double, 128.25, '']
+    - [runDataRefEndUserTime, Double, 122.246286, '']
+    - [runDataRefEndSystemTime, Double, 6.01162, '']
+    - [runDataRefEndMaxResidentSetSize, LongLong, 2929652, '']
+    - [runDataRefEndMinorPageFaults, LongLong, 4328182, '']
+    - [runDataRefEndMajorPageFaults, LongLong, 0, '']
+    - [runDataRefEndBlockInputs, LongLong, 0, '']
+    - [runDataRefEndBlockOutputs, LongLong, 0, '']
+    - [runDataRefEndVoluntaryContextSwitches, LongLong, 389, '']
+    - [runDataRefEndInvoluntaryContextSwitches, LongLong, 212, '']
+- - processCcd:charImage
+  - PropertySet
+  - !<lsst.daf.base.PropertyList>
+    - [runDataRefStartUtc, String, '2018-09-17T18:49:06.182567', '']
+    - [runDataRefStartCpuTime, Double, 128.25, '']
+    - [runDataRefStartUserTime, Double, 122.246526, '']
+    - [runDataRefStartSystemTime, Double, 6.011632, '']
+    - [runDataRefStartMaxResidentSetSize, LongLong, 2929652, '']
+    - [runDataRefStartMinorPageFaults, LongLong, 4328257, '']
+    - [runDataRefStartMajorPageFaults, LongLong, 0, '']
+    - [runDataRefStartBlockInputs, LongLong, 0, '']
+    - [runDataRefStartBlockOutputs, LongLong, 0, '']
+    - [runDataRefStartVoluntaryContextSwitches, LongLong, 389, '']
+    - [runDataRefStartInvoluntaryContextSwitches, LongLong, 212, '']
+    - [runStartUtc, String, '2018-09-17T18:49:06.183263', '']
+    - [runStartCpuTime, Double, 128.25, '']
+    - [runStartUserTime, Double, 122.247223, '']
+    - [runStartSystemTime, Double, 6.011632, '']
+    - [runStartMaxResidentSetSize, LongLong, 2929652, '']
+    - [runStartMinorPageFaults, LongLong, 4328447, '']
+    - [runStartMajorPageFaults, LongLong, 0, '']
+    - [runStartBlockInputs, LongLong, 0, '']
+    - [runStartBlockOutputs, LongLong, 0, '']
+    - [runStartVoluntaryContextSwitches, LongLong, 389, '']
+    - [runStartInvoluntaryContextSwitches, LongLong, 212, '']
+    - - detectMeasureAndEstimatePsfStartUtc
+      - String
+      - ['2018-09-17T18:49:06.652906', '2018-09-17T18:49:11.458496']
+      - ''
+    - - detectMeasureAndEstimatePsfStartCpuTime
+      - Double
+      - [128.72, 133.53]
+      - ''
+    - - detectMeasureAndEstimatePsfStartUserTime
+      - Double
+      - [122.71587099999999, 127.420044]
+      - ''
+    - - detectMeasureAndEstimatePsfStartSystemTime
+      - Double
+      - [6.012601, 6.113618]
+      - ''
+    - - detectMeasureAndEstimatePsfStartMaxResidentSetSize
+      - LongLong
+      - [2929652, 2929652]
+      - ''
+    - - detectMeasureAndEstimatePsfStartMinorPageFaults
+      - LongLong
+      - [4328927, 4457687]
+      - ''
+    - - detectMeasureAndEstimatePsfStartMajorPageFaults
+      - LongLong
+      - [0, 0]
+      - ''
+    - - detectMeasureAndEstimatePsfStartBlockInputs
+      - LongLong
+      - [0, 0]
+      - ''
+    - - detectMeasureAndEstimatePsfStartBlockOutputs
+      - LongLong
+      - [0, 0]
+      - ''
+    - - detectMeasureAndEstimatePsfStartVoluntaryContextSwitches
+      - LongLong
+      - [389, 389]
+      - ''
+    - - detectMeasureAndEstimatePsfStartInvoluntaryContextSwitches
+      - LongLong
+      - [213, 225]
+      - ''
+    - - detectMeasureAndEstimatePsfEndUtc
+      - String
+      - ['2018-09-17T18:49:11.194692', '2018-09-17T18:49:15.513894']
+      - ''
+    - - detectMeasureAndEstimatePsfEndCpuTime
+      - Double
+      - [133.26, 137.57]
+      - ''
+    - - detectMeasureAndEstimatePsfEndUserTime
+      - Double
+      - [127.170269, 131.41917]
+      - ''
+    - - detectMeasureAndEstimatePsfEndSystemTime
+      - Double
+      - [6.099612, 6.169618]
+      - ''
+    - - detectMeasureAndEstimatePsfEndMaxResidentSetSize
+      - LongLong
+      - [2929652, 2929652]
+      - ''
+    - - detectMeasureAndEstimatePsfEndMinorPageFaults
+      - LongLong
+      - [4441131, 4526862]
+      - ''
+    - - detectMeasureAndEstimatePsfEndMajorPageFaults
+      - LongLong
+      - [0, 0]
+      - ''
+    - - detectMeasureAndEstimatePsfEndBlockInputs
+      - LongLong
+      - [0, 0]
+      - ''
+    - - detectMeasureAndEstimatePsfEndBlockOutputs
+      - LongLong
+      - [0, 0]
+      - ''
+    - - detectMeasureAndEstimatePsfEndVoluntaryContextSwitches
+      - LongLong
+      - [389, 389]
+      - ''
+    - - detectMeasureAndEstimatePsfEndInvoluntaryContextSwitches
+      - LongLong
+      - [223, 227]
+      - ''
+    - [runEndUtc, String, '2018-09-17T18:49:17.317702', '']
+    - [runEndCpuTime, Double, 139.38, '']
+    - [runEndUserTime, Double, 133.203671, '']
+    - [runEndSystemTime, Double, 6.188595, '']
+    - [runEndMaxResidentSetSize, LongLong, 2929652, '']
+    - [runEndMinorPageFaults, LongLong, 4567652, '']
+    - [runEndMajorPageFaults, LongLong, 0, '']
+    - [runEndBlockInputs, LongLong, 0, '']
+    - [runEndBlockOutputs, LongLong, 0, '']
+    - [runEndVoluntaryContextSwitches, LongLong, 389, '']
+    - [runEndInvoluntaryContextSwitches, LongLong, 233, '']
+    - [runDataRefEndUtc, String, '2018-09-17T18:49:17.387331', '']
+    - [runDataRefEndCpuTime, Double, 139.45, '']
+    - [runDataRefEndUserTime, Double, 133.265399, '']
+    - [runDataRefEndSystemTime, Double, 6.1926, '']
+    - [runDataRefEndMaxResidentSetSize, LongLong, 2929652, '']
+    - [runDataRefEndMinorPageFaults, LongLong, 4571232, '']
+    - [runDataRefEndMajorPageFaults, LongLong, 0, '']
+    - [runDataRefEndBlockInputs, LongLong, 0, '']
+    - [runDataRefEndBlockOutputs, LongLong, 0, '']
+    - [runDataRefEndVoluntaryContextSwitches, LongLong, 398, '']
+    - [runDataRefEndInvoluntaryContextSwitches, LongLong, 233, '']
+- - processCcd:calibrate
+  - PropertySet
+  - !<lsst.daf.base.PropertyList>
+    - [runDataRefStartUtc, String, '2018-09-17T18:49:17.387905', '']
+    - [runDataRefStartCpuTime, Double, 139.45, '']
+    - [runDataRefStartUserTime, Double, 133.265963, '']
+    - [runDataRefStartSystemTime, Double, 6.1926, '']
+    - [runDataRefStartMaxResidentSetSize, LongLong, 2929652, '']
+    - [runDataRefStartMinorPageFaults, LongLong, 4571253, '']
+    - [runDataRefStartMajorPageFaults, LongLong, 0, '']
+    - [runDataRefStartBlockInputs, LongLong, 0, '']
+    - [runDataRefStartBlockOutputs, LongLong, 0, '']
+    - [runDataRefStartVoluntaryContextSwitches, LongLong, 398, '']
+    - [runDataRefStartInvoluntaryContextSwitches, LongLong, 233, '']
+    - [MAGZERO, Double, 25.0396604526264, '']
+    - [runDataRefEndUtc, String, '2018-09-17T18:51:59.475422', '']
+    - [runDataRefEndCpuTime, Double, 301.46, '']
+    - [runDataRefEndUserTime, Double, 288.239782, '']
+    - [runDataRefEndSystemTime, Double, 13.236071, '']
+    - [runDataRefEndMaxResidentSetSize, LongLong, 5318200, '']
+    - [runDataRefEndMinorPageFaults, LongLong, 10038041, '']
+    - [runDataRefEndMajorPageFaults, LongLong, 0, '']
+    - [runDataRefEndBlockInputs, LongLong, 0, '']
+    - [runDataRefEndBlockOutputs, LongLong, 0, '']
+    - [runDataRefEndVoluntaryContextSwitches, LongLong, 479, '']
+    - [runDataRefEndInvoluntaryContextSwitches, LongLong, 518, '']
+- - processCcd:charImage:measurePsf:makePsfCandidates
+  - PropertySet
+  - !<lsst.daf.base.PropertyList> []
+- - processCcd:charImage:background
+  - PropertySet
+  - !<lsst.daf.base.PropertyList> []
+- - processCcd:calibrate:astrometry
+  - PropertySet
+  - !<lsst.daf.base.PropertyList>
+    - [runStartUtc, String, '2018-09-17T18:51:24.811410', '']
+    - [runStartCpuTime, Double, 266.85, '']
+    - [runStartUserTime, Double, 257.818339, '']
+    - [runStartSystemTime, Double, 9.049314, '']
+    - [runStartMaxResidentSetSize, LongLong, 3422236, '']
+    - [runStartMinorPageFaults, LongLong, 7075633, '']
+    - [runStartMajorPageFaults, LongLong, 0, '']
+    - [runStartBlockInputs, LongLong, 0, '']
+    - [runStartBlockOutputs, LongLong, 0, '']
+    - [runStartVoluntaryContextSwitches, LongLong, 398, '']
+    - [runStartInvoluntaryContextSwitches, LongLong, 457, '']
+    - [solveStartUtc, String, '2018-09-17T18:51:24.811722', '']
+    - [solveStartCpuTime, Double, 266.85, '']
+    - [solveStartUserTime, Double, 257.81864, '']
+    - [solveStartSystemTime, Double, 9.049314, '']
+    - [solveStartMaxResidentSetSize, LongLong, 3422236, '']
+    - [solveStartMinorPageFaults, LongLong, 7075656, '']
+    - [solveStartMajorPageFaults, LongLong, 0, '']
+    - [solveStartBlockInputs, LongLong, 0, '']
+    - [solveStartBlockOutputs, LongLong, 0, '']
+    - [solveStartVoluntaryContextSwitches, LongLong, 398, '']
+    - [solveStartInvoluntaryContextSwitches, LongLong, 457, '']
+    - - _matchAndFitWcsStartUtc
+      - String
+      - ['2018-09-17T18:51:25.666094', '2018-09-17T18:51:35.900893', '2018-09-17T18:51:46.153123']
+      - ''
+    - - _matchAndFitWcsStartCpuTime
+      - Double
+      - [267.71, 277.95, 288.2]
+      - ''
+    - - _matchAndFitWcsStartUserTime
+      - Double
+      - [258.657582, 267.660671, 276.605183]
+      - ''
+    - - _matchAndFitWcsStartSystemTime
+      - Double
+      - [9.064286, 10.295202, 11.602105]
+      - ''
+    - - _matchAndFitWcsStartMaxResidentSetSize
+      - LongLong
+      - [3422236, 5318192, 5318200]
+      - ''
+    - - _matchAndFitWcsStartMinorPageFaults
+      - LongLong
+      - [7083640, 7991917, 8914167]
+      - ''
+    - - _matchAndFitWcsStartMajorPageFaults
+      - LongLong
+      - [0, 0, 0]
+      - ''
+    - - _matchAndFitWcsStartBlockInputs
+      - LongLong
+      - [0, 0, 0]
+      - ''
+    - - _matchAndFitWcsStartBlockOutputs
+      - LongLong
+      - [0, 0, 0]
+      - ''
+    - - _matchAndFitWcsStartVoluntaryContextSwitches
+      - LongLong
+      - [410, 410, 410]
+      - ''
+    - - _matchAndFitWcsStartInvoluntaryContextSwitches
+      - LongLong
+      - [459, 475, 491]
+      - ''
+    - - _matchAndFitWcsEndUtc
+      - String
+      - ['2018-09-17T18:51:35.900501', '2018-09-17T18:51:46.152608', '2018-09-17T18:51:56.416511']
+      - ''
+    - - _matchAndFitWcsEndCpuTime
+      - Double
+      - [277.95, 288.2, 298.46]
+      - ''
+    - - _matchAndFitWcsEndUserTime
+      - Double
+      - [267.660278, 276.604668, 285.468802]
+      - ''
+    - - _matchAndFitWcsEndSystemTime
+      - Double
+      - [10.295202, 11.602105, 13.001034]
+      - ''
+    - - _matchAndFitWcsEndMaxResidentSetSize
+      - LongLong
+      - [5318192, 5318200, 5318200]
+      - ''
+    - - _matchAndFitWcsEndMinorPageFaults
+      - LongLong
+      - [7991851, 8914066, 9938155]
+      - ''
+    - - _matchAndFitWcsEndMajorPageFaults
+      - LongLong
+      - [0, 0, 0]
+      - ''
+    - - _matchAndFitWcsEndBlockInputs
+      - LongLong
+      - [0, 0, 0]
+      - ''
+    - - _matchAndFitWcsEndBlockOutputs
+      - LongLong
+      - [0, 0, 0]
+      - ''
+    - - _matchAndFitWcsEndVoluntaryContextSwitches
+      - LongLong
+      - [410, 410, 410]
+      - ''
+    - - _matchAndFitWcsEndInvoluntaryContextSwitches
+      - LongLong
+      - [475, 491, 510]
+      - ''
+    - [solveEndUtc, String, '2018-09-17T18:51:56.418274', '']
+    - [solveEndCpuTime, Double, 298.47, '']
+    - [solveEndUserTime, Double, 285.470567, '']
+    - [solveEndSystemTime, Double, 13.001034, '']
+    - [solveEndMaxResidentSetSize, LongLong, 5318200, '']
+    - [solveEndMinorPageFaults, LongLong, 9938298, '']
+    - [solveEndMajorPageFaults, LongLong, 0, '']
+    - [solveEndBlockInputs, LongLong, 0, '']
+    - [solveEndBlockOutputs, LongLong, 0, '']
+    - [solveEndVoluntaryContextSwitches, LongLong, 410, '']
+    - [solveEndInvoluntaryContextSwitches, LongLong, 510, '']
+    - [runEndUtc, String, '2018-09-17T18:51:56.418459', '']
+    - [runEndCpuTime, Double, 298.47, '']
+    - [runEndUserTime, Double, 285.47075, '']
+    - [runEndSystemTime, Double, 13.001034, '']
+    - [runEndMaxResidentSetSize, LongLong, 5318200, '']
+    - [runEndMinorPageFaults, LongLong, 9938305, '']
+    - [runEndMajorPageFaults, LongLong, 0, '']
+    - [runEndBlockInputs, LongLong, 0, '']
+    - [runEndBlockOutputs, LongLong, 0, '']
+    - [runEndVoluntaryContextSwitches, LongLong, 410, '']
+    - [runEndInvoluntaryContextSwitches, LongLong, 510, '']
+- - processCcd:charImage:detection:background
+  - PropertySet
+  - !<lsst.daf.base.PropertyList> []
+- - processCcd:calibrate:photoCal:match:sourceSelection
+  - PropertySet
+  - !<lsst.daf.base.PropertyList> []
+- - processCcd:charImage:measurePsf:starSelector
+  - PropertySet
+  - !<lsst.daf.base.PropertyList> []
+- - processCcd:charImage:measurement
+  - PropertySet
+  - !<lsst.daf.base.PropertyList>
+    - - runStartUtc
+      - String
+      - ['2018-09-17T18:49:08.421743', '2018-09-17T18:49:13.232023', '2018-09-17T18:49:16.113191']
+      - ''
+    - - runStartCpuTime
+      - Double
+      - [130.49, 135.3, 138.18]
+      - ''
+    - - runStartUserTime
+      - Double
+      - [124.420537, 129.146467, 132.002445]
+      - ''
+    - - runStartSystemTime
+      - Double
+      - [6.076625, 6.160592, 6.185599]
+      - ''
+    - - runStartMaxResidentSetSize
+      - LongLong
+      - [2929652, 2929652, 2929652]
+      - ''
+    - - runStartMinorPageFaults
+      - LongLong
+      - [4415936, 4515867, 4565268]
+      - ''
+    - - runStartMajorPageFaults
+      - LongLong
+      - [0, 0, 0]
+      - ''
+    - - runStartBlockInputs
+      - LongLong
+      - [0, 0, 0]
+      - ''
+    - - runStartBlockOutputs
+      - LongLong
+      - [0, 0, 0]
+      - ''
+    - - runStartVoluntaryContextSwitches
+      - LongLong
+      - [389, 389, 389]
+      - ''
+    - - runStartInvoluntaryContextSwitches
+      - LongLong
+      - [217, 226, 228]
+      - ''
+    - - runEndUtc
+      - String
+      - ['2018-09-17T18:49:09.504210', '2018-09-17T18:49:14.252936', '2018-09-17T18:49:17.222989']
+      - ''
+    - - runEndCpuTime
+      - Double
+      - [131.57, 136.32, 139.28]
+      - ''
+    - - runEndUserTime
+      - Double
+      - [125.487928, 130.16333, 133.109997]
+      - ''
+    - - runEndSystemTime
+      - Double
+      - [6.091608, 6.164589, 6.187581]
+      - ''
+    - - runEndMaxResidentSetSize
+      - LongLong
+      - [2929652, 2929652, 2929652]
+      - ''
+    - - runEndMinorPageFaults
+      - LongLong
+      - [4431661, 4522731, 4565911]
+      - ''
+    - - runEndMajorPageFaults
+      - LongLong
+      - [0, 0, 0]
+      - ''
+    - - runEndBlockInputs
+      - LongLong
+      - [0, 0, 0]
+      - ''
+    - - runEndBlockOutputs
+      - LongLong
+      - [0, 0, 0]
+      - ''
+    - - runEndVoluntaryContextSwitches
+      - LongLong
+      - [389, 389, 389]
+      - ''
+    - - runEndInvoluntaryContextSwitches
+      - LongLong
+      - [220, 226, 232]
+      - ''
+- - processCcd:calibrate:astrometry:referenceSelection
+  - PropertySet
+  - !<lsst.daf.base.PropertyList> []
+- - processCcd:charImage:measureApCorr:sourceSelector
+  - PropertySet
+  - !<lsst.daf.base.PropertyList> []
+- - processCcd:charImage:measureApCorr
+  - PropertySet
+  - !<lsst.daf.base.PropertyList> []
+- - processCcd:charImage:applyApCorr
+  - PropertySet
+  - !<lsst.daf.base.PropertyList> []
+- - processCcd:charImage:installSimplePsf
+  - PropertySet
+  - !<lsst.daf.base.PropertyList> []
+- - processCcd:charImage:detection
+  - PropertySet
+  - !<lsst.daf.base.PropertyList>
+    - - runStartUtc
+      - String
+      - ['2018-09-17T18:49:06.949637', '2018-09-17T18:49:11.724538']
+      - ''
+    - - runStartCpuTime
+      - Double
+      - [129.01, 133.79]
+      - ''
+    - - runStartUserTime
+      - Double
+      - [122.998529, 127.671062]
+      - ''
+    - - runStartSystemTime
+      - Double
+      - [6.026633, 6.128618]
+      - ''
+    - - runStartMaxResidentSetSize
+      - LongLong
+      - [2929652, 2929652]
+      - ''
+    - - runStartMinorPageFaults
+      - LongLong
+      - [4340405, 4476360]
+      - ''
+    - - runStartMajorPageFaults
+      - LongLong
+      - [0, 0]
+      - ''
+    - - runStartBlockInputs
+      - LongLong
+      - [0, 0]
+      - ''
+    - - runStartBlockOutputs
+      - LongLong
+      - [0, 0]
+      - ''
+    - - runStartVoluntaryContextSwitches
+      - LongLong
+      - [389, 389]
+      - ''
+    - - runStartInvoluntaryContextSwitches
+      - LongLong
+      - [214, 225]
+      - ''
+    - - detectFootprintsStartUtc
+      - String
+      - ['2018-09-17T18:49:06.949814', '2018-09-17T18:49:11.724699']
+      - ''
+    - - detectFootprintsStartCpuTime
+      - Double
+      - [129.01, 133.79]
+      - ''
+    - - detectFootprintsStartUserTime
+      - Double
+      - [122.998705, 127.671221]
+      - ''
+    - - detectFootprintsStartSystemTime
+      - Double
+      - [6.026633, 6.128618]
+      - ''
+    - - detectFootprintsStartMaxResidentSetSize
+      - LongLong
+      - [2929652, 2929652]
+      - ''
+    - - detectFootprintsStartMinorPageFaults
+      - LongLong
+      - [4340421, 4476370]
+      - ''
+    - - detectFootprintsStartMajorPageFaults
+      - LongLong
+      - [0, 0]
+      - ''
+    - - detectFootprintsStartBlockInputs
+      - LongLong
+      - [0, 0]
+      - ''
+    - - detectFootprintsStartBlockOutputs
+      - LongLong
+      - [0, 0]
+      - ''
+    - - detectFootprintsStartVoluntaryContextSwitches
+      - LongLong
+      - [389, 389]
+      - ''
+    - - detectFootprintsStartInvoluntaryContextSwitches
+      - LongLong
+      - [214, 225]
+      - ''
+    - [doSmooth, Bool, true, '']
+    - [sigma, Double, 1.8305329439531757, '']
+    - [smoothingKernelWidth, Int, 13, '']
+    - [nGrow, Int, 4, '']
+    - - detectFootprintsEndUtc
+      - String
+      - ['2018-09-17T18:49:08.418523', '2018-09-17T18:49:13.230718']
+      - ''
+    - - detectFootprintsEndCpuTime
+      - Double
+      - [130.48, 135.3]
+      - ''
+    - - detectFootprintsEndUserTime
+      - Double
+      - [124.417335, 129.145185]
+      - ''
+    - - detectFootprintsEndSystemTime
+      - Double
+      - [6.076625, 6.160579]
+      - ''
+    - - detectFootprintsEndMaxResidentSetSize
+      - LongLong
+      - [2929652, 2929652]
+      - ''
+    - - detectFootprintsEndMinorPageFaults
+      - LongLong
+      - [4414804, 4515702]
+      - ''
+    - - detectFootprintsEndMajorPageFaults
+      - LongLong
+      - [0, 0]
+      - ''
+    - - detectFootprintsEndBlockInputs
+      - LongLong
+      - [0, 0]
+      - ''
+    - - detectFootprintsEndBlockOutputs
+      - LongLong
+      - [0, 0]
+      - ''
+    - - detectFootprintsEndVoluntaryContextSwitches
+      - LongLong
+      - [389, 389]
+      - ''
+    - - detectFootprintsEndInvoluntaryContextSwitches
+      - LongLong
+      - [217, 226]
+      - ''
+    - - runEndUtc
+      - String
+      - ['2018-09-17T18:49:08.421258', '2018-09-17T18:49:13.231798']
+      - ''
+    - - runEndCpuTime
+      - Double
+      - [130.49, 135.3]
+      - ''
+    - - runEndUserTime
+      - Double
+      - [124.420054, 129.146253]
+      - ''
+    - - runEndSystemTime
+      - Double
+      - [6.076625, 6.160582]
+      - ''
+    - - runEndMaxResidentSetSize
+      - LongLong
+      - [2929652, 2929652]
+      - ''
+    - - runEndMinorPageFaults
+      - LongLong
+      - [4415856, 4515843]
+      - ''
+    - - runEndMajorPageFaults
+      - LongLong
+      - [0, 0]
+      - ''
+    - - runEndBlockInputs
+      - LongLong
+      - [0, 0]
+      - ''
+    - - runEndBlockOutputs
+      - LongLong
+      - [0, 0]
+      - ''
+    - - runEndVoluntaryContextSwitches
+      - LongLong
+      - [389, 389]
+      - ''
+    - - runEndInvoluntaryContextSwitches
+      - LongLong
+      - [217, 226]
+      - ''
+- - processCcd:charImage:catalogCalculation
+  - PropertySet
+  - !<lsst.daf.base.PropertyList>
+    - [runStartUtc, String, '2018-09-17T18:49:17.298207', '']
+    - [runStartCpuTime, Double, 139.36, '']
+    - [runStartUserTime, Double, 133.184191, '']
+    - [runStartSystemTime, Double, 6.18859, '']
+    - [runStartMaxResidentSetSize, LongLong, 2929652, '']
+    - [runStartMinorPageFaults, LongLong, 4567035, '']
+    - [runStartMajorPageFaults, LongLong, 0, '']
+    - [runStartBlockInputs, LongLong, 0, '']
+    - [runStartBlockOutputs, LongLong, 0, '']
+    - [runStartVoluntaryContextSwitches, LongLong, 389, '']
+    - [runStartInvoluntaryContextSwitches, LongLong, 233, '']
+    - [runEndUtc, String, '2018-09-17T18:49:17.317316', '']
+    - [runEndCpuTime, Double, 139.38, '']
+    - [runEndUserTime, Double, 133.203295, '']
+    - [runEndSystemTime, Double, 6.188595, '']
+    - [runEndMaxResidentSetSize, LongLong, 2929652, '']
+    - [runEndMinorPageFaults, LongLong, 4567556, '']
+    - [runEndMajorPageFaults, LongLong, 0, '']
+    - [runEndBlockInputs, LongLong, 0, '']
+    - [runEndBlockOutputs, LongLong, 0, '']
+    - [runEndVoluntaryContextSwitches, LongLong, 389, '']
+    - [runEndInvoluntaryContextSwitches, LongLong, 233, '']

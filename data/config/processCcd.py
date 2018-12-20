@@ -1,43 +1,8 @@
 import lsst.pipe.tasks.processCcd
 assert type(config)==lsst.pipe.tasks.processCcd.ProcessCcdConfig, 'config is of type %s.%s instead of lsst.pipe.tasks.processCcd.ProcessCcdConfig' % (type(config).__module__, type(config).__name__)
-import eups.distrib.Repositories
-import eups.cmd
-import configparser
-import eups.table
-import eups.distrib.builder
-import lsst.obs.decam.crosstalk
-import eups.distrib.server
-import lsst.obs.decam.isr
-import eups.VersionCompare
-import eups.db.ChainFile
-import eups.stack.ProductFamily
-import lsst.pipe.tasks.setConfigFromEups
-import eups.stack
-import eups.db
-import eups.VersionParser
-import eups.distrib.Distrib
 import lsst.obs.decam.decamNullIsr
-import eups
-import eups.utils
-import eups.Eups
-import eups.distrib.DistribFactory
-import eups.app
-import eups.distrib.pacman
-import eups.Uses
-import optparse
-import eups.exceptions
-import eups.lock
-import eups.tags
-import eups.Product
-import eups.db.VersionFile
-import eups.stack.ProductStack
-import pipes
-import eups.hooks
-import eups.distrib
-import eups.distrib.tarball
-import eups.db.Database
-import eups.distrib.Repository
-import eups.distrib.eupspkg
+import lsst.obs.decam.isr
+import lsst.obs.decam.crosstalk
 import lsst.obs.decam.decamNullIsr
 config.isr.retarget(target=lsst.obs.decam.decamNullIsr.DecamNullIsrTask, ConfigClass=lsst.obs.decam.decamNullIsr.DecamNullIsrConfig)
 
@@ -520,7 +485,7 @@ config.charImage.measurement.plugins['base_PeakCentroid'].doMeasure=True
 # whether to run this plugin in single-object mode
 config.charImage.measurement.plugins['base_SkyCoord'].doMeasure=True
 
-config.charImage.measurement.plugins.names=['base_PsfFlux', 'base_SdssShape', 'base_PixelFlags', 'base_GaussianFlux', 'base_CircularApertureFlux', 'base_SdssCentroid']
+config.charImage.measurement.plugins.names=['base_GaussianFlux', 'base_PsfFlux', 'base_SdssCentroid', 'base_CircularApertureFlux', 'base_PixelFlags', 'base_SdssShape']
 # whether to run this plugin in single-object mode
 config.charImage.measurement.undeblended['base_PsfFlux'].doMeasure=True
 
@@ -721,7 +686,7 @@ config.charImage.measureApCorr.sourceSelector['science'].flags.bad=['base_PixelF
 config.charImage.measureApCorr.sourceSelector['science'].unresolved.minimum=None
 
 # Select objects with value less than this
-config.charImage.measureApCorr.sourceSelector['science'].unresolved.maximum=None
+config.charImage.measureApCorr.sourceSelector['science'].unresolved.maximum=0.5
 
 # Name of column for star/galaxy separation
 config.charImage.measureApCorr.sourceSelector['science'].unresolved.name='base_ClassificationExtendedness_value'
@@ -736,7 +701,7 @@ config.charImage.measureApCorr.sourceSelector['science'].signalToNoise.maximum=N
 config.charImage.measureApCorr.sourceSelector['science'].signalToNoise.fluxField='base_PsfFlux_flux'
 
 # Name of the source flux error field to use.
-config.charImage.measureApCorr.sourceSelector['science'].signalToNoise.errField='base_PsfFlux_fluxSigma'
+config.charImage.measureApCorr.sourceSelector['science'].signalToNoise.errField='base_PsfFlux_fluxErr'
 
 # Name of column for parent
 config.charImage.measureApCorr.sourceSelector['science'].isolated.parentName='parent'
@@ -818,7 +783,7 @@ config.charImage.measureApCorr.sourceSelector['objectSize'].nSigmaClip=2.0
 config.charImage.measureApCorr.sourceSelector['objectSize'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter', 'base_PixelFlags_flag_crCenter', 'base_PixelFlags_flag_bad', 'base_PixelFlags_flag_interpolated']
 
 # Name of a flag field that is True for Sources that should be used.
-config.charImage.measureApCorr.sourceSelector['flagged'].field='calib_psfUsed'
+config.charImage.measureApCorr.sourceSelector['flagged'].field='calib_psf_used'
 
 # List of flags which cause a source to be rejected as bad
 config.charImage.measureApCorr.sourceSelector['astrometry'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter', 'base_PixelFlags_flag_crCenter', 'base_PixelFlags_flag_bad']
@@ -890,7 +855,7 @@ config.charImage.catalogCalculation.plugins['base_ClassificationExtendedness'].m
 # correction factor for psfFlux error
 config.charImage.catalogCalculation.plugins['base_ClassificationExtendedness'].psfErrFactor=0.0
 
-config.charImage.catalogCalculation.plugins.names=['base_ClassificationExtendedness', 'base_FootprintArea']
+config.charImage.catalogCalculation.plugins.names=['base_FootprintArea', 'base_ClassificationExtendedness']
 # Replace the existing PSF model with a simplified version that has the same sigma at the start of each PSF determination iteration? Doing so makes PSF determination converge more robustly and quickly.
 config.charImage.useSimplePsf=True
 
@@ -911,6 +876,9 @@ config.charImage.refObjLoader.defaultFilter=''
 
 # Mapping of camera filter name: reference catalog filter name; each reference filter must exist
 config.charImage.refObjLoader.filterMap={'u': 'g', 'Y': 'y'}
+
+# Require that the fields needed to correct proper motion (epoch, pm_ra and pm_dec) are present?
+config.charImage.refObjLoader.requireProperMotion=False
 
 # Name of the ingested reference dataset
 config.charImage.refObjLoader.ref_dataset_name='ps1_pv3_3pi_20170110'
@@ -976,7 +944,7 @@ config.charImage.ref_match.matcher.sourceSelector['science'].flags.bad=['base_Pi
 config.charImage.ref_match.matcher.sourceSelector['science'].unresolved.minimum=None
 
 # Select objects with value less than this
-config.charImage.ref_match.matcher.sourceSelector['science'].unresolved.maximum=None
+config.charImage.ref_match.matcher.sourceSelector['science'].unresolved.maximum=0.5
 
 # Name of column for star/galaxy separation
 config.charImage.ref_match.matcher.sourceSelector['science'].unresolved.name='base_ClassificationExtendedness_value'
@@ -991,7 +959,7 @@ config.charImage.ref_match.matcher.sourceSelector['science'].signalToNoise.maxim
 config.charImage.ref_match.matcher.sourceSelector['science'].signalToNoise.fluxField='base_PsfFlux_flux'
 
 # Name of the source flux error field to use.
-config.charImage.ref_match.matcher.sourceSelector['science'].signalToNoise.errField='base_PsfFlux_fluxSigma'
+config.charImage.ref_match.matcher.sourceSelector['science'].signalToNoise.errField='base_PsfFlux_fluxErr'
 
 # Name of column for parent
 config.charImage.ref_match.matcher.sourceSelector['science'].isolated.parentName='parent'
@@ -1073,7 +1041,7 @@ config.charImage.ref_match.matcher.sourceSelector['objectSize'].nSigmaClip=2.0
 config.charImage.ref_match.matcher.sourceSelector['objectSize'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter', 'base_PixelFlags_flag_crCenter', 'base_PixelFlags_flag_bad', 'base_PixelFlags_flag_interpolated']
 
 # Name of a flag field that is True for Sources that should be used.
-config.charImage.ref_match.matcher.sourceSelector['flagged'].field='calib_psfUsed'
+config.charImage.ref_match.matcher.sourceSelector['flagged'].field='calib_psf_used'
 
 # List of flags which cause a source to be rejected as bad
 config.charImage.ref_match.matcher.sourceSelector['astrometry'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter', 'base_PixelFlags_flag_crCenter', 'base_PixelFlags_flag_bad']
@@ -1143,7 +1111,7 @@ config.charImage.ref_match.sourceSelection.flags.bad=['base_PixelFlags_flag_edge
 config.charImage.ref_match.sourceSelection.unresolved.minimum=None
 
 # Select objects with value less than this
-config.charImage.ref_match.sourceSelection.unresolved.maximum=None
+config.charImage.ref_match.sourceSelection.unresolved.maximum=0.5
 
 # Name of column for star/galaxy separation
 config.charImage.ref_match.sourceSelection.unresolved.name='base_ClassificationExtendedness_value'
@@ -1158,7 +1126,7 @@ config.charImage.ref_match.sourceSelection.signalToNoise.maximum=None
 config.charImage.ref_match.sourceSelection.signalToNoise.fluxField='base_PsfFlux_flux'
 
 # Name of the source flux error field to use.
-config.charImage.ref_match.sourceSelection.signalToNoise.errField='base_PsfFlux_fluxSigma'
+config.charImage.ref_match.sourceSelection.signalToNoise.errField='base_PsfFlux_fluxErr'
 
 # Name of column for parent
 config.charImage.ref_match.sourceSelection.isolated.parentName='parent'
@@ -1249,7 +1217,7 @@ config.charImage.measurePsf.starSelector['science'].flags.bad=['base_PixelFlags_
 config.charImage.measurePsf.starSelector['science'].unresolved.minimum=None
 
 # Select objects with value less than this
-config.charImage.measurePsf.starSelector['science'].unresolved.maximum=None
+config.charImage.measurePsf.starSelector['science'].unresolved.maximum=0.5
 
 # Name of column for star/galaxy separation
 config.charImage.measurePsf.starSelector['science'].unresolved.name='base_ClassificationExtendedness_value'
@@ -1264,7 +1232,7 @@ config.charImage.measurePsf.starSelector['science'].signalToNoise.maximum=None
 config.charImage.measurePsf.starSelector['science'].signalToNoise.fluxField='base_PsfFlux_flux'
 
 # Name of the source flux error field to use.
-config.charImage.measurePsf.starSelector['science'].signalToNoise.errField='base_PsfFlux_fluxSigma'
+config.charImage.measurePsf.starSelector['science'].signalToNoise.errField='base_PsfFlux_fluxErr'
 
 # Name of column for parent
 config.charImage.measurePsf.starSelector['science'].isolated.parentName='parent'
@@ -1346,7 +1314,7 @@ config.charImage.measurePsf.starSelector['objectSize'].nSigmaClip=2.0
 config.charImage.measurePsf.starSelector['objectSize'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter', 'base_PixelFlags_flag_crCenter', 'base_PixelFlags_flag_bad', 'base_PixelFlags_flag_interpolated']
 
 # Name of a flag field that is True for Sources that should be used.
-config.charImage.measurePsf.starSelector['flagged'].field='calib_psfUsed'
+config.charImage.measurePsf.starSelector['flagged'].field='calib_psf_used'
 
 # List of flags which cause a source to be rejected as bad
 config.charImage.measurePsf.starSelector['astrometry'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter', 'base_PixelFlags_flag_crCenter', 'base_PixelFlags_flag_bad']
@@ -1572,6 +1540,9 @@ config.calibrate.doWriteMatchesDenormalized=False
 # Perform astrometric calibration?
 config.calibrate.doAstrometry=True
 
+import lsst.meas.algorithms.loadIndexedReferenceObjects
+config.calibrate.astromRefObjLoader.retarget(target=lsst.meas.algorithms.loadIndexedReferenceObjects.LoadIndexedReferenceObjectsTask, ConfigClass=lsst.meas.algorithms.loadIndexedReferenceObjects.LoadIndexedReferenceObjectsConfig)
+
 # Padding to add to 4 all edges of the bounding box (pixels)
 config.calibrate.astromRefObjLoader.pixelMargin=300
 
@@ -1579,7 +1550,16 @@ config.calibrate.astromRefObjLoader.pixelMargin=300
 config.calibrate.astromRefObjLoader.defaultFilter=''
 
 # Mapping of camera filter name: reference catalog filter name; each reference filter must exist
-config.calibrate.astromRefObjLoader.filterMap={}
+config.calibrate.astromRefObjLoader.filterMap={'u': 'g', 'Y': 'y'}
+
+# Require that the fields needed to correct proper motion (epoch, pm_ra and pm_dec) are present?
+config.calibrate.astromRefObjLoader.requireProperMotion=False
+
+# Name of the ingested reference dataset
+config.calibrate.astromRefObjLoader.ref_dataset_name='ps1_pv3_3pi_20170110'
+
+import lsst.meas.algorithms.loadIndexedReferenceObjects
+config.calibrate.photoRefObjLoader.retarget(target=lsst.meas.algorithms.loadIndexedReferenceObjects.LoadIndexedReferenceObjectsTask, ConfigClass=lsst.meas.algorithms.loadIndexedReferenceObjects.LoadIndexedReferenceObjectsConfig)
 
 # Padding to add to 4 all edges of the bounding box (pixels)
 config.calibrate.photoRefObjLoader.pixelMargin=300
@@ -1588,34 +1568,46 @@ config.calibrate.photoRefObjLoader.pixelMargin=300
 config.calibrate.photoRefObjLoader.defaultFilter=''
 
 # Mapping of camera filter name: reference catalog filter name; each reference filter must exist
-config.calibrate.photoRefObjLoader.filterMap={}
+config.calibrate.photoRefObjLoader.filterMap={'u': 'g', 'Y': 'y'}
 
-# Maximum separation between reference objects and sources beyond which they will not be considered a match (arcsec)
-config.calibrate.astrometry.matcher.maxMatchDistArcSec=3.0
+# Require that the fields needed to correct proper motion (epoch, pm_ra and pm_dec) are present?
+config.calibrate.photoRefObjLoader.requireProperMotion=False
 
-# Number of bright stars to use
-config.calibrate.astrometry.matcher.numBrightStars=50
+# Name of the ingested reference dataset
+config.calibrate.photoRefObjLoader.ref_dataset_name='ps1_pv3_3pi_20170110'
 
-# Minimum number of matched pairs; see also minFracMatchedPairs
+import lsst.meas.astrom.matchPessimisticB
+config.calibrate.astrometry.matcher.retarget(target=lsst.meas.astrom.matchPessimisticB.MatchPessimisticBTask, ConfigClass=lsst.meas.astrom.matchPessimisticB.MatchPessimisticBConfig)
+
+# Number of bright stars to use. Sets the max number of patterns that can be tested.
+config.calibrate.astrometry.matcher.numBrightStars=200
+
+# Minimum number of matched pairs; see also minFracMatchedPairs.
 config.calibrate.astrometry.matcher.minMatchedPairs=30
 
-# Minimum number of matched pairs as a fraction of the smaller of the number of reference stars or the number of good sources; the actual minimum is the smaller of this value or minMatchedPairs
+# Minimum number of matched pairs as a fraction of the smaller of the number of reference stars or the number of good sources; the actual minimum is the smaller of this value or minMatchedPairs.
 config.calibrate.astrometry.matcher.minFracMatchedPairs=0.3
+
+# Number of softening iterations in matcher.
+config.calibrate.astrometry.matcher.matcherIterations=5
 
 # Maximum allowed shift of WCS, due to matching (pixel). When changing this value, the LoadReferenceObjectsConfig.pixelMargin should also be updated.
 config.calibrate.astrometry.matcher.maxOffsetPix=300
 
-# Rotation angle allowed between sources and position reference objects (degrees)
+# Rotation angle allowed between sources and position reference objects (degrees).
 config.calibrate.astrometry.matcher.maxRotationDeg=1.0
 
-# Allowed non-perpendicularity of x and y (degree)
-config.calibrate.astrometry.matcher.allowedNonperpDeg=3.0
-
-# number of points to define a shape for matching
+# Number of points to define a shape for matching.
 config.calibrate.astrometry.matcher.numPointsForShape=6
 
-# maximum determinant of linear transformation matrix for a usable solution
-config.calibrate.astrometry.matcher.maxDeterminant=0.02
+# Number of points to try for creating a shape. This value should be greater than or equal to numPointsForShape. Besides loosening the signal to noise cut in the matcherSourceSelector, increasing this number will solve CCDs where no match was found.
+config.calibrate.astrometry.matcher.numPointsForShapeAttempt=6
+
+# Distance in units of pixels to always consider a source-reference pair a match. This prevents the astrometric fitter from over-fitting and removing stars that should be matched and allows for inclusion of new matches as the wcs improves.
+config.calibrate.astrometry.matcher.minMatchDistPixels=1.0
+
+# Number of implied shift/rotations from patterns that must agree before it a given shift/rotation is accepted. This is only used after the first softening iteration fails and if both the number of reference and source objects is greater than numBrightStars.
+config.calibrate.astrometry.matcher.numPatternConsensus=3
 
 # Apply flux limit?
 config.calibrate.astrometry.matcher.sourceSelector['science'].doFluxLimit=False
@@ -1651,7 +1643,7 @@ config.calibrate.astrometry.matcher.sourceSelector['science'].flags.bad=['base_P
 config.calibrate.astrometry.matcher.sourceSelector['science'].unresolved.minimum=None
 
 # Select objects with value less than this
-config.calibrate.astrometry.matcher.sourceSelector['science'].unresolved.maximum=None
+config.calibrate.astrometry.matcher.sourceSelector['science'].unresolved.maximum=0.5
 
 # Name of column for star/galaxy separation
 config.calibrate.astrometry.matcher.sourceSelector['science'].unresolved.name='base_ClassificationExtendedness_value'
@@ -1666,7 +1658,7 @@ config.calibrate.astrometry.matcher.sourceSelector['science'].signalToNoise.maxi
 config.calibrate.astrometry.matcher.sourceSelector['science'].signalToNoise.fluxField='base_PsfFlux_flux'
 
 # Name of the source flux error field to use.
-config.calibrate.astrometry.matcher.sourceSelector['science'].signalToNoise.errField='base_PsfFlux_fluxSigma'
+config.calibrate.astrometry.matcher.sourceSelector['science'].signalToNoise.errField='base_PsfFlux_fluxErr'
 
 # Name of column for parent
 config.calibrate.astrometry.matcher.sourceSelector['science'].isolated.parentName='parent'
@@ -1748,7 +1740,7 @@ config.calibrate.astrometry.matcher.sourceSelector['objectSize'].nSigmaClip=2.0
 config.calibrate.astrometry.matcher.sourceSelector['objectSize'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter', 'base_PixelFlags_flag_crCenter', 'base_PixelFlags_flag_bad', 'base_PixelFlags_flag_interpolated']
 
 # Name of a flag field that is True for Sources that should be used.
-config.calibrate.astrometry.matcher.sourceSelector['flagged'].field='calib_psfUsed'
+config.calibrate.astrometry.matcher.sourceSelector['flagged'].field='calib_psf_used'
 
 # List of flags which cause a source to be rejected as bad
 config.calibrate.astrometry.matcher.sourceSelector['astrometry'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter', 'base_PixelFlags_flag_crCenter', 'base_PixelFlags_flag_bad']
@@ -1780,7 +1772,7 @@ config.calibrate.astrometry.matcher.sourceSelector['catalog'].fluxMax=0.0
 # List of flags which cause a source to be rejected as bad
 config.calibrate.astrometry.matcher.sourceSelector['catalog'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter']
 
-config.calibrate.astrometry.matcher.sourceSelector.name='matcher'
+config.calibrate.astrometry.matcher.sourceSelector.name='matcherPessimistic'
 # the maximum match distance is set to  mean_match_distance + matchDistanceSigma*std_dev_match_distance; ignored if not fitting a WCS
 config.calibrate.astrometry.matchDistanceSigma=2.0
 
@@ -1818,7 +1810,7 @@ config.calibrate.astrometry.sourceSelection.flags.bad=['base_PixelFlags_flag_edg
 config.calibrate.astrometry.sourceSelection.unresolved.minimum=None
 
 # Select objects with value less than this
-config.calibrate.astrometry.sourceSelection.unresolved.maximum=None
+config.calibrate.astrometry.sourceSelection.unresolved.maximum=0.5
 
 # Name of column for star/galaxy separation
 config.calibrate.astrometry.sourceSelection.unresolved.name='base_ClassificationExtendedness_value'
@@ -1833,7 +1825,7 @@ config.calibrate.astrometry.sourceSelection.signalToNoise.maximum=None
 config.calibrate.astrometry.sourceSelection.signalToNoise.fluxField='base_PsfFlux_flux'
 
 # Name of the source flux error field to use.
-config.calibrate.astrometry.sourceSelection.signalToNoise.errField='base_PsfFlux_fluxSigma'
+config.calibrate.astrometry.sourceSelection.signalToNoise.errField='base_PsfFlux_fluxErr'
 
 # Name of column for parent
 config.calibrate.astrometry.sourceSelection.isolated.parentName='parent'
@@ -1960,7 +1952,7 @@ config.calibrate.photoCal.match.sourceSelection.flags.bad=['base_PixelFlags_flag
 config.calibrate.photoCal.match.sourceSelection.unresolved.minimum=None
 
 # Select objects with value less than this
-config.calibrate.photoCal.match.sourceSelection.unresolved.maximum=None
+config.calibrate.photoCal.match.sourceSelection.unresolved.maximum=0.5
 
 # Name of column for star/galaxy separation
 config.calibrate.photoCal.match.sourceSelection.unresolved.name='base_ClassificationExtendedness_value'
@@ -1975,7 +1967,7 @@ config.calibrate.photoCal.match.sourceSelection.signalToNoise.maximum=None
 config.calibrate.photoCal.match.sourceSelection.signalToNoise.fluxField='base_PsfFlux_flux'
 
 # Name of the source flux error field to use.
-config.calibrate.photoCal.match.sourceSelection.signalToNoise.errField='base_PsfFlux_fluxSigma'
+config.calibrate.photoCal.match.sourceSelection.signalToNoise.errField='base_PsfFlux_fluxErr'
 
 # Name of column for parent
 config.calibrate.photoCal.match.sourceSelection.isolated.parentName='parent'
@@ -2064,13 +2056,13 @@ config.calibrate.photoCal.nIter=20
 
 config.calibrate.photoCal.colorterms.data={}
 # Name of photometric reference catalog; used to select a color term dict in colorterms. see also applyColorTerms
-config.calibrate.photoCal.photoCatName='8.0.0.0+34'
+config.calibrate.photoCal.photoCatName='ps1_pv3_3pi_20170110'
 
 # Additional magnitude uncertainty to be added in quadrature with measurement errors.
 config.calibrate.photoCal.magErrFloor=0.0
 
 # Fields to copy from the icSource catalog to the output catalog for matching sources Any missing fields will trigger a RuntimeError exception. Ignored if icSourceCat is not provided.
-config.calibrate.icSourceFieldsToCopy=['calib_psfCandidate', 'calib_psfUsed', 'calib_psf_reserved']
+config.calibrate.icSourceFieldsToCopy=['calib_psf_candidate', 'calib_psf_used', 'calib_psf_reserved']
 
 # Match radius for matching icSourceCat objects to sourceCat objects (pixels)
 config.calibrate.matchRadiusPix=3.0
@@ -2503,7 +2495,7 @@ config.calibrate.measurement.plugins['base_PeakCentroid'].doMeasure=True
 # whether to run this plugin in single-object mode
 config.calibrate.measurement.plugins['base_SkyCoord'].doMeasure=True
 
-config.calibrate.measurement.plugins.names=['base_PsfFlux', 'base_SdssShape', 'base_PixelFlags', 'base_GaussianFlux', 'base_NaiveCentroid', 'base_Blendedness', 'base_SkyCoord', 'base_CircularApertureFlux', 'base_SdssCentroid', 'base_LocalBackground', 'base_Variance']
+config.calibrate.measurement.plugins.names=['base_SkyCoord', 'base_LocalBackground', 'base_GaussianFlux', 'base_Blendedness', 'base_NaiveCentroid', 'base_Variance', 'base_PsfFlux', 'base_SdssCentroid', 'base_CircularApertureFlux', 'base_PixelFlags', 'base_SdssShape']
 # whether to run this plugin in single-object mode
 config.calibrate.measurement.undeblended['base_PsfFlux'].doMeasure=True
 
@@ -2685,7 +2677,7 @@ config.calibrate.catalogCalculation.plugins['base_ClassificationExtendedness'].m
 # correction factor for psfFlux error
 config.calibrate.catalogCalculation.plugins['base_ClassificationExtendedness'].psfErrFactor=0.0
 
-config.calibrate.catalogCalculation.plugins.names=['base_ClassificationExtendedness', 'base_FootprintArea']
+config.calibrate.catalogCalculation.plugins.names=['base_FootprintArea', 'base_ClassificationExtendedness']
 # Run fake sources injection task
 config.calibrate.doInsertFakes=False
 
