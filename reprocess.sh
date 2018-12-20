@@ -1,6 +1,9 @@
+# You have to have source an LSST stack install already.
+# This varies by system and installation and so is not included in this script.
+
 setup obs_decam -t w_2018_37
 # To be run from within validation_data_decam repo
-# were we were at DM-14868
+# where we were at DM-14868
 setup -k -r .  
 
 mkdir data
