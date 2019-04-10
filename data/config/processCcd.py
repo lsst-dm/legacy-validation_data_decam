@@ -911,278 +911,225 @@ config.charImage.ref_match.matcher.numPointsForShape=6
 config.charImage.ref_match.matcher.maxDeterminant=0.02
 
 # Apply flux limit?
-config.charImage.ref_match.matcher.sourceSelector['science'].doFluxLimit=False
+config.charImage.ref_match.sourceSelector['science'].doFluxLimit=False
 
 # Apply flag limitation?
-config.charImage.ref_match.matcher.sourceSelector['science'].doFlags=False
+config.charImage.ref_match.sourceSelector['science'].doFlags=False
 
 # Apply unresolved limitation?
-config.charImage.ref_match.matcher.sourceSelector['science'].doUnresolved=False
+config.charImage.ref_match.sourceSelector['science'].doUnresolved=False
 
 # Apply signal-to-noise limit?
-config.charImage.ref_match.matcher.sourceSelector['science'].doSignalToNoise=False
+config.charImage.ref_match.sourceSelector['science'].doSignalToNoise=False
 
 # Apply isolated limitation?
-config.charImage.ref_match.matcher.sourceSelector['science'].doIsolated=False
+config.charImage.ref_match.sourceSelector['science'].doIsolated=False
 
 # Select objects with value greater than this
-config.charImage.ref_match.matcher.sourceSelector['science'].fluxLimit.minimum=None
+config.charImage.ref_match.sourceSelector['science'].fluxLimit.minimum=None
 
 # Select objects with value less than this
-config.charImage.ref_match.matcher.sourceSelector['science'].fluxLimit.maximum=None
+config.charImage.ref_match.sourceSelector['science'].fluxLimit.maximum=None
 
 # Name of the source flux field to use.
-config.charImage.ref_match.matcher.sourceSelector['science'].fluxLimit.fluxField='slot_CalibFlux_flux'
+config.charImage.ref_match.sourceSelector['science'].fluxLimit.fluxField='slot_CalibFlux_flux'
 
 # List of source flag fields that must be set for a source to be used.
-config.charImage.ref_match.matcher.sourceSelector['science'].flags.good=[]
+config.charImage.ref_match.sourceSelector['science'].flags.good=[]
 
 # List of source flag fields that must NOT be set for a source to be used.
-config.charImage.ref_match.matcher.sourceSelector['science'].flags.bad=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_saturated', 'base_PsfFlux_flags']
+config.charImage.ref_match.sourceSelector['science'].flags.bad=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_saturated', 'base_PsfFlux_flags']
 
 # Select objects with value greater than this
-config.charImage.ref_match.matcher.sourceSelector['science'].unresolved.minimum=None
+config.charImage.ref_match.sourceSelector['science'].unresolved.minimum=None
 
 # Select objects with value less than this
-config.charImage.ref_match.matcher.sourceSelector['science'].unresolved.maximum=0.5
+config.charImage.ref_match.sourceSelector['science'].unresolved.maximum=0.5
 
 # Name of column for star/galaxy separation
-config.charImage.ref_match.matcher.sourceSelector['science'].unresolved.name='base_ClassificationExtendedness_value'
+config.charImage.ref_match.sourceSelector['science'].unresolved.name='base_ClassificationExtendedness_value'
 
 # Select objects with value greater than this
-config.charImage.ref_match.matcher.sourceSelector['science'].signalToNoise.minimum=None
+config.charImage.ref_match.sourceSelector['science'].signalToNoise.minimum=None
 
 # Select objects with value less than this
-config.charImage.ref_match.matcher.sourceSelector['science'].signalToNoise.maximum=None
+config.charImage.ref_match.sourceSelector['science'].signalToNoise.maximum=None
 
 # Name of the source flux field to use.
-config.charImage.ref_match.matcher.sourceSelector['science'].signalToNoise.fluxField='base_PsfFlux_flux'
+config.charImage.ref_match.sourceSelector['science'].signalToNoise.fluxField='base_PsfFlux_flux'
 
 # Name of the source flux error field to use.
-config.charImage.ref_match.matcher.sourceSelector['science'].signalToNoise.errField='base_PsfFlux_fluxErr'
+config.charImage.ref_match.sourceSelector['science'].signalToNoise.errField='base_PsfFlux_fluxErr'
 
 # Name of column for parent
-config.charImage.ref_match.matcher.sourceSelector['science'].isolated.parentName='parent'
+config.charImage.ref_match.sourceSelector['science'].isolated.parentName='parent'
 
 # Name of column for nChild
-config.charImage.ref_match.matcher.sourceSelector['science'].isolated.nChildName='deblend_nChild'
+config.charImage.ref_match.sourceSelector['science'].isolated.nChildName='deblend_nChild'
 
 # Apply magnitude limit?
-config.charImage.ref_match.matcher.sourceSelector['references'].doMagLimit=False
+config.charImage.ref_match.sourceSelector['references'].doMagLimit=False
 
 # Apply flag limitation?
-config.charImage.ref_match.matcher.sourceSelector['references'].doFlags=False
+config.charImage.ref_match.sourceSelector['references'].doFlags=False
 
 # Apply signal-to-noise limit?
-config.charImage.ref_match.matcher.sourceSelector['references'].doSignalToNoise=False
+config.charImage.ref_match.sourceSelector['references'].doSignalToNoise=False
 
 # Apply magnitude error limit?
-config.charImage.ref_match.matcher.sourceSelector['references'].doMagError=False
+config.charImage.ref_match.sourceSelector['references'].doMagError=False
 
 # Select objects with value greater than this
-config.charImage.ref_match.matcher.sourceSelector['references'].magLimit.minimum=None
+config.charImage.ref_match.sourceSelector['references'].magLimit.minimum=None
 
 # Select objects with value less than this
-config.charImage.ref_match.matcher.sourceSelector['references'].magLimit.maximum=None
+config.charImage.ref_match.sourceSelector['references'].magLimit.maximum=None
 
 # Name of the source flux field to use.
-config.charImage.ref_match.matcher.sourceSelector['references'].magLimit.fluxField='flux'
+config.charImage.ref_match.sourceSelector['references'].magLimit.fluxField='flux'
 
 # List of source flag fields that must be set for a source to be used.
-config.charImage.ref_match.matcher.sourceSelector['references'].flags.good=[]
+config.charImage.ref_match.sourceSelector['references'].flags.good=[]
 
 # List of source flag fields that must NOT be set for a source to be used.
-config.charImage.ref_match.matcher.sourceSelector['references'].flags.bad=[]
+config.charImage.ref_match.sourceSelector['references'].flags.bad=[]
 
 # Select objects with value greater than this
-config.charImage.ref_match.matcher.sourceSelector['references'].signalToNoise.minimum=None
+config.charImage.ref_match.sourceSelector['references'].signalToNoise.minimum=None
 
 # Select objects with value less than this
-config.charImage.ref_match.matcher.sourceSelector['references'].signalToNoise.maximum=None
+config.charImage.ref_match.sourceSelector['references'].signalToNoise.maximum=None
 
 # Name of the source flux field to use.
-config.charImage.ref_match.matcher.sourceSelector['references'].signalToNoise.fluxField='flux'
+config.charImage.ref_match.sourceSelector['references'].signalToNoise.fluxField='flux'
 
 # Name of the source flux error field to use.
-config.charImage.ref_match.matcher.sourceSelector['references'].signalToNoise.errField='flux_err'
+config.charImage.ref_match.sourceSelector['references'].signalToNoise.errField='flux_err'
 
 # Select objects with value greater than this
-config.charImage.ref_match.matcher.sourceSelector['references'].magError.minimum=None
+config.charImage.ref_match.sourceSelector['references'].magError.minimum=None
 
 # Select objects with value less than this
-config.charImage.ref_match.matcher.sourceSelector['references'].magError.maximum=None
+config.charImage.ref_match.sourceSelector['references'].magError.maximum=None
 
 # Name of the source flux error field to use.
-config.charImage.ref_match.matcher.sourceSelector['references'].magError.magErrField='mag_err'
+config.charImage.ref_match.sourceSelector['references'].magError.magErrField='mag_err'
 
-config.charImage.ref_match.matcher.sourceSelector['references'].colorLimits={}
+config.charImage.ref_match.sourceSelector['references'].colorLimits={}
 # specify the minimum psfFlux for good Psf Candidates
-config.charImage.ref_match.matcher.sourceSelector['objectSize'].fluxMin=12500.0
+config.charImage.ref_match.sourceSelector['objectSize'].fluxMin=12500.0
 
 # specify the maximum psfFlux for good Psf Candidates (ignored if == 0)
-config.charImage.ref_match.matcher.sourceSelector['objectSize'].fluxMax=0.0
+config.charImage.ref_match.sourceSelector['objectSize'].fluxMax=0.0
 
 # minimum width to include in histogram
-config.charImage.ref_match.matcher.sourceSelector['objectSize'].widthMin=0.0
+config.charImage.ref_match.sourceSelector['objectSize'].widthMin=0.0
 
 # maximum width to include in histogram
-config.charImage.ref_match.matcher.sourceSelector['objectSize'].widthMax=10.0
+config.charImage.ref_match.sourceSelector['objectSize'].widthMax=10.0
 
 # Name of field in Source to use for flux measurement
-config.charImage.ref_match.matcher.sourceSelector['objectSize'].sourceFluxField='base_GaussianFlux_flux'
+config.charImage.ref_match.sourceSelector['objectSize'].sourceFluxField='base_GaussianFlux_flux'
 
 # Standard deviation of width allowed to be interpreted as good stars
-config.charImage.ref_match.matcher.sourceSelector['objectSize'].widthStdAllowed=0.15
+config.charImage.ref_match.sourceSelector['objectSize'].widthStdAllowed=0.15
 
 # Keep objects within this many sigma of cluster 0's median
-config.charImage.ref_match.matcher.sourceSelector['objectSize'].nSigmaClip=2.0
+config.charImage.ref_match.sourceSelector['objectSize'].nSigmaClip=2.0
 
 # List of flags which cause a source to be rejected as bad
-config.charImage.ref_match.matcher.sourceSelector['objectSize'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter', 'base_PixelFlags_flag_crCenter', 'base_PixelFlags_flag_bad', 'base_PixelFlags_flag_interpolated']
+config.charImage.ref_match.sourceSelector['objectSize'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter', 'base_PixelFlags_flag_crCenter', 'base_PixelFlags_flag_bad', 'base_PixelFlags_flag_interpolated']
 
 # Name of a flag field that is True for Sources that should be used.
-config.charImage.ref_match.matcher.sourceSelector['flagged'].field='calib_psf_used'
+config.charImage.ref_match.sourceSelector['flagged'].field='calib_psf_used'
 
 # List of flags which cause a source to be rejected as bad
-config.charImage.ref_match.matcher.sourceSelector['astrometry'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter', 'base_PixelFlags_flag_crCenter', 'base_PixelFlags_flag_bad']
+config.charImage.ref_match.sourceSelector['astrometry'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter', 'base_PixelFlags_flag_crCenter', 'base_PixelFlags_flag_bad']
 
 # Type of source flux; typically one of Ap or Psf
-config.charImage.ref_match.matcher.sourceSelector['astrometry'].sourceFluxType='Ap'
+config.charImage.ref_match.sourceSelector['astrometry'].sourceFluxType='Ap'
 
 # Minimum allowed signal-to-noise ratio for sources used for matching (in the flux specified by sourceFluxType); <= 0 for no limit
-config.charImage.ref_match.matcher.sourceSelector['astrometry'].minSnr=10.0
+config.charImage.ref_match.sourceSelector['astrometry'].minSnr=10.0
 
 # Type of source flux; typically one of Ap or Psf
-config.charImage.ref_match.matcher.sourceSelector['matcher'].sourceFluxType='Ap'
+config.charImage.ref_match.sourceSelector['matcher'].sourceFluxType='Ap'
 
 # Minimum allowed signal-to-noise ratio for sources used for matching (in the flux specified by sourceFluxType); <= 0 for no limit
-config.charImage.ref_match.matcher.sourceSelector['matcher'].minSnr=40.0
+config.charImage.ref_match.sourceSelector['matcher'].minSnr=40.0
 
 # Type of source flux; typically one of Ap or Psf
-config.charImage.ref_match.matcher.sourceSelector['matcherPessimistic'].sourceFluxType='Ap'
+config.charImage.ref_match.sourceSelector['matcherPessimistic'].sourceFluxType='Ap'
 
 # Minimum allowed signal-to-noise ratio for sources used for matching (in the flux specified by sourceFluxType); <= 0 for no limit
-config.charImage.ref_match.matcher.sourceSelector['matcherPessimistic'].minSnr=40.0
+config.charImage.ref_match.sourceSelector['matcherPessimistic'].minSnr=40.0
 
 # specify the minimum psfFlux for good Psf Candidates
-config.charImage.ref_match.matcher.sourceSelector['catalog'].fluxLim=0.0
+config.charImage.ref_match.sourceSelector['catalog'].fluxLim=0.0
 
 # specify the maximum psfFlux for good Psf Candidates (ignored if == 0)
-config.charImage.ref_match.matcher.sourceSelector['catalog'].fluxMax=0.0
+config.charImage.ref_match.sourceSelector['catalog'].fluxMax=0.0
 
 # List of flags which cause a source to be rejected as bad
-config.charImage.ref_match.matcher.sourceSelector['catalog'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter']
+config.charImage.ref_match.sourceSelector['catalog'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter']
 
-config.charImage.ref_match.matcher.sourceSelector.name='matcher'
+config.charImage.ref_match.sourceSelector.name='matcher'
 # the maximum match distance is set to  mean_match_distance + matchDistanceSigma*std_dev_match_distance; ignored if not fitting a WCS
 config.charImage.ref_match.matchDistanceSigma=2.0
 
-# Apply flux limit?
-config.charImage.ref_match.sourceSelection.doFluxLimit=False
-
-# Apply flag limitation?
-config.charImage.ref_match.sourceSelection.doFlags=False
-
-# Apply unresolved limitation?
-config.charImage.ref_match.sourceSelection.doUnresolved=False
-
-# Apply signal-to-noise limit?
-config.charImage.ref_match.sourceSelection.doSignalToNoise=False
-
-# Apply isolated limitation?
-config.charImage.ref_match.sourceSelection.doIsolated=False
-
-# Select objects with value greater than this
-config.charImage.ref_match.sourceSelection.fluxLimit.minimum=None
-
-# Select objects with value less than this
-config.charImage.ref_match.sourceSelection.fluxLimit.maximum=None
-
-# Name of the source flux field to use.
-config.charImage.ref_match.sourceSelection.fluxLimit.fluxField='slot_CalibFlux_flux'
-
-# List of source flag fields that must be set for a source to be used.
-config.charImage.ref_match.sourceSelection.flags.good=[]
-
-# List of source flag fields that must NOT be set for a source to be used.
-config.charImage.ref_match.sourceSelection.flags.bad=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_saturated', 'base_PsfFlux_flags']
-
-# Select objects with value greater than this
-config.charImage.ref_match.sourceSelection.unresolved.minimum=None
-
-# Select objects with value less than this
-config.charImage.ref_match.sourceSelection.unresolved.maximum=0.5
-
-# Name of column for star/galaxy separation
-config.charImage.ref_match.sourceSelection.unresolved.name='base_ClassificationExtendedness_value'
-
-# Select objects with value greater than this
-config.charImage.ref_match.sourceSelection.signalToNoise.minimum=None
-
-# Select objects with value less than this
-config.charImage.ref_match.sourceSelection.signalToNoise.maximum=None
-
-# Name of the source flux field to use.
-config.charImage.ref_match.sourceSelection.signalToNoise.fluxField='base_PsfFlux_flux'
-
-# Name of the source flux error field to use.
-config.charImage.ref_match.sourceSelection.signalToNoise.errField='base_PsfFlux_fluxErr'
-
-# Name of column for parent
-config.charImage.ref_match.sourceSelection.isolated.parentName='parent'
-
-# Name of column for nChild
-config.charImage.ref_match.sourceSelection.isolated.nChildName='deblend_nChild'
-
 # Apply magnitude limit?
-config.charImage.ref_match.referenceSelection.doMagLimit=False
+config.charImage.ref_match.referenceSelector.doMagLimit=False
 
 # Apply flag limitation?
-config.charImage.ref_match.referenceSelection.doFlags=False
+config.charImage.ref_match.referenceSelector.doFlags=False
 
 # Apply signal-to-noise limit?
-config.charImage.ref_match.referenceSelection.doSignalToNoise=False
+config.charImage.ref_match.referenceSelector.doSignalToNoise=False
 
 # Apply magnitude error limit?
-config.charImage.ref_match.referenceSelection.doMagError=False
+config.charImage.ref_match.referenceSelector.doMagError=False
 
 # Select objects with value greater than this
-config.charImage.ref_match.referenceSelection.magLimit.minimum=None
+config.charImage.ref_match.referenceSelector.magLimit.minimum=None
 
 # Select objects with value less than this
-config.charImage.ref_match.referenceSelection.magLimit.maximum=None
+config.charImage.ref_match.referenceSelector.magLimit.maximum=None
 
 # Name of the source flux field to use.
-config.charImage.ref_match.referenceSelection.magLimit.fluxField='flux'
+config.charImage.ref_match.referenceSelector.magLimit.fluxField='flux'
 
 # List of source flag fields that must be set for a source to be used.
-config.charImage.ref_match.referenceSelection.flags.good=[]
+config.charImage.ref_match.referenceSelector.flags.good=[]
 
 # List of source flag fields that must NOT be set for a source to be used.
-config.charImage.ref_match.referenceSelection.flags.bad=[]
+config.charImage.ref_match.referenceSelector.flags.bad=[]
 
 # Select objects with value greater than this
-config.charImage.ref_match.referenceSelection.signalToNoise.minimum=None
+config.charImage.ref_match.referenceSelector.signalToNoise.minimum=None
 
 # Select objects with value less than this
-config.charImage.ref_match.referenceSelection.signalToNoise.maximum=None
+config.charImage.ref_match.referenceSelector.signalToNoise.maximum=None
 
 # Name of the source flux field to use.
-config.charImage.ref_match.referenceSelection.signalToNoise.fluxField='flux'
+config.charImage.ref_match.referenceSelector.signalToNoise.fluxField='flux'
 
 # Name of the source flux error field to use.
-config.charImage.ref_match.referenceSelection.signalToNoise.errField='flux_err'
+config.charImage.ref_match.referenceSelector.signalToNoise.errField='flux_err'
 
 # Select objects with value greater than this
-config.charImage.ref_match.referenceSelection.magError.minimum=None
+config.charImage.ref_match.referenceSelector.magError.minimum=None
 
 # Select objects with value less than this
-config.charImage.ref_match.referenceSelection.magError.maximum=None
+config.charImage.ref_match.referenceSelector.magError.maximum=None
 
 # Name of the source flux error field to use.
-config.charImage.ref_match.referenceSelection.magError.magErrField='mag_err'
+config.charImage.ref_match.referenceSelector.magError.magErrField='mag_err'
 
-config.charImage.ref_match.referenceSelection.colorLimits={}
+config.charImage.ref_match.referenceSelector.colorLimits={}
+
+# Source flux type to use in source selection.
+config.charImage.ref_match.sourceFluxType = 'Ap'
+
 # Apply flux limit?
 config.charImage.measurePsf.starSelector['science'].doFluxLimit=False
 
@@ -1610,278 +1557,225 @@ config.calibrate.astrometry.matcher.minMatchDistPixels=1.0
 config.calibrate.astrometry.matcher.numPatternConsensus=3
 
 # Apply flux limit?
-config.calibrate.astrometry.matcher.sourceSelector['science'].doFluxLimit=False
+config.calibrate.astrometry.sourceSelector['science'].doFluxLimit=False
 
 # Apply flag limitation?
-config.calibrate.astrometry.matcher.sourceSelector['science'].doFlags=False
+config.calibrate.astrometry.sourceSelector['science'].doFlags=False
 
 # Apply unresolved limitation?
-config.calibrate.astrometry.matcher.sourceSelector['science'].doUnresolved=False
+config.calibrate.astrometry.sourceSelector['science'].doUnresolved=False
 
 # Apply signal-to-noise limit?
-config.calibrate.astrometry.matcher.sourceSelector['science'].doSignalToNoise=False
+config.calibrate.astrometry.sourceSelector['science'].doSignalToNoise=False
 
 # Apply isolated limitation?
-config.calibrate.astrometry.matcher.sourceSelector['science'].doIsolated=False
+config.calibrate.astrometry.sourceSelector['science'].doIsolated=False
 
 # Select objects with value greater than this
-config.calibrate.astrometry.matcher.sourceSelector['science'].fluxLimit.minimum=None
+config.calibrate.astrometry.sourceSelector['science'].fluxLimit.minimum=None
 
 # Select objects with value less than this
-config.calibrate.astrometry.matcher.sourceSelector['science'].fluxLimit.maximum=None
+config.calibrate.astrometry.sourceSelector['science'].fluxLimit.maximum=None
 
 # Name of the source flux field to use.
-config.calibrate.astrometry.matcher.sourceSelector['science'].fluxLimit.fluxField='slot_CalibFlux_flux'
+config.calibrate.astrometry.sourceSelector['science'].fluxLimit.fluxField='slot_CalibFlux_flux'
 
 # List of source flag fields that must be set for a source to be used.
-config.calibrate.astrometry.matcher.sourceSelector['science'].flags.good=[]
+config.calibrate.astrometry.sourceSelector['science'].flags.good=[]
 
 # List of source flag fields that must NOT be set for a source to be used.
-config.calibrate.astrometry.matcher.sourceSelector['science'].flags.bad=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_saturated', 'base_PsfFlux_flags']
+config.calibrate.astrometry.sourceSelector['science'].flags.bad=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_saturated', 'base_PsfFlux_flags']
 
 # Select objects with value greater than this
-config.calibrate.astrometry.matcher.sourceSelector['science'].unresolved.minimum=None
+config.calibrate.astrometry.sourceSelector['science'].unresolved.minimum=None
 
 # Select objects with value less than this
-config.calibrate.astrometry.matcher.sourceSelector['science'].unresolved.maximum=0.5
+config.calibrate.astrometry.sourceSelector['science'].unresolved.maximum=0.5
 
 # Name of column for star/galaxy separation
-config.calibrate.astrometry.matcher.sourceSelector['science'].unresolved.name='base_ClassificationExtendedness_value'
+config.calibrate.astrometry.sourceSelector['science'].unresolved.name='base_ClassificationExtendedness_value'
 
 # Select objects with value greater than this
-config.calibrate.astrometry.matcher.sourceSelector['science'].signalToNoise.minimum=None
+config.calibrate.astrometry.sourceSelector['science'].signalToNoise.minimum=None
 
 # Select objects with value less than this
-config.calibrate.astrometry.matcher.sourceSelector['science'].signalToNoise.maximum=None
+config.calibrate.astrometry.sourceSelector['science'].signalToNoise.maximum=None
 
 # Name of the source flux field to use.
-config.calibrate.astrometry.matcher.sourceSelector['science'].signalToNoise.fluxField='base_PsfFlux_flux'
+config.calibrate.astrometry.sourceSelector['science'].signalToNoise.fluxField='base_PsfFlux_flux'
 
 # Name of the source flux error field to use.
-config.calibrate.astrometry.matcher.sourceSelector['science'].signalToNoise.errField='base_PsfFlux_fluxErr'
+config.calibrate.astrometry.sourceSelector['science'].signalToNoise.errField='base_PsfFlux_fluxErr'
 
 # Name of column for parent
-config.calibrate.astrometry.matcher.sourceSelector['science'].isolated.parentName='parent'
+config.calibrate.astrometry.sourceSelector['science'].isolated.parentName='parent'
 
 # Name of column for nChild
-config.calibrate.astrometry.matcher.sourceSelector['science'].isolated.nChildName='deblend_nChild'
+config.calibrate.astrometry.sourceSelector['science'].isolated.nChildName='deblend_nChild'
 
 # Apply magnitude limit?
-config.calibrate.astrometry.matcher.sourceSelector['references'].doMagLimit=False
+config.calibrate.astrometry.sourceSelector['references'].doMagLimit=False
 
 # Apply flag limitation?
-config.calibrate.astrometry.matcher.sourceSelector['references'].doFlags=False
+config.calibrate.astrometry.sourceSelector['references'].doFlags=False
 
 # Apply signal-to-noise limit?
-config.calibrate.astrometry.matcher.sourceSelector['references'].doSignalToNoise=False
+config.calibrate.astrometry.sourceSelector['references'].doSignalToNoise=False
 
 # Apply magnitude error limit?
-config.calibrate.astrometry.matcher.sourceSelector['references'].doMagError=False
+config.calibrate.astrometry.sourceSelector['references'].doMagError=False
 
 # Select objects with value greater than this
-config.calibrate.astrometry.matcher.sourceSelector['references'].magLimit.minimum=None
+config.calibrate.astrometry.sourceSelector['references'].magLimit.minimum=None
 
 # Select objects with value less than this
-config.calibrate.astrometry.matcher.sourceSelector['references'].magLimit.maximum=None
+config.calibrate.astrometry.sourceSelector['references'].magLimit.maximum=None
 
 # Name of the source flux field to use.
-config.calibrate.astrometry.matcher.sourceSelector['references'].magLimit.fluxField='flux'
+config.calibrate.astrometry.sourceSelector['references'].magLimit.fluxField='flux'
 
 # List of source flag fields that must be set for a source to be used.
-config.calibrate.astrometry.matcher.sourceSelector['references'].flags.good=[]
+config.calibrate.astrometry.sourceSelector['references'].flags.good=[]
 
 # List of source flag fields that must NOT be set for a source to be used.
-config.calibrate.astrometry.matcher.sourceSelector['references'].flags.bad=[]
+config.calibrate.astrometry.sourceSelector['references'].flags.bad=[]
 
 # Select objects with value greater than this
-config.calibrate.astrometry.matcher.sourceSelector['references'].signalToNoise.minimum=None
+config.calibrate.astrometry.sourceSelector['references'].signalToNoise.minimum=None
 
 # Select objects with value less than this
-config.calibrate.astrometry.matcher.sourceSelector['references'].signalToNoise.maximum=None
+config.calibrate.astrometry.sourceSelector['references'].signalToNoise.maximum=None
 
 # Name of the source flux field to use.
-config.calibrate.astrometry.matcher.sourceSelector['references'].signalToNoise.fluxField='flux'
+config.calibrate.astrometry.sourceSelector['references'].signalToNoise.fluxField='flux'
 
 # Name of the source flux error field to use.
-config.calibrate.astrometry.matcher.sourceSelector['references'].signalToNoise.errField='flux_err'
+config.calibrate.astrometry.sourceSelector['references'].signalToNoise.errField='flux_err'
 
 # Select objects with value greater than this
-config.calibrate.astrometry.matcher.sourceSelector['references'].magError.minimum=None
+config.calibrate.astrometry.sourceSelector['references'].magError.minimum=None
 
 # Select objects with value less than this
-config.calibrate.astrometry.matcher.sourceSelector['references'].magError.maximum=None
+config.calibrate.astrometry.sourceSelector['references'].magError.maximum=None
 
 # Name of the source flux error field to use.
-config.calibrate.astrometry.matcher.sourceSelector['references'].magError.magErrField='mag_err'
+config.calibrate.astrometry.sourceSelector['references'].magError.magErrField='mag_err'
 
-config.calibrate.astrometry.matcher.sourceSelector['references'].colorLimits={}
+config.calibrate.astrometry.sourceSelector['references'].colorLimits={}
 # specify the minimum psfFlux for good Psf Candidates
-config.calibrate.astrometry.matcher.sourceSelector['objectSize'].fluxMin=12500.0
+config.calibrate.astrometry.sourceSelector['objectSize'].fluxMin=12500.0
 
 # specify the maximum psfFlux for good Psf Candidates (ignored if == 0)
-config.calibrate.astrometry.matcher.sourceSelector['objectSize'].fluxMax=0.0
+config.calibrate.astrometry.sourceSelector['objectSize'].fluxMax=0.0
 
 # minimum width to include in histogram
-config.calibrate.astrometry.matcher.sourceSelector['objectSize'].widthMin=0.0
+config.calibrate.astrometry.sourceSelector['objectSize'].widthMin=0.0
 
 # maximum width to include in histogram
-config.calibrate.astrometry.matcher.sourceSelector['objectSize'].widthMax=10.0
+config.calibrate.astrometry.sourceSelector['objectSize'].widthMax=10.0
 
 # Name of field in Source to use for flux measurement
-config.calibrate.astrometry.matcher.sourceSelector['objectSize'].sourceFluxField='base_GaussianFlux_flux'
+config.calibrate.astrometry.sourceSelector['objectSize'].sourceFluxField='base_GaussianFlux_flux'
 
 # Standard deviation of width allowed to be interpreted as good stars
-config.calibrate.astrometry.matcher.sourceSelector['objectSize'].widthStdAllowed=0.15
+config.calibrate.astrometry.sourceSelector['objectSize'].widthStdAllowed=0.15
 
 # Keep objects within this many sigma of cluster 0's median
-config.calibrate.astrometry.matcher.sourceSelector['objectSize'].nSigmaClip=2.0
+config.calibrate.astrometry.sourceSelector['objectSize'].nSigmaClip=2.0
 
 # List of flags which cause a source to be rejected as bad
-config.calibrate.astrometry.matcher.sourceSelector['objectSize'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter', 'base_PixelFlags_flag_crCenter', 'base_PixelFlags_flag_bad', 'base_PixelFlags_flag_interpolated']
+config.calibrate.astrometry.sourceSelector['objectSize'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter', 'base_PixelFlags_flag_crCenter', 'base_PixelFlags_flag_bad', 'base_PixelFlags_flag_interpolated']
 
 # Name of a flag field that is True for Sources that should be used.
-config.calibrate.astrometry.matcher.sourceSelector['flagged'].field='calib_psf_used'
+config.calibrate.astrometry.sourceSelector['flagged'].field='calib_psf_used'
 
 # List of flags which cause a source to be rejected as bad
-config.calibrate.astrometry.matcher.sourceSelector['astrometry'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter', 'base_PixelFlags_flag_crCenter', 'base_PixelFlags_flag_bad']
+config.calibrate.astrometry.sourceSelector['astrometry'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter', 'base_PixelFlags_flag_crCenter', 'base_PixelFlags_flag_bad']
 
 # Type of source flux; typically one of Ap or Psf
-config.calibrate.astrometry.matcher.sourceSelector['astrometry'].sourceFluxType='Ap'
+config.calibrate.astrometry.sourceSelector['astrometry'].sourceFluxType='Ap'
 
 # Minimum allowed signal-to-noise ratio for sources used for matching (in the flux specified by sourceFluxType); <= 0 for no limit
-config.calibrate.astrometry.matcher.sourceSelector['astrometry'].minSnr=10.0
+config.calibrate.astrometry.sourceSelector['astrometry'].minSnr=10.0
 
 # Type of source flux; typically one of Ap or Psf
-config.calibrate.astrometry.matcher.sourceSelector['matcher'].sourceFluxType='Ap'
+config.calibrate.astrometry.sourceSelector['matcher'].sourceFluxType='Ap'
 
 # Minimum allowed signal-to-noise ratio for sources used for matching (in the flux specified by sourceFluxType); <= 0 for no limit
-config.calibrate.astrometry.matcher.sourceSelector['matcher'].minSnr=40.0
+config.calibrate.astrometry.sourceSelector['matcher'].minSnr=40.0
 
 # Type of source flux; typically one of Ap or Psf
-config.calibrate.astrometry.matcher.sourceSelector['matcherPessimistic'].sourceFluxType='Ap'
+config.calibrate.astrometry.sourceSelector['matcherPessimistic'].sourceFluxType='Ap'
 
 # Minimum allowed signal-to-noise ratio for sources used for matching (in the flux specified by sourceFluxType); <= 0 for no limit
-config.calibrate.astrometry.matcher.sourceSelector['matcherPessimistic'].minSnr=40.0
+config.calibrate.astrometry.sourceSelector['matcherPessimistic'].minSnr=40.0
 
 # specify the minimum psfFlux for good Psf Candidates
-config.calibrate.astrometry.matcher.sourceSelector['catalog'].fluxLim=0.0
+config.calibrate.astrometry.sourceSelector['catalog'].fluxLim=0.0
 
 # specify the maximum psfFlux for good Psf Candidates (ignored if == 0)
-config.calibrate.astrometry.matcher.sourceSelector['catalog'].fluxMax=0.0
+config.calibrate.astrometry.sourceSelector['catalog'].fluxMax=0.0
 
 # List of flags which cause a source to be rejected as bad
-config.calibrate.astrometry.matcher.sourceSelector['catalog'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter']
+config.calibrate.astrometry.sourceSelector['catalog'].badFlags=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_interpolatedCenter', 'base_PixelFlags_flag_saturatedCenter']
 
-config.calibrate.astrometry.matcher.sourceSelector.name='matcherPessimistic'
+config.calibrate.astrometry.sourceSelector.name='matcherPessimistic'
 # the maximum match distance is set to  mean_match_distance + matchDistanceSigma*std_dev_match_distance; ignored if not fitting a WCS
 config.calibrate.astrometry.matchDistanceSigma=2.0
 
-# Apply flux limit?
-config.calibrate.astrometry.sourceSelection.doFluxLimit=False
-
-# Apply flag limitation?
-config.calibrate.astrometry.sourceSelection.doFlags=False
-
-# Apply unresolved limitation?
-config.calibrate.astrometry.sourceSelection.doUnresolved=False
-
-# Apply signal-to-noise limit?
-config.calibrate.astrometry.sourceSelection.doSignalToNoise=False
-
-# Apply isolated limitation?
-config.calibrate.astrometry.sourceSelection.doIsolated=False
-
-# Select objects with value greater than this
-config.calibrate.astrometry.sourceSelection.fluxLimit.minimum=None
-
-# Select objects with value less than this
-config.calibrate.astrometry.sourceSelection.fluxLimit.maximum=None
-
-# Name of the source flux field to use.
-config.calibrate.astrometry.sourceSelection.fluxLimit.fluxField='slot_CalibFlux_flux'
-
-# List of source flag fields that must be set for a source to be used.
-config.calibrate.astrometry.sourceSelection.flags.good=[]
-
-# List of source flag fields that must NOT be set for a source to be used.
-config.calibrate.astrometry.sourceSelection.flags.bad=['base_PixelFlags_flag_edge', 'base_PixelFlags_flag_saturated', 'base_PsfFlux_flags']
-
-# Select objects with value greater than this
-config.calibrate.astrometry.sourceSelection.unresolved.minimum=None
-
-# Select objects with value less than this
-config.calibrate.astrometry.sourceSelection.unresolved.maximum=0.5
-
-# Name of column for star/galaxy separation
-config.calibrate.astrometry.sourceSelection.unresolved.name='base_ClassificationExtendedness_value'
-
-# Select objects with value greater than this
-config.calibrate.astrometry.sourceSelection.signalToNoise.minimum=None
-
-# Select objects with value less than this
-config.calibrate.astrometry.sourceSelection.signalToNoise.maximum=None
-
-# Name of the source flux field to use.
-config.calibrate.astrometry.sourceSelection.signalToNoise.fluxField='base_PsfFlux_flux'
-
-# Name of the source flux error field to use.
-config.calibrate.astrometry.sourceSelection.signalToNoise.errField='base_PsfFlux_fluxErr'
-
-# Name of column for parent
-config.calibrate.astrometry.sourceSelection.isolated.parentName='parent'
-
-# Name of column for nChild
-config.calibrate.astrometry.sourceSelection.isolated.nChildName='deblend_nChild'
-
 # Apply magnitude limit?
-config.calibrate.astrometry.referenceSelection.doMagLimit=False
+config.calibrate.astrometry.referenceSelector.doMagLimit=False
 
 # Apply flag limitation?
-config.calibrate.astrometry.referenceSelection.doFlags=False
+config.calibrate.astrometry.referenceSelector.doFlags=False
 
 # Apply signal-to-noise limit?
-config.calibrate.astrometry.referenceSelection.doSignalToNoise=False
+config.calibrate.astrometry.referenceSelector.doSignalToNoise=False
 
 # Apply magnitude error limit?
-config.calibrate.astrometry.referenceSelection.doMagError=False
+config.calibrate.astrometry.referenceSelector.doMagError=False
 
 # Select objects with value greater than this
-config.calibrate.astrometry.referenceSelection.magLimit.minimum=None
+config.calibrate.astrometry.referenceSelector.magLimit.minimum=None
 
 # Select objects with value less than this
-config.calibrate.astrometry.referenceSelection.magLimit.maximum=None
+config.calibrate.astrometry.referenceSelector.magLimit.maximum=None
 
 # Name of the source flux field to use.
-config.calibrate.astrometry.referenceSelection.magLimit.fluxField='flux'
+config.calibrate.astrometry.referenceSelector.magLimit.fluxField='flux'
 
 # List of source flag fields that must be set for a source to be used.
-config.calibrate.astrometry.referenceSelection.flags.good=[]
+config.calibrate.astrometry.referenceSelector.flags.good=[]
 
 # List of source flag fields that must NOT be set for a source to be used.
-config.calibrate.astrometry.referenceSelection.flags.bad=[]
+config.calibrate.astrometry.referenceSelector.flags.bad=[]
 
 # Select objects with value greater than this
-config.calibrate.astrometry.referenceSelection.signalToNoise.minimum=None
+config.calibrate.astrometry.referenceSelector.signalToNoise.minimum=None
 
 # Select objects with value less than this
-config.calibrate.astrometry.referenceSelection.signalToNoise.maximum=None
+config.calibrate.astrometry.referenceSelector.signalToNoise.maximum=None
 
 # Name of the source flux field to use.
-config.calibrate.astrometry.referenceSelection.signalToNoise.fluxField='flux'
+config.calibrate.astrometry.referenceSelector.signalToNoise.fluxField='flux'
 
 # Name of the source flux error field to use.
-config.calibrate.astrometry.referenceSelection.signalToNoise.errField='flux_err'
+config.calibrate.astrometry.referenceSelector.signalToNoise.errField='flux_err'
 
 # Select objects with value greater than this
-config.calibrate.astrometry.referenceSelection.magError.minimum=None
+config.calibrate.astrometry.referenceSelector.magError.minimum=None
 
 # Select objects with value less than this
-config.calibrate.astrometry.referenceSelection.magError.maximum=None
+config.calibrate.astrometry.referenceSelector.magError.maximum=None
 
 # Name of the source flux error field to use.
-config.calibrate.astrometry.referenceSelection.magError.magErrField='mag_err'
+config.calibrate.astrometry.referenceSelector.magError.magErrField='mag_err'
 
-config.calibrate.astrometry.referenceSelection.colorLimits={}
+config.calibrate.astrometry.referenceSelector.colorLimits={}
+
+# Source flux type to use in source selection.
+config.calibrate.astrometry.sourceFluxType = 'Ap'
+
 # order of SIP polynomial
 config.calibrate.astrometry.wcsFitter.order=4
 
